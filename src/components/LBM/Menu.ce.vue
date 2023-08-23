@@ -1,67 +1,75 @@
 <script setup>
+import menu from '@/lbm-menu.json'
 
 </script>
 
 <template>
     <nav role='navigation' class="menu">
-        <label for="menu">Menu <i class="fa fa-bars"></i></label>
+        <label for="menu">Menu
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd"
+                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"
+                    clip-rule="evenodd" />
+            </svg>
+        </label>
         <input type="checkbox" id="menu">
         <ul>
-            <li class="menu-hasdropdown">
-                <label for="about">
-                    <img src="https://www.lebusmagique.fr/medias/images/157354.png" alt="">
-                    LBM
+            <li>
+                <a href="" id="logo">
+                    <img src="https://gaming.lebusmagique.fr/genshin-impact-timeline/logo-192.png" alt="">
+                </a>
+            </li>
+            <li v-for="m, i in menu" :class="{ 'menu-hasdropdown': m.childs?.length }">
+                <label :for="'menu-' + i" v-if="m.childs?.length">
+                    <img :src="m.icon" v-if="m.icon" alt="">
+                    {{ m.title }}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
                             clip-rule="evenodd" />
                     </svg>
                 </label>
-                <input type="checkbox" id="about">
-                <ul class="menu-dropdown">
-                    <li><a href="">
-                            <img src="https://www.lebusmagique.fr/medias/images/ic.ne-coeur-plein.png" alt="">
-                            Les activités
-                        </a></li>
-                    <li><a href="">
-                            <img src="https://www.lebusmagique.fr/medias/images/041633-yellow-comment-bubbles-icon-transport-travel-transportation-school-bus2.png"
-                                alt="">
-                            Nous rejoindre ?
-                        </a></li>
-                    <li><a href="">
-                            <img src="https://www.lebusmagique.fr/medias/images/commandantrouge.png" alt="">
-                            L'équipe Staff LBM</a></li>
-                    <li><a href="">Rejoindre le staff</a></li>
-                    <li><a href="">Rangs, purge et règles</a></li>
-                    <li><a href="">History</a></li>
-                    <li><a href="">History</a></li>
-                    <li><a href="">History</a></li>
-                    <li><a href="">History</a></li>
-                    <li><a href="">History</a></li>
-                    <li><a href="">History</a></li>
-                    <li><a href="">History</a></li>
-                    <li><a href="">Mission</a></li>
-                    <li class="menu-hasdropdown menu-hasflyout">
-                        <label for="services">
-                            Services
+                <a :href="m.url" v-else>
+                    <img :src="m.icon" v-if="m.icon" alt="">
+                    {{ m.title }}
+                </a>
+                <input type="checkbox" :id="'menu-' + i" v-if="m.childs?.length">
+                <ul class="menu-dropdown" v-if="m.childs?.length">
+                    <li v-for="s0, j in m.childs" :class="{ 'menu-hasdropdown menu-hasflyout': s0.childs?.length }">
+                        <label :for="'submenu-' + j" v-if="s0.childs?.length">
+                            <span>
+                                <img :src="s0.icon" v-if="s0.icon" alt="">
+                                {{ s0.title }}
+                            </span>
+                            <span v-if="s0.extensions" :class="'ext-' + s0.extensions.join('-')"></span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
                         </label>
-                        <input type="checkbox" id="services">
-                        <ul class="menu-dropdown">
-                            <li><a href="">Service 1</a></li>
-                            <li><a href="">Service 2</a></li>
-                            <li><a href="">Service 3</a></li>
+                        <a v-else :href="s0.url">
+                            <span>
+                                <img :src="s0.icon" v-if="s0.icon" alt="">
+                                {{ s0.title }}
+                            </span>
+                            <span v-if="s0.extensions" :class="'ext-' + s0.extensions.join('-')"></span>
+                        </a>
+                        <input type="checkbox" :id="'submenu-' + j" v-if="s0.childs?.length">
+                        <ul class="menu-dropdown" v-if="s0.childs?.length">
+                            <li v-for="s1 in s0.childs">
+                                <a :href="s1.url">
+                                    <span>
+                                        <img :src="s1.icon" v-if="s1.icon" alt="">
+                                        {{ s1.title }}
+                                    </span>
+                                    <span v-if="s1.extensions" :class="'ext-' + s1.extensions.join('-')"></span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
             </li>
-            <li><a href="#">Succès</a></li>
-            <li><a href="#">Outils</a></li>
-            <li><a href="#">Guides</a></li>
-            <li><a href="#">Expéditions</a></li>
-            <li><a href="#">HoT</a></li>
-            <li><a href="#">PoF</a></li>
-            <li><a href="#">EoD</a></li>
-            <li><a href="#">SotO</a></li>
         </ul>
     </nav>
 </template>
@@ -97,9 +105,22 @@
     display: flex;
     white-space: nowrap;
     align-items: center;
+    justify-content: space-between;
     gap: .5rem;
-    padding: .75rem .75rem;
+    padding: .75rem 0 .75rem .75rem;
     height: 100%;
+}
+
+.menu a>span,
+.menu label>span {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.menu ul ul a,
+.menu ul ul label {
+    padding: .5rem .75rem .5rem .5rem;
 }
 
 .menu img {
@@ -109,9 +130,22 @@
     object-position: center;
 }
 
+.menu #logo {
+    padding: 0;
+}
+
+.menu #logo img {
+    width: 3rem;
+    height: 3rem;
+}
+
 .menu svg {
     width: 1.25rem;
     height: 1.25rem;
+}
+
+.menu ul ul svg {
+    transform: rotate(-90deg);
 }
 
 .menu-dropdown,
@@ -133,8 +167,8 @@
 
     input[type=checkbox]:checked+ul {
         display: block;
-        -webkit-animation: grow 0.5s ease-in-out;
-        animation: grow 0.5s ease-in-out;
+        /* -webkit-animation: grow 0.5s ease-in-out; */
+        /* animation: grow 0.5s ease-in-out; */
     }
 }
 
@@ -159,14 +193,14 @@
         position: relative;
     }
 
-    .menu-hasdropdown label:after {
+    /* .menu-hasdropdown label:after {
         content: '';
-    }
+    } */
 
     .menu-hasdropdown:hover>ul {
         display: block;
-        -webkit-animation: grow 0.5s ease-in-out;
-        animation: grow 0.5s ease-in-out;
+        /* -webkit-animation: grow 0.5s ease-in-out; */
+        /* animation: grow 0.5s ease-in-out; */
     }
 
     .menu-hasdropdown>ul {
