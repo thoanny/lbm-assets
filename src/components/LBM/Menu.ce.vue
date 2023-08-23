@@ -63,11 +63,6 @@
             <li><a href="#">EoD</a></li>
             <li><a href="#">SotO</a></li>
         </ul>
-        <ul>
-            <li>
-
-            </li>
-        </ul>
     </nav>
 </template>
 
