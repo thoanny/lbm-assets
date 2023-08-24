@@ -74,7 +74,7 @@ import menu from '@/lbm-menu.json'
     </nav>
 </template>
 
-<style>
+<style scoped>
 .menu {
     background: #035e8d;
     font-family: 'Open Sans';
