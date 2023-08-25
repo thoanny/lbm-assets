@@ -1,0 +1,232 @@
+[
+    {
+        "item_id": 100099,
+        "icon": null,
+        "name": "Grimoire d'emote \"/bénir\"",
+        "price": 250,
+        "limit": 1,
+        "extensions": []
+    },
+    {
+        "item_id": 100284,
+        "icon": null,
+        "name": "Boîte de sélection d'apparence d'arme sanctifiée",
+        "price": 150,
+        "limit": 16,
+        "extensions": [
+            "soto"
+        ]
+    },
+    {
+        "item_id": 100593,
+        "icon": null,
+        "name": "Apparence d'épaulières sanctifiées",
+        "price": 375,
+        "limit": 1,
+        "extensions": [
+            "soto"
+        ]
+    },
+    {
+        "item_id": 100663,
+        "icon": null,
+        "name": "Apparence de griffon-hibou enchanté",
+        "price": 1000,
+        "limit": 1,
+        "extensions": [
+            "soto"
+        ]
+    },
+    {
+        "item_id": 39123,
+        "icon": null,
+        "name": "Grand sac d'artisanat",
+        "price": 40,
+        "limit": 0,
+        "extensions": []
+    },
+    {
+        "item_id": 64736,
+        "icon": null,
+        "name": "Charge de transmutation",
+        "price": 8,
+        "limit": 30,
+        "extensions": []
+    },
+    {
+        "item_id": 95289,
+        "icon": null,
+        "name": "Coffre de maîtrise du Lion noir",
+        "price": 15,
+        "limit": 20,
+        "extensions": []
+    },
+    {
+        "item_id": 46748,
+        "icon": null,
+        "name": "Orbe de ranimation",
+        "price": 95,
+        "limit": 10,
+        "extensions": []
+    },
+    {
+        "item_id": 96054,
+        "icon": null,
+        "name": "Kit de démarrage d'arme légendaire",
+        "price": 1000,
+        "limit": 1,
+        "extensions": [
+            "soto"
+        ]
+    },
+    {
+        "item_id": 100878,
+        "icon": null,
+        "name": "Sac de pièces (1&nbsp;pièce&nbsp;d'or)",
+        "price": 30,
+        "limit": 0,
+        "extensions": []
+    },
+    {
+        "item_id": 46746,
+        "icon": null,
+        "name": "Cristal de vision",
+        "price": 150,
+        "limit": 4,
+        "extensions": []
+    },
+    {
+        "item_id": 100233,
+        "icon": null,
+        "name": "Essence mineure d'or",
+        "price": 1000,
+        "limit": 2,
+        "extensions": []
+    },
+    {
+        "item_id": 100878,
+        "icon": null,
+        "name": "Sac de pièces (1&nbsp;pièce&nbsp;d'or)",
+        "price": 6,
+        "limit": 90,
+        "extensions": []
+    },
+    {
+        "item_id": 19976,
+        "icon": null,
+        "name": "Pièce mystique",
+        "price": 9,
+        "limit": 60,
+        "extensions": []
+    },
+    {
+        "item_id": 43766,
+        "icon": null,
+        "name": "Grimoire de connaissance",
+        "price": 8,
+        "limit": 35,
+        "extensions": []
+    },
+    {
+        "item_id": 39124,
+        "icon": null,
+        "name": "Sac lourd d'artisanat",
+        "price": 8,
+        "limit": 30,
+        "extensions": [
+            "soto"
+        ]
+    },
+    {
+        "item_id": 92206,
+        "icon": null,
+        "name": "Extension de stockage d'archétype",
+        "price": 500,
+        "limit": 1,
+        "extensions": []
+    },
+    {
+        "item_id": 19675,
+        "icon": null,
+        "name": "Trèfle mystique",
+        "price": 60,
+        "limit": 20,
+        "extensions": []
+    },
+    {
+        "item_id": 100361,
+        "icon": null,
+        "name": "Apparence de bottes sanctifiées",
+        "price": 375,
+        "limit": 1,
+        "extensions": [
+            "soto"
+        ]
+    },
+    {
+        "item_id": 68328,
+        "icon": null,
+        "name": "Sac de lauriers",
+        "price": 10,
+        "limit": 150,
+        "extensions": []
+    },
+    {
+        "item_id": 20349,
+        "icon": null,
+        "name": "Extracteur d'amélioration",
+        "price": 35,
+        "limit": 12,
+        "extensions": []
+    },
+    {
+        "item_id": 71413,
+        "icon": null,
+        "name": "Coffre d'arme élevée",
+        "price": 600,
+        "limit": 1,
+        "extensions": []
+    },
+    {
+        "item_id": 100029,
+        "icon": null,
+        "name": "Apparence de gants sanctifiés",
+        "price": 375,
+        "limit": 1,
+        "extensions": [
+            "soto"
+        ]
+    },
+    {
+        "item_id": 49208,
+        "icon": null,
+        "name": "Coffre d'armure élevée",
+        "price": 400,
+        "limit": 3,
+        "extensions": []
+    },
+    {
+        "item_id": 45176,
+        "icon": null,
+        "name": "Essence de chance",
+        "price": 6,
+        "limit": 40,
+        "extensions": []
+    },
+    {
+        "item_id": 92209,
+        "icon": null,
+        "name": "Extension de modèle d'archétype",
+        "price": 425,
+        "limit": 2,
+        "extensions": []
+    },
+    {
+        "item_id": 19925,
+        "icon": null,
+        "name": "Éclat d'obsidienne",
+        "price": 50,
+        "limit": 20,
+        "extensions": []
+    }
+]

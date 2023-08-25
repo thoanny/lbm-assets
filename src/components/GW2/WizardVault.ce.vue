@@ -1,14 +1,60 @@
 <script setup>
 import { ref } from 'vue';
+import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json'
 
 const panel = ref('objectives');
+const tab = ref('daily');
+const rewards = ref(null);
+
+const user = ref({
+    'content': {
+        'pve': true,
+        'pvp': true,
+        'wvw': true
+    },
+    'extensions': {
+        'hot': false,
+        'pof': false,
+        'eod': false,
+        'soto': false,
+    }
+})
 
 function switchPanel(p) {
-    console.log(p)
     if (p !== panel.value) {
         panel.value = p;
     }
 }
+
+function switchTab(t) {
+    if (t !== tab.value) {
+        tab.value = t;
+    }
+}
+
+async function getApiItems() {
+    const ids = GW2WizardVaultRewards.map((r) => r.item_id).join(',');
+    try {
+        const res = await fetch('https://api.guildwars2.com/v2/items?ids=' + ids);
+        const items = await res.json();
+        return items;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+getApiItems().then(items => {
+    GW2WizardVaultRewards.forEach((r, ri) => {
+        const index = items.findIndex((i) => r.item_id == i.id);
+        if (index >= 0) {
+            GW2WizardVaultRewards[ri].icon = items[index].icon;
+            GW2WizardVaultRewards[ri].rarity = items[index].rarity;
+        }
+    });
+    rewards.value = GW2WizardVaultRewards;
+});
+
+
 
 </script>
 
@@ -17,9 +63,11 @@ function switchPanel(p) {
         <h4>
             <img src="@/assets/img/IconWizardVault.png" />
             Chambre forte du sorcier
+            <span class="block text-base mt-2 ml-2" v-if="panel === 'objectives'">&ndash; Objectifs</span>
+            <span class="block text-base mt-2 ml-2" v-if="panel === 'rewards'">&ndash; Récompenses astrales</span>
         </h4>
         <div class="wizard-vault">
-            <div class="menu">
+            <div class="wizard-vault__menu">
                 <button @click="switchPanel('objectives')" :class="{ 'active': panel == 'objectives' }">
                     <img src="@/assets/img/IconWizardVaultObjectives.png" alt="Objectifs" title="Objectifs" />
                 </button>
@@ -33,37 +81,59 @@ function switchPanel(p) {
                 </button>
             </div>
             <div class="wizard-vault__objectives-panel" v-if="panel == 'objectives'">
-                <div class="wizard-vault__panel-title">Objectifs</div>
-                <div class="wizard-vault__objectives-toolbar">
-                    <div>
-                        <label><input type="checkbox">JcE</label>
-                        <label><input type="checkbox">JcJ</label>
-                        <label><input type="checkbox">McM</label>
+                <div class="wizard-vault__objectives-toolbar" v-if="false">
+                    <div class="flex gap-2 items-center">
+                        <span class="font-semibold">Préférences&nbsp;:</span>
+                        <input type="checkbox" id="user_content_pve" v-model="user.content.pve">
+                        <label for="user_content_pve">JcE</label>
+                        <input type="checkbox" id="user_content_pvp" v-model="user.content.pvp">
+                        <label for="user_content_pvp">JcJ</label>
+                        <input type="checkbox" id="user_content_wvw" v-model="user.content.wvw">
+                        <label for="user_content_wvw">McM</label>
                     </div>
                     <div class="flex gap-2 items-center">
-                        <label for="apikey">Clé API</label>
-                        <input type="text" class="border rounded py-2 px-3 text-gray-900" id="apikey">
+                        <span class="font-semibold">Extensions&nbsp;:</span>
+                        <input type="checkbox" id="user_extension_hot" v-model="user.extensions.hot">
+                        <label for="user_extension_hot">HoT</label>
+                        <input type="checkbox" id="user_extension_pof" v-model="user.extensions.pof">
+                        <label for="user_extension_pof">PoF</label>
+                        <input type="checkbox" id="user_extension_eod" v-model="user.extensions.eod">
+                        <label for="user_extension_eod">EoD</label>
+                        <input type="checkbox" id="user_extension_soto" v-model="user.extensions.soto">
+                        <label for="user_extension_soto">SotO</label>
                     </div>
                 </div>
-                <div>
-                    <button>Quotidien</button>
-                    <button>Hebdomadaire</button>
-                    <button>Spécial</button>
+                <div class="wizard-vault__tabs" v-if="false">
+                    <button @click="switchTab('daily')" :class="{ 'active': tab == 'daily' }">Quotidien</button>
+                    <button @click="switchTab('weekly')" :class="{ 'active': tab == 'weekly' }">Hebdomadaire</button>
+                    <button @click="switchTab('special')" :class="{ 'active': tab == 'special' }">Spécial</button>
                 </div>
-                <div class="wizard-vault__objectives">
+                <div class="wizard-vault__objectives" v-if="false">
                     <div class="wizard-vault__objective wizard-vault__objective--pve">
-
                     </div>
                     <div class="wizard-vault__objective wizard-vault__objective--pvp">
-
                     </div>
                     <div class="wizard-vault__objective wizard-vault__objective--wvw">
-
                     </div>
                 </div>
+                <div v-else>Prochainement disponible...</div>
             </div>
-            <div id="wizard-vault__rewards" v-if="panel == 'rewards'">
-                <div class="wizard-vault__panel-title">Récompenses astrales</div>
+            <div id="wizard-vault__rewards-panel" v-if="panel == 'rewards'">
+                <div class="wizard-vault__rewards" v-if="rewards">
+                    <div v-for="reward, r in rewards" class="wizard-vault__reward">
+                        <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
+                            :class="'wizard-vault__reward__icon--rarity-' + reward.rarity" v-if="reward.icon">
+                        <div class="wizard-vault__reward__price">
+                            {{ reward.price }}
+                            <img src="@/assets/img/CurrencyAstralAcclaim.png" />
+                        </div>
+                        <div class="wizard-vault__reward__name" v-html="reward.name"></div>
+                        <div class="wizard-vault__reward__limit" v-if="reward.limit">
+                            {{ reward.limit }} {{ (reward.limit) > 1 ? 'disponibles' : 'disponible' }}
+                        </div>
+                    </div>
+                </div>
+                <div v-else>Chargement en cours...</div>
             </div>
         </div>
     </div>
@@ -73,6 +143,36 @@ function switchPanel(p) {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input[type="checkbox"] {
+    @apply hidden;
+}
+
+input[type="checkbox"]+label {
+    @apply inline-flex gap-1 items-center cursor-pointer;
+}
+
+input[type="checkbox"]+label:before {
+    @apply w-5 h-5 block bg-center bg-no-repeat;
+    content: '';
+    background-image: url('@/assets/img/CheckboxUnchecked.png');
+}
+
+input[type="checkbox"]:checked+label:before {
+    background-image: url('@/assets/img/CheckboxChecked.png');
+}
+
+button {
+    @apply bg-gray-600 rounded py-2 px-3 inline-flex items-center justify-center opacity-50;
+
+    &.active {
+        @apply opacity-100 ring-offset-2 ring-2 ring-gray-600 ring-offset-gray-900;
+    }
+
+    &[disabled] {
+        @apply opacity-10;
+    }
+}
 
 .gw2-wizard-vault {
     @apply w-full bg-gray-900 text-gray-50 rounded-xl;
@@ -89,21 +189,24 @@ function switchPanel(p) {
         @apply flex gap-4 w-full p-4 pt-0;
 
         &__panel-title {
-            @apply text-2xl font-semibold;
+            @apply text-2xl font-semibold mb-4;
         }
 
-        &__objectives-panel {
+        &__tabs {
+            @apply flex gap-2 mb-4;
+        }
+
+        &__objectives-panel,
+        &__rewards-panel {
             @apply flex-1;
         }
 
         &__objectives-toolbar {
-            @apply flex justify-between gap-4 items-center;
-
-
+            @apply flex gap-6 items-center justify-between border border-gray-800 py-2 px-3 rounded-lg mb-4;
         }
 
         &__objectives {
-            @apply flex flex-col gap-1;
+            @apply flex flex-col gap-2;
         }
 
         &__objective {
@@ -122,26 +225,74 @@ function switchPanel(p) {
                 background-image: url('@/assets/img/BackgroundWizardVaultWvw.png');
             }
         }
-    }
 
-    .menu {
-        @apply flex flex-col gap-2 w-12;
+        &__rewards {
+            @apply grid grid-cols-5 gap-2;
+        }
 
-        button {
-            @apply bg-gray-600 rounded py-2 block aspect-square flex items-center justify-center opacity-50;
+        &__reward {
+            @apply border border-gray-800 p-4 rounded-lg flex flex-col items-center justify-start text-center gap-2;
 
-            &.active {
-                @apply opacity-100 ring-offset-2 ring-2 ring-gray-600 ring-offset-gray-900;
+            &__icon {
+                @apply w-16 h-16 rounded;
+                border: 3px solid #fff;
+
+                &--rarity-Legendary {
+                    border-color: #93f;
+                }
+
+                &--rarity-Ascended {
+                    border-color: #f48;
+                }
+
+                &--rarity-Exotic {
+                    border-color: #fa0;
+                }
+
+                &--rarity-Rare {
+                    border-color: #f0d022;
+                }
+
+                &--rarity-Masterwork {
+                    border-color: #32b112;
+                }
+
+                &--rarity-Fine {
+                    border-color: #5291f0;
+                }
             }
 
-            &[disabled] {
-                @apply opacity-10;
+            &__name {
+                @apply font-semibold leading-5;
+            }
+
+            &__limit {
+                @apply text-sm;
+            }
+
+            &__price {
+                @apply flex gap-1 items-center font-bold text-lg;
+
+                img {
+                    @apply w-6 h-6;
+                }
             }
         }
 
-        img {
-            @apply grayscale;
+
+        &__menu {
+            @apply flex flex-col gap-2 w-12 flex-shrink-0;
+
+            button {
+                @apply px-0 aspect-square;
+            }
+
+            img {
+                @apply grayscale;
+            }
         }
     }
+
+
 }
 </style>
