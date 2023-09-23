@@ -1,10 +1,23 @@
+<script>
+import { Tippy, TippyDirective } from 'tippy.vue'
+export default {
+    components: {
+        Tippy
+    },
+    directives: {
+        tippy: TippyDirective
+    }
+}
+</script>
+
 <script setup>
 import { ref } from 'vue';
-import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json'
+import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json';
 
-const panel = ref('objectives');
+const panel = ref('rewards');
 const tab = ref('daily');
 const rewards = ref(null);
+const itemTooltipData = ref(null);
 
 const user = ref({
     'content': {
@@ -32,6 +45,22 @@ function switchTab(t) {
     }
 }
 
+async function getItem(id) {
+    try {
+        const res = await fetch('https://api.guildwars2.com/v2/items/' + id + '?lang=fr');
+        return await res.json();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function showItemToolip(id) {
+    itemTooltipData.value = null;
+    getItem(id).then(data => {
+        itemTooltipData.value = data;
+    });
+}
+
 async function getApiItems() {
     const ids = GW2WizardVaultRewards.map((r) => r.item_id).join(',');
     try {
@@ -53,8 +82,6 @@ getApiItems().then(items => {
     });
     rewards.value = GW2WizardVaultRewards;
 });
-
-
 
 </script>
 
@@ -120,9 +147,37 @@ getApiItems().then(items => {
             </div>
             <div id="wizard-vault__rewards-panel" v-if="panel == 'rewards'">
                 <div class="wizard-vault__rewards" v-if="rewards">
-                    <div v-for="reward, r in rewards" class="wizard-vault__reward">
+                    <div v-for="reward, r in rewards" class="wizard-vault__reward" :key="r">
                         <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
-                            :class="'wizard-vault__reward__icon--rarity-' + reward.rarity" v-if="reward.icon">
+                            :class="'wizard-vault__reward__icon--rarity-' + reward.rarity" v-if="reward.icon" v-tippy>
+                        <tippy @show="showItemToolip(reward.item_id)" placement="auto" followCursor="true">
+                            <div v-if="itemTooltipData">
+                                <div v-if="itemTooltipData.text">Error: {{ itemTooltipData.text }}</div>
+                                <div v-else class="flex flex-col gap-2 text-md">
+                                    <div class="flex gap-3 items-center">
+                                        <img :src="itemTooltipData.icon" class="self-start rounded w-12 h-12" alt="">
+                                        <div class="font-bold text-base">{{ itemTooltipData.name }}</div>
+                                    </div>
+                                    <div>
+                                        <div>{{ itemTooltipData.rarity }}</div>
+                                        <div>
+                                            {{ itemTooltipData.type }}
+                                            <span v-if="itemTooltipData.details?.type">
+                                                ({{ itemTooltipData.details?.type }})
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div v-if="itemTooltipData.description">{{ itemTooltipData.description }}</div>
+                                    <div v-if="itemTooltipData.flags.length > 0"
+                                        class="flex flex-wrap gap-1 text-xs text-white opacity-60">
+                                        <span v-for="flag in itemTooltipData.flags" :key="flag">
+                                            {{ flag }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else>Chargement en cours...</div>
+                        </tippy>
                         <div class="wizard-vault__reward__price">
                             {{ reward.price }}
                             <img src="@/assets/img/CurrencyAstralAcclaim.png" />
