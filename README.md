@@ -1,14 +1,6 @@
-# lbm-assets
+# Assets du Bus Magique
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Outils et ressources pour le site du Bus Magique.
 
 ## Project Setup
 
@@ -22,14 +14,36 @@ npm install
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
 npm run lint
 ```
+
+## CustomElements
+
+### LBM Menu
+
+```html
+<lbm-menu></lbm-menu>
+```
+
+*Work in progress*
+
+### GW2 Wizard Vault
+
+```html
+<gw2-wizard-vault></gw2-wizard-vault>
+```
+
+Application de la chambre forte du sorcier en 3 onglets (objectifs, récompenses et héritage). L'API GW2 n'est pas encore à jour, donc tout est statique/manuel pour le moment.
+
+### GW2 Timers
+
+```html
+<gw2-events-timer></gw2-events-timer>
+```
+
+Nouvelle version des timers des événements et worl boss de Guild Wars 2.
+
+*Work in progress*
