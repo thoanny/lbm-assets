@@ -11,6 +11,7 @@ export default {
 </script>
 
 <script setup>
+import '/node_modules/tippy.js/dist/tippy.css';
 import { ref } from 'vue';
 import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json';
 
