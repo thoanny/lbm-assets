@@ -20,6 +20,11 @@ npm run dev
 npm run lint
 ```
 
+## Intégrer au site du Bus Magique
+
+Sur e-monsie, dans "Options de référencement" puis "Balises méta supplémentaires", importer le script `<script type="module" src="https://lbm-assets.vercel.app/index.js"></script>`
+ (ne pas oublier l'atribut type=module !) et dans le code de la page, utiliser les balises CustomElements.
+
 ## CustomElements
 
 ### LBM Menu
