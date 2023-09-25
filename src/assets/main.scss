@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --gw2-rarity-Junk: #bbb;
+    --gw2-rarity-Basic: #fff;
+    --gw2-rarity-Fine: #5291f0;
+    --gw2-rarity-Masterwork: #32b112;
+    --gw2-rarity-Rare: #f0d022;
+    --gw2-rarity-Exotic: #fa0;
+    --gw2-rarity-Ascended: #f48;
+    --gw2-rarity-Legendary: #93f;
+}

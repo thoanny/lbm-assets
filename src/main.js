@@ -1,4 +1,4 @@
-import './assets/main.css'
+import './assets/main.scss'
 import '/node_modules/tippy.js/dist/tippy.css';
 
 import { defineCustomElement } from 'vue';

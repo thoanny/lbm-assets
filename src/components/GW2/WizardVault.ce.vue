@@ -11,7 +11,6 @@ export default {
 </script>
 
 <script setup>
-import '/node_modules/tippy.js/dist/tippy.css';
 import { ref } from 'vue';
 import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json';
 
@@ -150,7 +149,7 @@ getApiItems().then(items => {
                 <div class="wizard-vault__rewards" v-if="rewards">
                     <div v-for="reward, r in rewards" class="wizard-vault__reward" :key="r">
                         <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
-                            :class="'wizard-vault__reward__icon--rarity-' + reward.rarity" v-if="reward.icon" v-tippy>
+                            :class="'border-gw2-rarity-' + reward.rarity" v-if="reward.icon" v-tippy>
                         <tippy @show="showItemToolip(reward.item_id)" placement="auto" followCursor="true">
                             <div v-if="itemTooltipData">
                                 <div v-if="itemTooltipData.text">Error: {{ itemTooltipData.text }}</div>
@@ -196,9 +195,22 @@ getApiItems().then(items => {
 </template>
 
 <style lang="scss" scoped>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+// GW2 Colors
+$gw2-rarity-colors: "Junk", "Basic", "Fine", "Masterwork", "Rare", "Exotic", "Ascended", "Legendary";
+
+@each $color in $gw2-rarity-colors {
+    .text-gw2-rarity-#{$color} {
+        color: var(--gw2-rarity-#{$color}) !important;
+    }
+
+    .bg-gw2-rarity-#{$color} {
+        background-color: var(--gw2-rarity-#{$color}) !important;
+    }
+
+    .border-gw2-rarity-#{$color} {
+        border-color: var(--gw2-rarity-#{$color}) !important;
+    }
+}
 
 input[type="checkbox"] {
     @apply hidden;
@@ -291,31 +303,7 @@ button {
 
             &__icon {
                 @apply w-16 h-16 rounded;
-                border: 3px solid #fff;
-
-                &--rarity-Legendary {
-                    border-color: #93f;
-                }
-
-                &--rarity-Ascended {
-                    border-color: #f48;
-                }
-
-                &--rarity-Exotic {
-                    border-color: #fa0;
-                }
-
-                &--rarity-Rare {
-                    border-color: #f0d022;
-                }
-
-                &--rarity-Masterwork {
-                    border-color: #32b112;
-                }
-
-                &--rarity-Fine {
-                    border-color: #5291f0;
-                }
+                border: 3px solid transparent;
             }
 
             &__name {
