@@ -12,3 +12,19 @@
     --gw2-rarity-Ascended: #f48;
     --gw2-rarity-Legendary: #93f;
 }
+
+$gw2-rarity-colors: "Junk", "Basic", "Fine", "Masterwork", "Rare", "Exotic", "Ascended", "Legendary";
+
+@each $color in $gw2-rarity-colors {
+    .text-gw2-rarity-#{$color} {
+        color: var(--gw2-rarity-#{$color}) !important;
+    }
+
+    .bg-gw2-rarity-#{$color} {
+        background-color: var(--gw2-rarity-#{$color}) !important;
+    }
+
+    .border-gw2-rarity-#{$color} {
+        border-color: var(--gw2-rarity-#{$color}) !important;
+    }
+}
