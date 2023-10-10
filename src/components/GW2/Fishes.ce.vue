@@ -70,11 +70,15 @@ function updateFilters() {
             achievements.value.push(f.achievement);
         }
 
+        achievements.value = sortArrayOfObjects(achievements.value, "name");
+
         if (f.hole) {
             const j = holes.value.findIndex(h => h.id === f.hole?.id);
             if (j < 0) {
                 holes.value.push(f.hole);
             }
+
+            holes.value = sortArrayOfObjects(holes.value, "name");
         }
 
         if (f.bait) {
@@ -82,6 +86,8 @@ function updateFilters() {
             if (k < 0) {
                 baits.value.push(f.bait);
             }
+
+            baits.value = sortArrayOfObjects(baits.value, "name");
         }
     });
 }
@@ -93,10 +99,28 @@ function resetFilters() {
     fishes.value = allFishes.value;
 }
 
+const sortArrayOfObjects = (arr, propertyName, order = 'ascending') => {
+    const sortedArr = arr.sort((a, b) => {
+        if (a[propertyName] < b[propertyName]) {
+            return -1;
+        }
+        if (a[propertyName] > b[propertyName]) {
+            return 1;
+        }
+        return 0;
+    });
+
+    if (order === 'descending') {
+        return sortedArr.reverse();
+    }
+
+    return sortedArr;
+};
+
 </script>
 
 <template>
-    <div class="bg-black bg-opacity-50 p-4 rounded-lg">
+    <div class="bg-black bg-opacity-50 p-4 rounded-lg text-neutral-content">
         <div class="flex flex-col sm:flex-row justify-between gap-2 sm:gap-4 items-center">
             <div class="text-2xl font-bold flex gap-2 items-center text-white">
                 <img src="@/assets/img/fishing-companion.png" alt="" class="w-12 h-12 shrink-0">
@@ -109,28 +133,28 @@ function resetFilters() {
         <div v-if="fishes">
             <div class="flex flex-col md:flex-row justify-between gap-4 items-center mt-4">
                 <div class="flex flex-wrap gap-2">
-                    <select class="select select-sm selected-bordered w-full sm:w-auto" v-model="currentAchievement"
-                        @change="updateFishes('achievement')">
+                    <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto"
+                        v-model="currentAchievement" @change="updateFishes('achievement')">
                         <option value="">- Région -</option>
                         <option v-for="achievement in achievements" :key="achievement.id" :value="achievement.id">
                             {{ achievement.name }}
                         </option>
                     </select>
-                    <select class="select select-sm selected-bordered w-full sm:w-auto" v-model="currentHole"
-                        @change="updateFishes('hole')">
+                    <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto" v-model="currentHole"
+                        @change="updateFishes('hole')" v-if="currentAchievement">
                         <option value="">- Zone -</option>
                         <option v-for="hole in holes" :key="hole.id" :value="hole.id">
                             {{ hole.name }}
                         </option>
                     </select>
-                    <select class="select select-sm selected-bordered w-full sm:w-auto" v-model="currentBait"
-                        @change="updateFishes('bait')">
+                    <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto" v-model="currentBait"
+                        @change="updateFishes('bait')" v-if="currentAchievement">
                         <option value="">- Appât -</option>
                         <option v-for="bait in baits" :key="bait.uid" :value="bait.uid">
                             {{ bait.name }}
                         </option>
                     </select>
-                    <button class="btn btn-sm btn-square" @click="resetFilters"
+                    <button class="lbm-btn lbm-btn-sm lbm-btn-square" @click="resetFilters"
                         v-if="currentAchievement || currentHole || currentBait">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                             <path
@@ -138,7 +162,7 @@ function resetFilters() {
                         </svg>
                     </button>
                 </div>
-                <label class="btn btn-sm w-full sm:w-auto" for="fishes-settings-modal">
+                <label class="lbm-btn lbm-btn-sm w-full sm:w-auto" for="fishes-settings-modal">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -150,14 +174,15 @@ function resetFilters() {
             </div>
             <div class="flex flex-col gap-3">
                 <!-- Daily -->
-                <div v-if="daily" class="flex gap-2 items-center p-2 bg-base-100 rounded rounded-lg mt-4">
+                <div v-if="daily"
+                    class="flex gap-4 items-center p-4 bg-black rounded rounded-lg mt-4 border border-base-100">
                     <img :src="'https://api.lebusmagique.fr/uploads/api/gw2/items/' + daily.uid + '.png'"
-                        class="rounded rounded-lg border w-14 h-14 shrink-0" :class="'border-gw2-rarity-' + daily.rarity"
+                        class="rounded rounded-lg border w-18 h-18 shrink-0" :class="'border-gw2-rarity-' + daily.rarity"
                         alt="">
                     <div class="flex flex-col gap-1">
                         <div class="inline-flex flex-wrap gap-2 items-center">
                             <span class="font-bold text-white">{{ daily.name }}</span>
-                            <span class="badge badge-primary">
+                            <span class="lbm-badge lbm-badge-primary">
                                 Poisson du jour
                             </span>
                         </div>
@@ -206,53 +231,72 @@ function resetFilters() {
                     </div>
                 </div>
                 <!-- Fishes -->
-                <div v-for="fish in fishes" :key="fish.uid" class="flex gap-4 items-center">
-                    <img :src="'https://api.lebusmagique.fr/uploads/api/gw2/items/' + fish.uid + '.png'"
-                        class="rounded rounded-lg border w-14 h-14 shrink-0" :class="'border-gw2-rarity-' + fish.rarity"
-                        alt="">
-                    <div>
-                        <div class="font-bold text-white">{{ fish.name }}</div>
-                        <div class="flex flex-wrap gap-x-2 gap-y-1 text-sm">
-                            <span class="inline-flex gap-1 items-center" v-if="fish.achievement">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"
-                                    fill="currentColor" class="h-3 w-3">
-                                    <path
-                                        d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z" />
-                                </svg>
-                                {{ fish.achievement.name }}
-                            </span>
-                            <span class="inline-flex gap-1 items-center" v-if="fish.hole">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="h-3 w-3" height="1em"
-                                    viewBox="0 0 352 512">
-                                    <path
-                                        d="M205.22 22.09c-7.94-28.78-49.44-30.12-58.44 0C100.01 179.85 0 222.72 0 333.91 0 432.35 78.72 512 176 512s176-79.65 176-178.09c0-111.75-99.79-153.34-146.78-311.82zM176 448c-61.75 0-112-50.25-112-112 0-8.84 7.16-16 16-16s16 7.16 16 16c0 44.11 35.89 80 80 80 8.84 0 16 7.16 16 16s-7.16 16-16 16z" />
-                                </svg>
-                                {{ fish.hole.name }}
-                            </span>
-                            <span class="inline-flex gap-1 items-center" v-if="fish.bait">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="currentColor" class="h-3 w-3"
-                                    viewBox="0 0 512 512">
-                                    <path
-                                        d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z" />
-                                </svg>
-                                {{ fish.bait.name }}
-                            </span>
-                            <span class="inline-flex gap-1 items-center" v-if="fish.power">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"
-                                    fill="currentColor" class="h-3 w-3">
-                                    <path
-                                        d="M510.28 445.86l-73.03-292.13c-3.8-15.19-16.44-25.72-30.87-25.72h-60.25c3.57-10.05 5.88-20.72 5.88-32 0-53.02-42.98-96-96-96s-96 42.98-96 96c0 11.28 2.3 21.95 5.88 32h-60.25c-14.43 0-27.08 10.54-30.87 25.72L1.72 445.86C-6.61 479.17 16.38 512 48.03 512h415.95c31.64 0 54.63-32.83 46.3-66.14zM256 128c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32z" />
-                                </svg>
-                                {{ fish.power }}
-                            </span>
-                            <span class="inline-flex gap-1 items-center" v-if="fish.time">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"
-                                    fill="currentColor" class="h-3 w-3">
-                                    <path
-                                        d="M256,8C119,8,8,119,8,256S119,504,256,504,504,393,504,256,393,8,256,8Zm92.49,313h0l-20,25a16,16,0,0,1-22.49,2.5h0l-67-49.72a40,40,0,0,1-15-31.23V112a16,16,0,0,1,16-16h32a16,16,0,0,1,16,16V256l58,42.5A16,16,0,0,1,348.49,321Z" />
-                                </svg>
-                                {{ _times[fish.time] }}
-                            </span>
+                <div v-if="fishes.length === 0">
+                    <div class="flex gap-2 items-center font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd"
+                                d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Aucun poisson trouvé
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd"
+                                d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </div>
+                <div id="fishes"
+                    class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 max-h-screen border border-base-100 overflow-y-auto p-4 rounded rounded-lg items-start"
+                    v-else>
+                    <div v-for="fish in fishes" :key="fish.uid" class="flex gap-4 items-center">
+                        <img :src="'https://api.lebusmagique.fr/uploads/api/gw2/items/' + fish.uid + '.png'"
+                            class="rounded rounded-lg border w-18 h-18 shrink-0" :class="'border-gw2-rarity-' + fish.rarity"
+                            alt="">
+                        <div>
+                            <div class="font-bold text-white">{{ fish.name }}</div>
+                            <div class="flex flex-wrap gap-x-2 gap-y-1 text-sm">
+                                <span class="inline-flex gap-1 items-center" v-if="fish.achievement">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"
+                                        fill="currentColor" class="h-3 w-3">
+                                        <path
+                                            d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z" />
+                                    </svg>
+                                    {{ fish.achievement.name }}
+                                </span>
+                                <span class="inline-flex gap-1 items-center" v-if="fish.hole">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="h-3 w-3" height="1em"
+                                        viewBox="0 0 352 512">
+                                        <path
+                                            d="M205.22 22.09c-7.94-28.78-49.44-30.12-58.44 0C100.01 179.85 0 222.72 0 333.91 0 432.35 78.72 512 176 512s176-79.65 176-178.09c0-111.75-99.79-153.34-146.78-311.82zM176 448c-61.75 0-112-50.25-112-112 0-8.84 7.16-16 16-16s16 7.16 16 16c0 44.11 35.89 80 80 80 8.84 0 16 7.16 16 16s-7.16 16-16 16z" />
+                                    </svg>
+                                    {{ fish.hole.name }}
+                                </span>
+                                <span class="inline-flex gap-1 items-center" v-if="fish.bait">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="currentColor" class="h-3 w-3"
+                                        viewBox="0 0 512 512">
+                                        <path
+                                            d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z" />
+                                    </svg>
+                                    {{ fish.bait.name }}
+                                </span>
+                                <span class="inline-flex gap-1 items-center" v-if="fish.power">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"
+                                        fill="currentColor" class="h-3 w-3">
+                                        <path
+                                            d="M510.28 445.86l-73.03-292.13c-3.8-15.19-16.44-25.72-30.87-25.72h-60.25c3.57-10.05 5.88-20.72 5.88-32 0-53.02-42.98-96-96-96s-96 42.98-96 96c0 11.28 2.3 21.95 5.88 32h-60.25c-14.43 0-27.08 10.54-30.87 25.72L1.72 445.86C-6.61 479.17 16.38 512 48.03 512h415.95c31.64 0 54.63-32.83 46.3-66.14zM256 128c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32z" />
+                                    </svg>
+                                    {{ fish.power }}
+                                </span>
+                                <span class="inline-flex gap-1 items-center" v-if="fish.time">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"
+                                        fill="currentColor" class="h-3 w-3">
+                                        <path
+                                            d="M256,8C119,8,8,119,8,256S119,504,256,504,504,393,504,256,393,8,256,8Zm92.49,313h0l-20,25a16,16,0,0,1-22.49,2.5h0l-67-49.72a40,40,0,0,1-15-31.23V112a16,16,0,0,1,16-16h32a16,16,0,0,1,16,16V256l58,42.5A16,16,0,0,1,348.49,321Z" />
+                                    </svg>
+                                    {{ _times[fish.time] }}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -264,24 +308,24 @@ function resetFilters() {
     </div>
 
 
-    <input type="checkbox" id="fishes-settings-modal" class="modal-toggle" />
-    <div class="modal">
-        <div class="modal-box">
+    <input type="checkbox" id="fishes-settings-modal" class="lbm-modal-toggle" />
+    <div class="lbm-modal">
+        <div class="lbm-modal-box">
             <h3 class="font-bold text-lg">Paramètres</h3>
-            <div class="form-control w-full">
-                <label class="label">
-                    <span class="label-text">Clé API Guild Wars 2</span>
+            <div class="lbm-form-control w-full">
+                <label class="lbm-label">
+                    <span class="lbm-label-text">Clé API Guild Wars 2</span>
                 </label>
-                <input type="text" placeholder="Type here" class="input input-bordered w-full" />
+                <input type="text" placeholder="Type here" class="lbm-input lbm-input-bordered w-full" />
             </div>
-            <div class="form-control mt-3">
-                <label class="label cursor-pointer justify-start gap-2">
-                    <input type="checkbox" class="toggle toggle-primary" checked />
+            <div class="lbm-form-control mt-3">
+                <label class="lbm-label cursor-pointer justify-start gap-2">
+                    <input type="checkbox" class="lbm-toggle lbm-toggle-success" checked />
                     <span class="label-text">Masquer les poissons pêchés</span>
                 </label>
             </div>
-            <div class="modal-action">
-                <label for="fishes-settings-modal" class="btn btn-primary">Fermer</label>
+            <div class="lbm-modal-action">
+                <label for="fishes-settings-modal" class="lbm-btn lbm-btn-primary">Fermer</label>
             </div>
         </div>
     </div>
@@ -292,5 +336,11 @@ function resetFilters() {
 
 img.border {
     border-width: 3px;
+}
+
+#fishes {
+    max-height: calc(100dvh - 17rem);
+    min-height: 13rem;
+    height: auto;
 }
 </style>
