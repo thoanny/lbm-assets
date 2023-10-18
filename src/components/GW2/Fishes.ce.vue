@@ -33,7 +33,7 @@ const _times = {
 async function getFishes() {
     isLoading.value = true;
     try {
-        const res = await fetch('https://api.lebusmagique.fr/api/gw2/fishes?token=' + apiKey.value);
+        const res = await fetch('https://api.lebusmagique.fr/api/gw2/fishes' + ((apiKey.value) ? '?token=' + apiKey.value : ''));
         return await res.json();
     } catch (error) {
         console.error(error);
