@@ -1,8 +1,14 @@
 <script setup>
 
-import { ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 
-const allFishes = ref({});
+const refreshFishesInterval = ref(null);
+
+const apiKey = ref(null);
+const hideCompleted = ref(false);
+const token = ref(null);
+
+const allFishes = ref(null);
 const fishes = ref(null);
 const daily = ref({});
 
@@ -14,37 +20,38 @@ const currentAchievement = ref('');
 const currentHole = ref('');
 const currentBait = ref('');
 
+const isLoading = ref(false);
+
+const TIMER_INTERVAL = 300000; // 5 minutes
+
 const _times = {
     'n': 'Nuit',
     'd': 'Jour',
     'dd': 'Aube/Crépuscule'
 };
 
-async function getData() {
+async function getFishes() {
+    isLoading.value = true;
     try {
-        const res = await fetch('https://api.lebusmagique.fr/api/gw2/fishes');
+        const res = await fetch('https://api.lebusmagique.fr/api/gw2/fishes?token=' + apiKey.value);
         return await res.json();
     } catch (error) {
         console.error(error);
     }
 }
 
-getData().then(d => {
-    allFishes.value = fishes.value = d.fishes;
-    daily.value = d.daily;
-    updateFilters();
-});
-
-function updateFishes(t) {
-    console.log('updateFilters()', 'ach:' + currentAchievement.value, 'hole:' + currentHole.value, 'bait:' + currentBait.value);
-
+function updateFishes(reset = false) {
     fishes.value = allFishes.value;
 
-    if (t === 'achievement') {
+    if (reset) {
         holes.value = [];
         baits.value = [];
         currentHole.value = '';
         currentBait.value = '';
+    }
+
+    if (hideCompleted.value) {
+        fishes.value = fishes.value.filter(f => !f.status);
     }
 
     if (currentAchievement.value) {
@@ -96,7 +103,8 @@ function resetFilters() {
     currentAchievement.value = '';
     currentHole.value = '';
     currentBait.value = '';
-    fishes.value = allFishes.value;
+    achievements.value = [];
+    updateFishes();
 }
 
 const sortArrayOfObjects = (arr, propertyName, order = 'ascending') => {
@@ -117,6 +125,55 @@ const sortArrayOfObjects = (arr, propertyName, order = 'ascending') => {
     return sortedArr;
 };
 
+function initUserSettings() {
+    const localApiKey = localStorage.getItem('gw2-fishes-api-key');
+    if (localApiKey) {
+        apiKey.value = localApiKey;
+    }
+
+    const localHideCompleted = localStorage.getItem('gw2-fishes-hide-completed');
+    if (localHideCompleted) {
+        hideCompleted.value = (localHideCompleted === 'true');
+    }
+}
+
+function loadFishes() {
+    getFishes().then(d => {
+        allFishes.value = d.fishes;
+        daily.value = d.daily;
+        token.value = d.token;
+        updateFishes();
+        isLoading.value = false;
+    });
+}
+
+initUserSettings();
+
+onMounted(() => {
+    loadFishes();
+
+    if (!refreshFishesInterval.value) {
+        refreshFishesInterval.value = setInterval(loadFishes, TIMER_INTERVAL);
+    }
+});
+
+onUnmounted(() => {
+    if (refreshFishesInterval.value) clearInterval(refreshFishesInterval.value);
+    refreshFishesInterval.value = null;
+});
+
+watch(hideCompleted, async () => {
+    localStorage.setItem('gw2-fishes-hide-completed', hideCompleted.value);
+    if (fishes.value) {
+        resetFilters();
+    }
+});
+
+watch(apiKey, async () => {
+    localStorage.setItem('gw2-fishes-api-key', apiKey.value);
+    loadFishes();
+});
+
 </script>
 
 <template>
@@ -130,38 +187,46 @@ const sortArrayOfObjects = (arr, propertyName, order = 'ascending') => {
                 {{ fishes.length }}/{{ allFishes.length }} poissons
             </div>
         </div>
-        <div v-if="fishes">
-            <div class="flex flex-col md:flex-row justify-between gap-4 items-center mt-4">
-                <div class="flex flex-wrap gap-2">
-                    <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto"
-                        v-model="currentAchievement" @change="updateFishes('achievement')">
-                        <option value="">- Région -</option>
-                        <option v-for="achievement in achievements" :key="achievement.id" :value="achievement.id">
-                            {{ achievement.name }}
-                        </option>
-                    </select>
-                    <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto" v-model="currentHole"
-                        @change="updateFishes('hole')" v-if="currentAchievement">
-                        <option value="">- Zone -</option>
-                        <option v-for="hole in holes" :key="hole.id" :value="hole.id">
-                            {{ hole.name }}
-                        </option>
-                    </select>
-                    <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto" v-model="currentBait"
-                        @change="updateFishes('bait')" v-if="currentAchievement">
-                        <option value="">- Appât -</option>
-                        <option v-for="bait in baits" :key="bait.uid" :value="bait.uid">
-                            {{ bait.name }}
-                        </option>
-                    </select>
-                    <button class="lbm-btn lbm-btn-sm lbm-btn-square" @click="resetFilters"
-                        v-if="currentAchievement || currentHole || currentBait">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                            <path
-                                d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                        </svg>
-                    </button>
-                </div>
+        <div class="flex flex-col md:flex-row justify-between gap-4 items-center mt-4">
+            <div class="flex flex-wrap gap-2">
+                <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto" v-model="currentAchievement"
+                    @change="updateFishes(1)">
+                    <option value="">- Région -</option>
+                    <option v-for="achievement in achievements" :key="achievement.id" :value="achievement.id">
+                        {{ achievement.name }}
+                    </option>
+                </select>
+                <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto" v-model="currentHole"
+                    @change="updateFishes()" v-if="currentAchievement">
+                    <option value="">- Zone -</option>
+                    <option v-for="hole in holes" :key="hole.id" :value="hole.id">
+                        {{ hole.name }}
+                    </option>
+                </select>
+                <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto" v-model="currentBait"
+                    @change="updateFishes()" v-if="currentAchievement">
+                    <option value="">- Appât -</option>
+                    <option v-for="bait in baits" :key="bait.uid" :value="bait.uid">
+                        {{ bait.name }}
+                    </option>
+                </select>
+                <button class="lbm-btn lbm-btn-sm lbm-btn-square" @click="resetFilters"
+                    v-if="currentAchievement || currentHole || currentBait">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                        <path
+                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="flex gap-2 items-center">
+                <label class="lbm-btn lbm-btn-error lbm-btn-sm gap-1" v-if="token === 'notok'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                        <path
+                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                    </svg>
+
+                    API GW2
+                </label>
                 <label class="lbm-btn lbm-btn-sm w-full sm:w-auto" for="fishes-settings-modal">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
@@ -172,10 +237,11 @@ const sortArrayOfObjects = (arr, propertyName, order = 'ascending') => {
                     Paramètres
                 </label>
             </div>
-            <div class="flex flex-col gap-3">
+        </div>
+        <div v-if="fishes && !isLoading">
+            <div class="flex flex-col gap-3 mt-4">
                 <!-- Daily -->
-                <div v-if="daily"
-                    class="flex gap-4 items-center p-4 bg-black rounded rounded-lg mt-4 border border-base-100">
+                <div v-if="daily" class="flex gap-4 items-center p-4 bg-black rounded rounded-lg border border-base-100">
                     <img :src="'https://api.lebusmagique.fr/uploads/api/gw2/items/' + daily.uid + '.png'"
                         class="rounded rounded-lg border w-18 h-18 shrink-0" :class="'border-gw2-rarity-' + daily.rarity"
                         alt="">
@@ -247,14 +313,21 @@ const sortArrayOfObjects = (arr, propertyName, order = 'ascending') => {
                     </div>
                 </div>
                 <div id="fishes"
-                    class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 max-h-screen border border-base-100 overflow-y-auto p-4 rounded rounded-lg items-start"
+                    class="grid grid-cols-1 lg:grid-cols-2 gap-3 max-h-screen border border-base-100 overflow-y-auto p-4 rounded rounded-lg items-start"
                     v-else>
                     <div v-for="fish in fishes" :key="fish.uid" class="flex gap-4 items-center">
-                        <img :src="'https://api.lebusmagique.fr/uploads/api/gw2/items/' + fish.uid + '.png'"
-                            class="rounded rounded-lg border w-18 h-18 shrink-0" :class="'border-gw2-rarity-' + fish.rarity"
-                            alt="">
+                        <div class="lbm-indicator w-18 h-18 shrink-0">
+                            <span class="lbm-indicator-item lbm-indicator-bottom lbm-badge bottom-2 right-2 shadow"
+                                v-if="fish.status" :class="'fish-completed-' + fish.status"></span>
+                            <img :src="'https://api.lebusmagique.fr/uploads/api/gw2/items/' + fish.uid + '.png'"
+                                class="rounded rounded-lg border w-18 h-18 shrink-0"
+                                :class="'border-gw2-rarity-' + fish.rarity" alt="">
+                        </div>
+
                         <div>
-                            <div class="font-bold text-white">{{ fish.name }}</div>
+                            <div class="font-bold text-white">
+                                {{ fish.name }}
+                            </div>
                             <div class="flex flex-wrap gap-x-2 gap-y-1 text-sm">
                                 <span class="inline-flex gap-1 items-center" v-if="fish.achievement">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"
@@ -303,10 +376,9 @@ const sortArrayOfObjects = (arr, propertyName, order = 'ascending') => {
             </div>
         </div>
         <div class="flex gap-2 items-center mt-4" v-else>
-            <span class="loading"></span> Chargement en cours...
+            <span class="lbm-loading"></span> Chargement en cours...
         </div>
     </div>
-
 
     <input type="checkbox" id="fishes-settings-modal" class="lbm-modal-toggle" />
     <div class="lbm-modal">
@@ -316,11 +388,13 @@ const sortArrayOfObjects = (arr, propertyName, order = 'ascending') => {
                 <label class="lbm-label">
                     <span class="lbm-label-text">Clé API Guild Wars 2</span>
                 </label>
-                <input type="text" placeholder="Type here" class="lbm-input lbm-input-bordered w-full" />
+                <input type="text" placeholder="" class="lbm-input lbm-input-bordered w-full" v-model="apiKey" />
+            </div>
+            <div class="text-error mt-2" v-if="token === 'notok'">Clé API invalide ou problème avec l'API Guild Wars 2...
             </div>
             <div class="lbm-form-control mt-3">
                 <label class="lbm-label cursor-pointer justify-start gap-2">
-                    <input type="checkbox" class="lbm-toggle lbm-toggle-success" checked />
+                    <input type="checkbox" class="lbm-toggle lbm-toggle-success" v-model="hideCompleted" />
                     <span class="label-text">Masquer les poissons pêchés</span>
                 </label>
             </div>
@@ -342,5 +416,13 @@ img.border {
     max-height: calc(100dvh - 17rem);
     min-height: 13rem;
     height: auto;
+}
+
+.fish-completed-done {
+    @apply bg-success;
+}
+
+.fish-completed-repeat {
+    @apply bg-info;
 }
 </style>
