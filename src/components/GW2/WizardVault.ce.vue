@@ -18,6 +18,7 @@ const panel = ref('rewards');
 const tab = ref('daily');
 const rewards = ref(null);
 const itemTooltipData = ref(null);
+const currentVaultTotal = ref(0);
 
 const user = ref({
     'content': {
@@ -79,6 +80,9 @@ getApiItems().then(items => {
             GW2WizardVaultRewards[ri].icon = items[index].icon;
             GW2WizardVaultRewards[ri].rarity = items[index].rarity;
         }
+        if (r.limit > 0) {
+            currentVaultTotal.value += r.limit * r.price;
+        }
     });
     rewards.value = GW2WizardVaultRewards;
 });
@@ -86,15 +90,15 @@ getApiItems().then(items => {
 </script>
 
 <template>
-    <div class="gw2-wizard-vault">
-        <h4>
+    <div class="gw2-wizard-vault w-full bg-black bg-opacity-50 p-4 rounded-lg text-neutral-content">
+        <h4 class="flex-col md:flex-row mb-6 md:mb-0 text-center md:text-left">
             <img src="@/assets/img/IconWizardVault.png" />
-            Chambre forte du sorcier
+            <span class="text-white">Chambre forte du&nbsp;sorcier</span>
             <span class="block text-base mt-2 ml-2" v-if="panel === 'objectives'">&ndash; Objectifs</span>
             <span class="block text-base mt-2 ml-2" v-if="panel === 'rewards'">&ndash; Récompenses astrales</span>
         </h4>
-        <div class="wizard-vault">
-            <div class="wizard-vault__menu">
+        <div class="wizard-vault flex-col md:flex-row">
+            <div class="wizard-vault__menu flex-row md:flex-col">
                 <button @click="switchPanel('objectives')" :class="{ 'active': panel == 'objectives' }">
                     <img src="@/assets/img/IconWizardVaultObjectives.png" alt="Objectifs" title="Objectifs" />
                 </button>
@@ -145,8 +149,15 @@ getApiItems().then(items => {
                 </div>
                 <div v-else>Prochainement disponible...</div>
             </div>
-            <div id="wizard-vault__rewards-panel" v-if="panel == 'rewards'">
-                <div class="wizard-vault__rewards" v-if="rewards">
+            <div id="wizard-vault__rewards-panel" class="w-full" v-if="panel == 'rewards'">
+                <div class="mb-4">
+                    Vous avez besoin de <strong>{{ new Intl.NumberFormat('fr-FR').format(currentVaultTotal) }} <img
+                            src="@/assets/img/CurrencyAstralAcclaim.png" class="inline w-6 h-6" /> acclamations
+                        astrales</strong> pour
+                    acheter toutes les récompenses limitées.
+                </div>
+                <div class="wizard-vault__rewards grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
+                    v-if="rewards">
                     <div v-for="reward, r in rewards" class="wizard-vault__reward" :key="r">
                         <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
                             :class="'border-gw2-rarity-' + reward.rarity" v-if="reward.icon" v-tippy>
@@ -178,11 +189,11 @@ getApiItems().then(items => {
                             </div>
                             <div v-else>Chargement en cours...</div>
                         </tippy>
-                        <div class="wizard-vault__reward__price">
+                        <div class="wizard-vault__reward__price text-white">
                             {{ reward.price }}
                             <img src="@/assets/img/CurrencyAstralAcclaim.png" />
                         </div>
-                        <div class="wizard-vault__reward__name" v-html="reward.name"></div>
+                        <div class="wizard-vault__reward__name text-white" v-html="reward.name"></div>
                         <div class="wizard-vault__reward__limit" v-if="reward.limit">
                             {{ reward.limit }} {{ (reward.limit) > 1 ? 'disponibles' : 'disponible' }}
                         </div>
@@ -195,6 +206,7 @@ getApiItems().then(items => {
 </template>
 
 <style lang="scss" scoped>
+@import '../../assets/main.scss';
 // GW2 Colors
 $gw2-rarity-colors: "Junk", "Basic", "Fine", "Masterwork", "Rare", "Exotic", "Ascended", "Legendary";
 
@@ -243,7 +255,6 @@ button {
 }
 
 .gw2-wizard-vault {
-    @apply w-full bg-gray-900 text-gray-50 rounded-xl;
 
     h4 {
         @apply text-3xl flex items-center font-bold;
@@ -266,7 +277,7 @@ button {
 
         &__objectives-panel,
         &__rewards-panel {
-            @apply flex-1;
+            @apply flex-1 w-full;
         }
 
         &__objectives-toolbar {
@@ -292,10 +303,6 @@ button {
             &--wvw {
                 background-image: url('@/assets/img/BackgroundWizardVaultWvw.png');
             }
-        }
-
-        &__rewards {
-            @apply grid grid-cols-5 gap-2;
         }
 
         &__reward {
@@ -325,10 +332,10 @@ button {
 
 
         &__menu {
-            @apply flex flex-col gap-2 w-12 flex-shrink-0;
+            @apply flex gap-2;
 
             button {
-                @apply px-0 aspect-square;
+                @apply px-0 aspect-square flex-shrink-0 w-12;
             }
 
             img {
