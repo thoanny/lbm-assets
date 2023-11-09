@@ -63,7 +63,7 @@ function showItemToolip(id) {
 }
 
 async function getApiItems() {
-    const ids = GW2WizardVaultRewards.map((r) => r.item_id).join(',');
+    const ids = GW2WizardVaultRewards.current.map((r) => r.item_id).join(',');
     try {
         const res = await fetch('https://api.guildwars2.com/v2/items?ids=' + ids);
         const items = await res.json();
@@ -74,17 +74,17 @@ async function getApiItems() {
 }
 
 getApiItems().then(items => {
-    GW2WizardVaultRewards.forEach((r, ri) => {
+    GW2WizardVaultRewards.current.forEach((r, ri) => {
         const index = items.findIndex((i) => r.item_id == i.id);
         if (index >= 0) {
-            GW2WizardVaultRewards[ri].icon = items[index].icon;
-            GW2WizardVaultRewards[ri].rarity = items[index].rarity;
+            GW2WizardVaultRewards.current[ri].icon = items[index].icon;
+            GW2WizardVaultRewards.current[ri].rarity = items[index].rarity;
         }
         if (r.limit > 0) {
             currentVaultTotal.value += r.limit * r.price;
         }
     });
-    rewards.value = GW2WizardVaultRewards;
+    rewards.value = GW2WizardVaultRewards.current;
 });
 
 </script>
