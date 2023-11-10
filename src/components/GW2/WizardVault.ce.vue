@@ -17,6 +17,7 @@ import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json';
 const panel = ref('rewards');
 const tab = ref('daily');
 const rewards = ref(null);
+const legacyRewards = ref(null);
 const itemTooltipData = ref(null);
 const currentVaultTotal = ref(0);
 
@@ -87,6 +88,31 @@ getApiItems().then(items => {
     rewards.value = GW2WizardVaultRewards.current;
 });
 
+async function getApiItemsLegacy() {
+    const ids = GW2WizardVaultRewards.legacy.map((r) => r.item_id).join(',');
+    try {
+        const res = await fetch('https://api.guildwars2.com/v2/items?ids=' + ids);
+        const items = await res.json();
+        return items;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+getApiItemsLegacy().then(items => {
+    GW2WizardVaultRewards.legacy.forEach((r, ri) => {
+        const index = items.findIndex((i) => r.item_id == i.id);
+        if (index >= 0) {
+            GW2WizardVaultRewards.legacy[ri].icon = items[index].icon;
+            GW2WizardVaultRewards.legacy[ri].rarity = items[index].rarity;
+        }
+        if (r.limit > 0) {
+            currentVaultTotal.value += r.limit * r.price;
+        }
+    });
+    legacyRewards.value = GW2WizardVaultRewards.legacy;
+});
+
 </script>
 
 <template>
@@ -96,6 +122,7 @@ getApiItems().then(items => {
             <span class="text-white">Chambre forte du&nbsp;sorcier</span>
             <span class="block text-base mt-2 ml-2" v-if="panel === 'objectives'">&ndash; Objectifs</span>
             <span class="block text-base mt-2 ml-2" v-if="panel === 'rewards'">&ndash; Récompenses astrales</span>
+            <span class="block text-base mt-2 ml-2" v-if="panel === 'legacy'">&ndash; Récompenses d'héritage</span>
         </h4>
         <div class="wizard-vault flex-col md:flex-row">
             <div class="wizard-vault__menu flex-row md:flex-col">
@@ -106,7 +133,7 @@ getApiItems().then(items => {
                     <img src="@/assets/img/IconWizardVaultRewards.png" alt="Récompenses astrales"
                         title="Récompenses astrales" />
                 </button>
-                <button @click="switchPanel('rewards')" disabled>
+                <button @click="switchPanel('legacy')" :class="{ 'active': panel == 'legacy' }">
                     <img src="@/assets/img/IconWizardVaultLegacyRewards.png" alt="Récompenses d'héritage"
                         title="Récompenses d'héritage" />
                 </button>
@@ -159,6 +186,52 @@ getApiItems().then(items => {
                 <div class="wizard-vault__rewards grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
                     v-if="rewards">
                     <div v-for="reward, r in rewards" class="wizard-vault__reward" :key="r">
+                        <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
+                            :class="'border-gw2-rarity-' + reward.rarity" v-if="reward.icon" v-tippy>
+                        <tippy @show="showItemToolip(reward.item_id)" placement="auto" followCursor="true">
+                            <div v-if="itemTooltipData">
+                                <div v-if="itemTooltipData.text">Error: {{ itemTooltipData.text }}</div>
+                                <div v-else class="flex flex-col gap-2 text-md">
+                                    <div class="flex gap-3 items-center">
+                                        <img :src="itemTooltipData.icon" class="self-start rounded w-12 h-12" alt="">
+                                        <div class="font-bold text-base">{{ itemTooltipData.name }}</div>
+                                    </div>
+                                    <div>
+                                        <div>{{ itemTooltipData.rarity }}</div>
+                                        <div>
+                                            {{ itemTooltipData.type }}
+                                            <span v-if="itemTooltipData.details?.type">
+                                                ({{ itemTooltipData.details?.type }})
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div v-if="itemTooltipData.description">{{ itemTooltipData.description }}</div>
+                                    <div v-if="itemTooltipData.flags.length > 0"
+                                        class="flex flex-wrap gap-1 text-xs text-white opacity-60">
+                                        <span v-for="flag in itemTooltipData.flags" :key="flag">
+                                            {{ flag }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else>Chargement en cours...</div>
+                        </tippy>
+                        <div class="wizard-vault__reward__price text-white">
+                            {{ reward.price }}
+                            <img src="@/assets/img/CurrencyAstralAcclaim.png" />
+                        </div>
+                        <div class="wizard-vault__reward__name text-white" v-html="reward.name"></div>
+                        <div class="wizard-vault__reward__limit" v-if="reward.limit">
+                            {{ reward.limit }} {{ (reward.limit) > 1 ? 'disponibles' : 'disponible' }}
+                        </div>
+                    </div>
+                </div>
+                <div v-else>Chargement en cours...</div>
+            </div>
+            <div id="wizard-vault__legacy-panel" class="w-full" v-if="panel == 'legacy'">
+                <div class="wizard-vault__rewards grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
+                    v-if="legacyRewards">
+                    <div v-for="reward, r in legacyRewards" class="wizard-vault__reward" :key="r">
                         <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
                             :class="'border-gw2-rarity-' + reward.rarity" v-if="reward.icon" v-tippy>
                         <tippy @show="showItemToolip(reward.item_id)" placement="auto" followCursor="true">
@@ -276,7 +349,8 @@ button {
         }
 
         &__objectives-panel,
-        &__rewards-panel {
+        &__rewards-panel,
+        &__legacy-panel {
             @apply flex-1 w-full;
         }
 
