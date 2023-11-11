@@ -4,6 +4,9 @@ module.exports = {
     "./index.html",
     "./src/**/*.{vue,js}",
   ],
+  corePlugins: {
+    preflight: false,
+  },
   theme: {
     extend: {},
   },
