@@ -126,14 +126,20 @@ getApiItemsLegacy().then(items => {
         </h4>
         <div class="wizard-vault flex-col md:flex-row">
             <div class="wizard-vault__menu flex-row md:flex-col">
-                <button @click="switchPanel('objectives')" :class="{ 'active': panel == 'objectives' }">
+                <button @click="switchPanel('objectives')"
+                    :class="{ 'lbm-btn-primary': panel === 'objectives', 'lbm-btn-neutral': panel !== 'objectives' }"
+                    class="lbm-btn lbm-btn-square">
                     <img src="@/assets/img/IconWizardVaultObjectives.png" alt="Objectifs" title="Objectifs" />
                 </button>
-                <button @click="switchPanel('rewards')" :class="{ 'active': panel == 'rewards' }">
+                <button @click="switchPanel('rewards')"
+                    :class="{ 'lbm-btn-primary': panel == 'rewards', 'lbm-btn-neutral': panel !== 'rewards' }"
+                    class="lbm-btn lbm-btn-square">
                     <img src="@/assets/img/IconWizardVaultRewards.png" alt="Récompenses astrales"
                         title="Récompenses astrales" />
                 </button>
-                <button @click="switchPanel('legacy')" :class="{ 'active': panel == 'legacy' }">
+                <button @click="switchPanel('legacy')"
+                    :class="{ 'lbm-btn-primary': panel == 'legacy', 'lbm-btn-neutral': panel !== 'legacy' }"
+                    class="lbm-btn lbm-btn-square">
                     <img src="@/assets/img/IconWizardVaultLegacyRewards.png" alt="Récompenses d'héritage"
                         title="Récompenses d'héritage" />
                 </button>
@@ -281,35 +287,23 @@ getApiItemsLegacy().then(items => {
 <style lang="scss" scoped>
 @import '../../assets/main.scss';
 
-input[type="checkbox"] {
-    @apply hidden;
-}
+// input[type="checkbox"] {
+//     @apply hidden;
+// }
 
-input[type="checkbox"]+label {
-    @apply inline-flex gap-1 items-center cursor-pointer;
-}
+// input[type="checkbox"]+label {
+//     @apply inline-flex gap-1 items-center cursor-pointer;
+// }
 
-input[type="checkbox"]+label:before {
-    @apply w-5 h-5 block bg-center bg-no-repeat;
-    content: '';
-    background-image: url('@/assets/img/CheckboxUnchecked.png');
-}
+// input[type="checkbox"]+label:before {
+//     @apply w-5 h-5 block bg-center bg-no-repeat;
+//     content: '';
+//     background-image: url('@/assets/img/CheckboxUnchecked.png');
+// }
 
-input[type="checkbox"]:checked+label:before {
-    background-image: url('@/assets/img/CheckboxChecked.png');
-}
-
-button {
-    @apply bg-gray-600 rounded py-2 px-3 inline-flex items-center justify-center opacity-50;
-
-    &.active {
-        @apply opacity-100 ring-offset-2 ring-2 ring-gray-600 ring-offset-gray-900;
-    }
-
-    &[disabled] {
-        @apply opacity-10;
-    }
-}
+// input[type="checkbox"]:checked+label:before {
+//     background-image: url('@/assets/img/CheckboxChecked.png');
+// }
 
 .gw2-wizard-vault {
 
@@ -364,7 +358,7 @@ button {
         }
 
         &__reward {
-            @apply border border-gray-800 p-4 rounded-lg flex flex-col items-center justify-start text-center gap-2;
+            @apply border border-neutral p-4 rounded-lg flex flex-col items-center justify-start text-center gap-2;
 
             &__icon {
                 @apply w-16 h-16 rounded;
@@ -391,10 +385,6 @@ button {
 
         &__menu {
             @apply flex gap-2;
-
-            button {
-                @apply px-0 aspect-square flex-shrink-0 w-12;
-            }
 
             img {
                 @apply grayscale;

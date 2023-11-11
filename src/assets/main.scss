@@ -13,6 +13,25 @@
     --gw2-rarity-Legendary: #93f;
 }
 
+*,
+::before,
+::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e5e7eb;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 1rem;
+    margin: 0;
+}
+
 $gw2-rarity-colors: "Junk", "Basic", "Fine", "Masterwork", "Rare", "Exotic", "Ascended", "Legendary";
 
 @each $color in $gw2-rarity-colors {
