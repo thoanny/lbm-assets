@@ -26,20 +26,6 @@ const legacyRewards = ref(null);
 const itemTooltipData = ref(null);
 const currentVaultTotal = ref(0);
 
-// const user = ref({
-//     'content': {
-//         'pve': true,
-//         'pvp': true,
-//         'wvw': true
-//     },
-//     'extensions': {
-//         'hot': false,
-//         'pof': false,
-//         'eod': false,
-//         'soto': false,
-//     }
-// });
-
 function switchPanel(p) {
     if (p !== panel.value) {
         panel.value = p;
@@ -62,21 +48,9 @@ async function getObjectives() {
 }
 
 getObjectives().then(data => {
-    console.log(data)
     data.forEach(o => {
         objectives.value[o.period].push(o);
     });
-    // GW2WizardVaultRewards.current.forEach((r, ri) => {
-    //     const index = items.findIndex((i) => r.item_id == i.id);
-    //     if (index >= 0) {
-    //         GW2WizardVaultRewards.current[ri].icon = items[index].icon;
-    //         GW2WizardVaultRewards.current[ri].rarity = items[index].rarity;
-    //     }
-    //     if (r.limit > 0) {
-    //         currentVaultTotal.value += r.limit * r.price;
-    //     }
-    // });
-    // rewards.value = GW2WizardVaultRewards.current;
 });
 
 async function getItem(id) {
@@ -149,6 +123,23 @@ function markdownToHtml(md) {
     return markdown.render(md);
 }
 
+function formatGold(total) {
+    const copper = Math.floor(total % 100);
+    const silver = Math.floor((total % 10000) / 100);
+    const gold = Math.floor(total / 10000);
+    let currency;
+
+    if (gold) {
+        currency = "<span class=\"lbm-currency\"><span class=\"gold\">" + gold + "</span><span class=\"silver\">" + silver.toString().padStart(2, '0') + "</span><span class=\"copper\">" + copper.toString().padStart(2, '0') + "</span></span>";
+    } else if (silver) {
+        currency = "<span class=\"lbm-currency\"><span class=\"silver\">" + silver + "</span><span class=\"copper\">" + copper.toString().padStart(2, '0') + "</span></span>";
+    } else {
+        currency = "<span class=\"lbm-currency\"><span class=\"copper\">" + Math.floor(total) + "</span></span>";
+    }
+
+    return currency;
+}
+
 </script>
 
 <template>
@@ -181,28 +172,6 @@ function markdownToHtml(md) {
                 </button>
             </div>
             <div class="wizard-vault__objectives-panel" v-if="panel == 'objectives'">
-                <!-- <div class="wizard-vault__objectives-toolbar" v-if="false">
-                    <div class="flex gap-2 items-center">
-                        <span class="font-semibold">Préférences&nbsp;:</span>
-                        <input type="checkbox" id="user_content_pve" v-model="user.content.pve">
-                        <label for="user_content_pve">JcE</label>
-                        <input type="checkbox" id="user_content_pvp" v-model="user.content.pvp">
-                        <label for="user_content_pvp">JcJ</label>
-                        <input type="checkbox" id="user_content_wvw" v-model="user.content.wvw">
-                        <label for="user_content_wvw">McM</label>
-                    </div>
-                    <div class="flex gap-2 items-center">
-                        <span class="font-semibold">Extensions&nbsp;:</span>
-                        <input type="checkbox" id="user_extension_hot" v-model="user.extensions.hot">
-                        <label for="user_extension_hot">HoT</label>
-                        <input type="checkbox" id="user_extension_pof" v-model="user.extensions.pof">
-                        <label for="user_extension_pof">PoF</label>
-                        <input type="checkbox" id="user_extension_eod" v-model="user.extensions.eod">
-                        <label for="user_extension_eod">EoD</label>
-                        <input type="checkbox" id="user_extension_soto" v-model="user.extensions.soto">
-                        <label for="user_extension_soto">SotO</label>
-                    </div>
-                </div> -->
                 <div class="wizard-vault__tabs">
                     <button @click="switchTab('daily')" class="lbm-btn"
                         :class="{ 'lbm-btn-primary': tab === 'daily', 'lbm-btn-neutral': tab !== 'daily' }">Quotidien</button>
@@ -271,6 +240,7 @@ function markdownToHtml(md) {
                             {{ reward.price }}
                             <img src="@/assets/img/CurrencyAstralAcclaim.png" />
                         </div>
+                        <div v-if="reward.value && reward.price" v-html="formatGold(reward.value / reward.price)"></div>
                         <div class="wizard-vault__reward__name text-white" v-html="reward.name"></div>
                         <div class="wizard-vault__reward__limit" v-if="reward.limit">
                             {{ reward.limit }} {{ (reward.limit) > 1 ? 'disponibles' : 'disponible' }}
@@ -357,6 +327,36 @@ function markdownToHtml(md) {
 
         img {
             @apply w-20 h-20;
+        }
+    }
+
+    :deep(.lbm-currency) {
+        @apply flex gap-1 items-center text-sm -mt-2;
+
+        .gold,
+        .silver,
+        .copper {
+            @apply flex gap-1 items-center;
+
+            &:after {
+                content: '';
+                display: block;
+                width: .66rem;
+                height: .66rem;
+                border-radius: 1rem;
+            }
+        }
+
+        .gold:after {
+            background: gold;
+        }
+
+        .silver:after {
+            background: silver;
+        }
+
+        .copper:after {
+            background: #D3824C;
         }
     }
 

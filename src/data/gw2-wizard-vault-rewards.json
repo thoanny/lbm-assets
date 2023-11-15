@@ -62,7 +62,8 @@
             "name": "Sac de pièces (1&nbsp;pièce&nbsp;d'or)",
             "price": 30,
             "limit": 0,
-            "extensions": []
+            "extensions": [],
+            "value": 10000
         },
         {
             "item_id": 19976,
@@ -70,7 +71,8 @@
             "name": "Pièce mystique",
             "price": 9,
             "limit": 60,
-            "extensions": []
+            "extensions": [],
+            "value": 13963
         },
         {
             "item_id": 64736,
@@ -96,7 +98,8 @@
             "limit": 1,
             "extensions": [
                 "soto"
-            ]
+            ],
+            "value": 6329967
         },
         {
             "item_id": 68328,
@@ -104,7 +107,8 @@
             "name": "Sac de lauriers",
             "price": 10,
             "limit": 150,
-            "extensions": []
+            "extensions": [],
+            "value": 8800
         },
         {
             "item_id": 19675,
@@ -112,7 +116,8 @@
             "name": "Trèfle mystique",
             "price": 60,
             "limit": 20,
-            "extensions": []
+            "extensions": [],
+            "value": 46913
         },
         {
             "item_id": 43766,
@@ -128,7 +133,8 @@
             "name": "Grand sac d'artisanat",
             "price": 40,
             "limit": 0,
-            "extensions": []
+            "extensions": [],
+            "value": 1609
         },
         {
             "item_id": 100878,
@@ -136,7 +142,8 @@
             "name": "Sac de pièces (1&nbsp;pièce&nbsp;d'or)",
             "price": 6,
             "limit": 90,
-            "extensions": []
+            "extensions": [],
+            "value": 10000
         },
         {
             "item_id": 92209,
@@ -144,7 +151,8 @@
             "name": "Extension de modèle d'archétype",
             "price": 425,
             "limit": 2,
-            "extensions": []
+            "extensions": [],
+            "value": 1200000
         },
         {
             "item_id": 100233,
@@ -200,7 +208,8 @@
             "name": "Extension de stockage d'archétype",
             "price": 500,
             "limit": 1,
-            "extensions": []
+            "extensions": [],
+            "value": 2000000
         },
         {
             "item_id": 95289,
@@ -208,7 +217,8 @@
             "name": "Coffre de maîtrise du Lion noir",
             "price": 15,
             "limit": 20,
-            "extensions": []
+            "extensions": [],
+            "value": 10000
         },
         {
             "item_id": 39124,
@@ -218,7 +228,8 @@
             "limit": 30,
             "extensions": [
                 "soto"
-            ]
+            ],
+            "value": 7049
         }
     ],
     "legacy": [
