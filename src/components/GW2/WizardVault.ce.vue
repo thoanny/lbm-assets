@@ -14,26 +14,27 @@ export default {
 import { ref } from 'vue';
 import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json';
 
-const panel = ref('rewards');
+const panel = ref('objectives');
 const tab = ref('daily');
+const objectives = ref({ 'daily': [], 'weekly': [], 'special': [] });
 const rewards = ref(null);
 const legacyRewards = ref(null);
 const itemTooltipData = ref(null);
 const currentVaultTotal = ref(0);
 
-const user = ref({
-    'content': {
-        'pve': true,
-        'pvp': true,
-        'wvw': true
-    },
-    'extensions': {
-        'hot': false,
-        'pof': false,
-        'eod': false,
-        'soto': false,
-    }
-})
+// const user = ref({
+//     'content': {
+//         'pve': true,
+//         'pvp': true,
+//         'wvw': true
+//     },
+//     'extensions': {
+//         'hot': false,
+//         'pof': false,
+//         'eod': false,
+//         'soto': false,
+//     }
+// });
 
 function switchPanel(p) {
     if (p !== panel.value) {
@@ -46,6 +47,33 @@ function switchTab(t) {
         tab.value = t;
     }
 }
+
+async function getObjectives() {
+    try {
+        const res = await fetch('https://api.lebusmagique.fr/api/gw2/wizard-vault/objectives');
+        return await res.json();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+getObjectives().then(data => {
+    console.log(data)
+    data.forEach(o => {
+        objectives.value[o.period].push(o);
+    });
+    // GW2WizardVaultRewards.current.forEach((r, ri) => {
+    //     const index = items.findIndex((i) => r.item_id == i.id);
+    //     if (index >= 0) {
+    //         GW2WizardVaultRewards.current[ri].icon = items[index].icon;
+    //         GW2WizardVaultRewards.current[ri].rarity = items[index].rarity;
+    //     }
+    //     if (r.limit > 0) {
+    //         currentVaultTotal.value += r.limit * r.price;
+    //     }
+    // });
+    // rewards.value = GW2WizardVaultRewards.current;
+});
 
 async function getItem(id) {
     try {
@@ -145,7 +173,7 @@ getApiItemsLegacy().then(items => {
                 </button>
             </div>
             <div class="wizard-vault__objectives-panel" v-if="panel == 'objectives'">
-                <div class="wizard-vault__objectives-toolbar" v-if="false">
+                <!-- <div class="wizard-vault__objectives-toolbar" v-if="false">
                     <div class="flex gap-2 items-center">
                         <span class="font-semibold">Préférences&nbsp;:</span>
                         <input type="checkbox" id="user_content_pve" v-model="user.content.pve">
@@ -166,21 +194,30 @@ getApiItemsLegacy().then(items => {
                         <input type="checkbox" id="user_extension_soto" v-model="user.extensions.soto">
                         <label for="user_extension_soto">SotO</label>
                     </div>
+                </div> -->
+                <div class="wizard-vault__tabs">
+                    <button @click="switchTab('daily')" class="lbm-btn"
+                        :class="{ 'lbm-btn-primary': tab === 'daily', 'lbm-btn-neutral': tab !== 'daily' }">Quotidien</button>
+                    <button @click="switchTab('weekly')" class="lbm-btn"
+                        :class="{ 'lbm-btn-primary': tab === 'weekly', 'lbm-btn-neutral': tab !== 'weekly' }">Hebdomadaire</button>
+                    <button @click="switchTab('special')" class="lbm-btn"
+                        :class="{ 'lbm-btn-primary': tab === 'special', 'lbm-btn-neutral': tab !== 'special' }">Spécial</button>
                 </div>
-                <div class="wizard-vault__tabs" v-if="false">
-                    <button @click="switchTab('daily')" :class="{ 'active': tab == 'daily' }">Quotidien</button>
-                    <button @click="switchTab('weekly')" :class="{ 'active': tab == 'weekly' }">Hebdomadaire</button>
-                    <button @click="switchTab('special')" :class="{ 'active': tab == 'special' }">Spécial</button>
+                <div class="wizard-vault__objectives" v-if="objectives[tab]">
+                    <div class="wizard-vault__objective flex gap-4 items-center" v-for="obj in objectives[tab]"
+                        :key="obj.title" :class="'wizard-vault__objective--' + obj.type">
+                        <div class="w-full">
+                            <div class="text-lg font-bold line-clamp-1">{{ obj.title }}</div>
+                            <div class="line-clamp-2">{{ obj.tip }}</div>
+                        </div>
+                        <div class="text-lg font-bold w-16 shrink-0 flex gap-2 items-center justify-end">
+                            {{ obj.astralAcclaim }}
+                            <img src="@/assets/img/CurrencyAstralAcclaim.png" class="inline w-6 h-6"
+                                alt="Acclamation astrale" />
+                        </div>
+                    </div>
                 </div>
-                <div class="wizard-vault__objectives" v-if="false">
-                    <div class="wizard-vault__objective wizard-vault__objective--pve">
-                    </div>
-                    <div class="wizard-vault__objective wizard-vault__objective--pvp">
-                    </div>
-                    <div class="wizard-vault__objective wizard-vault__objective--wvw">
-                    </div>
-                </div>
-                <div v-else>Prochainement disponible...</div>
+                <div v-else>Aucun objectif actuellement disponible...</div>
             </div>
             <div id="wizard-vault__rewards-panel" class="w-full" v-if="panel == 'rewards'">
                 <div class="mb-4">
@@ -341,8 +378,9 @@ getApiItemsLegacy().then(items => {
         }
 
         &__objective {
-            @apply w-full bg-no-repeat bg-left bg-black;
+            @apply w-full bg-no-repeat bg-left bg-black py-3 pr-4;
             height: 92px;
+            padding-left: 4.5rem;
 
             &--pve {
                 background-image: url('@/assets/img/BackgroundWizardVaultPve.png');
