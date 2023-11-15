@@ -1,5 +1,6 @@
 <script>
-import { Tippy, TippyDirective } from 'tippy.vue'
+import { Tippy, TippyDirective } from 'tippy.vue';
+
 export default {
     components: {
         Tippy
@@ -13,6 +14,9 @@ export default {
 <script setup>
 import { ref } from 'vue';
 import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json';
+
+import MarkdownIt from "markdown-it";
+const markdown = new MarkdownIt();
 
 const panel = ref('objectives');
 const tab = ref('daily');
@@ -141,6 +145,10 @@ getApiItemsLegacy().then(items => {
     legacyRewards.value = GW2WizardVaultRewards.legacy;
 });
 
+function markdownToHtml(md) {
+    return markdown.render(md);
+}
+
 </script>
 
 <template>
@@ -208,7 +216,7 @@ getApiItemsLegacy().then(items => {
                         :key="obj.title" :class="'wizard-vault__objective--' + obj.type">
                         <div class="w-full">
                             <div class="font-bold line-clamp-1 text-white">{{ obj.title }}</div>
-                            <div class="line-clamp-2">{{ obj.tip }}</div>
+                            <div class="line-clamp-2 wizard-vault__objective__tip" v-html="markdownToHtml(obj.tip)"></div>
                         </div>
                         <div class="text-lg font-bold w-20 shrink-0 flex gap-2 items-center justify-end">
                             {{ obj.astralAcclaim }}
@@ -392,6 +400,13 @@ getApiItemsLegacy().then(items => {
 
             &--wvw {
                 background-image: url('@/assets/img/BackgroundWizardVaultWvw.png');
+            }
+
+            &__tip {
+                :deep(p) {
+                    padding: 0;
+                    margin: 0;
+                }
             }
         }
 
