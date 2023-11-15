@@ -207,10 +207,10 @@ getApiItemsLegacy().then(items => {
                     <div class="wizard-vault__objective flex gap-4 items-center" v-for="obj in objectives[tab]"
                         :key="obj.title" :class="'wizard-vault__objective--' + obj.type">
                         <div class="w-full">
-                            <div class="text-lg font-bold line-clamp-1 text-white">{{ obj.title }}</div>
+                            <div class="font-bold line-clamp-1 text-white">{{ obj.title }}</div>
                             <div class="line-clamp-2">{{ obj.tip }}</div>
                         </div>
-                        <div class="text-lg font-bold w-16 shrink-0 flex gap-2 items-center justify-end">
+                        <div class="text-lg font-bold w-20 shrink-0 flex gap-2 items-center justify-end">
                             {{ obj.astralAcclaim }}
                             <img src="@/assets/img/CurrencyAstralAcclaim.png" class="inline w-6 h-6"
                                 alt="Acclamation astrale" />
