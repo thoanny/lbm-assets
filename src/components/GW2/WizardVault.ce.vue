@@ -180,7 +180,7 @@ function formatGold(total) {
                     <button @click="switchTab('special')" class="lbm-btn"
                         :class="{ 'lbm-btn-primary': tab === 'special', 'lbm-btn-neutral': tab !== 'special' }">Spécial</button>
                 </div>
-                <div class="wizard-vault__objectives" v-if="objectives[tab]">
+                <div class="wizard-vault__objectives" v-if="objectives[tab].length > 0">
                     <div class="wizard-vault__objective flex gap-4 items-center" v-for="obj in objectives[tab]"
                         :key="obj.title" :class="'wizard-vault__objective--' + obj.type">
                         <div class="w-full">
@@ -194,7 +194,7 @@ function formatGold(total) {
                         </div>
                     </div>
                 </div>
-                <div v-else>Aucun objectif actuellement disponible...</div>
+                <div v-else>Aucun objectif dans cette catégorie pour le moment...</div>
             </div>
             <div id="wizard-vault__rewards-panel" class="w-full" v-if="panel == 'rewards'">
                 <div class="mb-4">
