@@ -204,7 +204,7 @@ function formatGold(total) {
                         astrales</strong> pour
                     acheter toutes les récompenses limitées.
                 </div>
-                <div class="wizard-vault__rewards grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
+                <div class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
                     v-if="rewards">
                     <div v-for="reward, r in rewards" class="wizard-vault__reward" :key="r">
                         <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
@@ -251,7 +251,7 @@ function formatGold(total) {
                 <div v-else>Chargement en cours...</div>
             </div>
             <div id="wizard-vault__legacy-panel" class="w-full" v-if="panel == 'legacy'">
-                <div class="wizard-vault__rewards grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
+                <div class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
                     v-if="legacyRewards">
                     <div v-for="reward, r in legacyRewards" class="wizard-vault__reward" :key="r">
                         <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
