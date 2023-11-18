@@ -172,7 +172,7 @@ function formatGold(total) {
                 </button>
             </div>
             <div class="wizard-vault__objectives-panel" v-if="panel == 'objectives'">
-                <div class="wizard-vault__tabs">
+                <div class="wizard-vault__tabs flex-col sm:flex-row">
                     <button @click="switchTab('daily')" class="lbm-btn"
                         :class="{ 'lbm-btn-primary': tab === 'daily', 'lbm-btn-neutral': tab !== 'daily' }">Quotidien</button>
                     <button @click="switchTab('weekly')" class="lbm-btn"
@@ -181,11 +181,12 @@ function formatGold(total) {
                         :class="{ 'lbm-btn-primary': tab === 'special', 'lbm-btn-neutral': tab !== 'special' }">Spécial</button>
                 </div>
                 <div class="wizard-vault__objectives" v-if="objectives[tab].length > 0">
-                    <div class="wizard-vault__objective flex gap-4 items-center" v-for="obj in objectives[tab]"
+                    <div class="wizard-vault__objective flex gap-4 items-center relative" v-for="obj in objectives[tab]"
                         :key="obj.title" :class="'wizard-vault__objective--' + obj.type">
                         <div class="w-full">
-                            <div class="font-bold line-clamp-1 text-white">{{ obj.title }}</div>
-                            <div class="line-clamp-2 wizard-vault__objective__tip" v-html="markdownToHtml(obj.tip)"></div>
+                            <div class="lbm-badge lbm-badge-sm absolute -top-2 left-2">{{ obj.type }}</div>
+                            <div class="font-bold text-white">{{ obj.title }}</div>
+                            <div class="wizard-vault__objective__tip" v-html="markdownToHtml(obj.tip)"></div>
                         </div>
                         <div class="text-lg font-bold w-20 shrink-0 flex gap-2 items-center justify-end">
                             {{ obj.astralAcclaim }}
@@ -382,24 +383,40 @@ function formatGold(total) {
         }
 
         &__objectives {
-            @apply flex flex-col gap-2;
+            @apply flex flex-col gap-4;
         }
 
         &__objective {
-            @apply w-full bg-no-repeat bg-left bg-black py-3 pr-4;
-            height: 92px;
-            padding-left: 4.5rem;
+            @apply w-full bg-no-repeat bg-left bg-black py-3 px-4 border-2 rounded-xl;
 
             &--pve {
-                background-image: url('@/assets/img/BackgroundWizardVaultPve.png');
+                border-color: var(--gw2-wizard-vault-objective-pve) !important;
+
+                .lbm-badge {
+                    @apply text-white text-neutral uppercase;
+                    background: var(--gw2-wizard-vault-objective-pve);
+                    border-color: var(--gw2-wizard-vault-objective-pve);
+                }
             }
 
             &--pvp {
-                background-image: url('@/assets/img/BackgroundWizardVaultPvp.png');
+                border-color: var(--gw2-wizard-vault-objective-pvp) !important;
+
+                .lbm-badge {
+                    @apply text-white text-white uppercase;
+                    background: var(--gw2-wizard-vault-objective-pvp);
+                    border-color: var(--gw2-wizard-vault-objective-pvp);
+                }
             }
 
             &--wvw {
-                background-image: url('@/assets/img/BackgroundWizardVaultWvw.png');
+                border-color: var(--gw2-wizard-vault-objective-wvw) !important;
+
+                .lbm-badge {
+                    @apply text-white text-neutral uppercase;
+                    background: var(--gw2-wizard-vault-objective-wvw);
+                    border-color: var(--gw2-wizard-vault-objective-wvw);
+                }
             }
 
             &__tip {
