@@ -1,0 +1,441 @@
+[
+    {
+        "uid": "soto",
+        "name": "Secrets of the Obscure",
+        "rows": [
+            {
+                "uid": "convergences",
+                "name": "Convergences",
+                "icon": null,
+                "link": "https://www.lebusmagique.fr/pages/gw2-soto/convergences/",
+                "events": {
+                    "start": {
+                        "duration": 90,
+                        "name": null,
+                        "background": "#ffd88c",
+                        "chatlink": null,
+                        "link": null
+                    },
+                    "convergence": {
+                        "duration": 30,
+                        "name": "Convergences",
+                        "background": "#ffbb33",
+                        "chatlink": "[&BB8OAAA=]",
+                        "link": "https://www.lebusmagique.fr/pages/gw2-soto/convergences/"
+                    },
+                    "pause": {
+                        "duration": 150,
+                        "name": null,
+                        "background": "#ffd88c",
+                        "chatlink": null,
+                        "link": null
+                    },
+                    "end": {
+                        "duration": 60,
+                        "name": null,
+                        "background": "#ffd88c",
+                        "chatlink": null,
+                        "link": null
+                    }
+                },
+                "pattern": [
+                    "start",
+                    "convergence",
+                    "pause",
+                    "convergence",
+                    "pause",
+                    "convergence",
+                    "pause",
+                    "convergence",
+                    "pause",
+                    "convergence",
+                    "pause",
+                    "convergence",
+                    "pause",
+                    "convergence",
+                    "pause",
+                    "convergence",
+                    "end"
+                ]
+            }
+        ]
+    },
+    {
+        "uid": "tyria",
+        "name": "Tyrie centrale",
+        "rows": [
+            {
+                "uid": "day-night",
+                "name": "Cycle jour/nuit",
+                "icon": null,
+                "link": null,
+                "events": {
+                    "start": {
+                        "duration": 25,
+                        "name": "Nuit",
+                        "background": "#1998B6",
+                        "chatlink": "[&BKgBAAA=]",
+                        "link": null
+                    },
+                    "dawn": {
+                        "duration": 5,
+                        "name": "Aube",
+                        "background": "linear-gradient( 90deg, #1998B6, #BFEFFF )",
+                        "chatlink": "[&BH4BAAA=]",
+                        "link": null
+                    },
+                    "day": {
+                        "duration": 70,
+                        "name": "Jour",
+                        "background": "#BFEFFF",
+                        "chatlink": "[&BM0CAAA=]",
+                        "link": null
+                    },
+                    "dusk": {
+                        "duration": 5,
+                        "name": "Soir",
+                        "background": "linear-gradient( 90deg, #BFEFFF, #1998B6 )",
+                        "chatlink": "[&BM0CAAA=]",
+                        "link": null
+                    },
+                    "night": {
+                        "duration": 40,
+                        "name": "Nuit",
+                        "background": "#1998B6",
+                        "chatlink": "[&BE4DAAA=]",
+                        "link": null
+                    },
+                    "end": {
+                        "duration": 15,
+                        "name": "Nuit",
+                        "background": "#1998B6",
+                        "chatlink": "[&BE4DAAA=]",
+                        "link": null
+                    }
+                },
+                "pattern": [
+                    "start",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "night",
+                    "dawn",
+                    "day",
+                    "dusk",
+                    "end"
+                ]
+            },
+            {
+                "uid": "world-boss",
+                "name": "World boss",
+                "icon": null,
+                "link": null,
+                "events": {
+                    "taidha": {
+                        "duration": 15,
+                        "name": "Taidha Covington",
+                        "background": "#B9D0D5",
+                        "chatlink": "[&BKgBAAA=]",
+                        "link": null
+                    },
+                    "chamane": {
+                        "duration": 15,
+                        "name": "Chamane de Svanir",
+                        "background": "#D7DFE1",
+                        "chatlink": "[&BH4BAAA=]",
+                        "link": null
+                    },
+                    "mega": {
+                        "duration": 15,
+                        "name": "Mégadestructeur",
+                        "background": "#B9D0D5",
+                        "chatlink": "[&BM0CAAA=]",
+                        "link": null
+                    },
+                    "elem": {
+                        "duration": 15,
+                        "name": "Élémentaire de feu",
+                        "background": "#D7DFE1",
+                        "chatlink": "[&BM0CAAA=]",
+                        "link": null
+                    },
+                    "destruc": {
+                        "duration": 15,
+                        "name": "Le destructeur",
+                        "background": "#B9D0D5",
+                        "chatlink": "[&BE4DAAA=]",
+                        "link": null
+                    },
+                    "guivre": {
+                        "duration": 15,
+                        "name": "Guivre de la jungle",
+                        "background": "#D7DFE1",
+                        "chatlink": "[&BEEFAAA=]",
+                        "link": null
+                    },
+                    "ulgoth": {
+                        "duration": 15,
+                        "name": "Ulgoth le Modniir",
+                        "background": "#B9D0D5",
+                        "chatlink": "[&BEEFAAA=]",
+                        "link": null
+                    },
+                    "behemoth": {
+                        "duration": 15,
+                        "name": "Béhémoth des ombres",
+                        "background": "#D7DFE1",
+                        "chatlink": "[&BEEFAAA=]",
+                        "link": null
+                    },
+                    "golem": {
+                        "duration": 15,
+                        "name": "Golem Marque II",
+                        "background": "#B9D0D5",
+                        "chatlink": "[&BEEFAAA=]",
+                        "link": null
+                    },
+                    "jormag": {
+                        "duration": 15,
+                        "name": "Griffe de Jormag",
+                        "background": "#B9D0D5",
+                        "chatlink": "[&BEEFAAA=]",
+                        "link": null
+                    }
+                },
+                "pattern": [
+                    "taidha",
+                    "chamane",
+                    "mega",
+                    "elem",
+                    "destruc",
+                    "guivre",
+                    "ulgoth",
+                    "behemoth",
+                    "golem",
+                    "chamane",
+                    "jormag",
+                    "elem",
+                    "taidha",
+                    "guivre",
+                    "mega",
+                    "behemoth",
+                    "destruc",
+                    "chamane",
+                    "ulgoth",
+                    "elem",
+                    "golem",
+                    "guivre",
+                    "jormag",
+                    "behemoth",
+                    "taidha",
+                    "chamane",
+                    "mega",
+                    "elem",
+                    "destruc",
+                    "guivre",
+                    "ulgoth",
+                    "behemoth",
+                    "golem",
+                    "chamane",
+                    "jormag",
+                    "elem",
+                    "taidha",
+                    "guivre",
+                    "mega",
+                    "behemoth",
+                    "destruc",
+                    "chamane",
+                    "ulgoth",
+                    "elem",
+                    "golem",
+                    "guivre",
+                    "jormag",
+                    "behemoth",
+                    "taidha",
+                    "chamane",
+                    "mega",
+                    "elem",
+                    "destruc",
+                    "guivre",
+                    "ulgoth",
+                    "behemoth",
+                    "golem",
+                    "chamane",
+                    "jormag",
+                    "elem",
+                    "taidha",
+                    "guivre",
+                    "mega",
+                    "behemoth",
+                    "destruc",
+                    "chamane",
+                    "ulgoth",
+                    "elem",
+                    "golem",
+                    "guivre",
+                    "jormag",
+                    "behemoth",
+                    "taidha",
+                    "chamane",
+                    "mega",
+                    "elem",
+                    "destruc",
+                    "guivre",
+                    "ulgoth",
+                    "behemoth",
+                    "golem",
+                    "chamane",
+                    "jormag",
+                    "elem",
+                    "taidha",
+                    "guivre",
+                    "mega",
+                    "behemoth",
+                    "destruc",
+                    "chamane",
+                    "ulgoth",
+                    "elem",
+                    "golem",
+                    "guivre",
+                    "jormag",
+                    "behemoth"
+                ]
+            },
+            {
+                "uid": "world-boss-bis",
+                "name": null,
+                "icon": null,
+                "link": null,
+                "events": {
+                    "karka": {
+                        "duration": 15,
+                        "name": "Reine karka",
+                        "background": "#EA568F",
+                        "chatlink": "[&BKgBAAA=]",
+                        "link": null
+                    },
+                    "tequatl": {
+                        "duration": 15,
+                        "name": "Tequatl le Sans-soleil",
+                        "background": "#EA568F",
+                        "chatlink": "[&BH4BAAA=]",
+                        "link": null
+                    },
+                    "tt": {
+                        "duration": 15,
+                        "name": "Triple terreur",
+                        "background": "#EA568F",
+                        "chatlink": "[&BM0CAAA=]",
+                        "link": null
+                    },
+                    "pause45": {
+                        "duration": 45,
+                        "name": null,
+                        "background": "#E99AB8",
+                        "chatlink": null,
+                        "link": null
+                    },
+                    "pause105": {
+                        "duration": 105,
+                        "name": null,
+                        "background": "#E99AB8",
+                        "chatlink": null,
+                        "link": null
+                    },
+                    "pause135": {
+                        "duration": 135,
+                        "name": null,
+                        "background": "#E99AB8",
+                        "chatlink": null,
+                        "link": null
+                    },
+                    "end": {
+                        "duration": 165,
+                        "name": null,
+                        "background": "#E99AB8",
+                        "chatlink": null,
+                        "link": null
+                    }
+                },
+                "pattern": [
+                    "karka",
+                    "pause45",
+                    "tequatl",
+                    "pause45",
+                    "tt",
+                    "pause45",
+                    "karka",
+                    "pause45",
+                    "tequatl",
+                    "pause45",
+                    "tt",
+                    "pause105",
+                    "karka",
+                    "pause45",
+                    "tequatl",
+                    "pause45",
+                    "tt",
+                    "pause135",
+                    "karka",
+                    "pause45",
+                    "tequatl",
+                    "pause45",
+                    "tt",
+                    "pause135",
+                    "karka",
+                    "pause45",
+                    "tequatl",
+                    "pause45",
+                    "tt",
+                    "pause45",
+                    "karka",
+                    "pause45",
+                    "tequatl",
+                    "pause45",
+                    "tt",
+                    "end"
+                ]
+            }
+        ]
+    }
+]

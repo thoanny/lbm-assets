@@ -1,215 +1,138 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
+import categories from '../../data/EventsTimer.events.json';
 
-const data = reactive({
-    hour: '00',
-    minute: '00',
-    localHour: '00',
-    localMinute: '00',
-    percentOfTwoHours: 0,
+const WIDTH = 10;
+const ONE_MINUTE = 60000;
+
+let rowsTime = {};
+const el = ref();
+const cursorPosition = ref(0);
+const interval = ref(null);
+
+function getTheTime(uid, duration) {
+    if (typeof rowsTime[uid] === 'undefined') {
+        rowsTime[uid] = 0;
+    }
+
+    const current = rowsTime[uid] - 1440;
+    const hours = Math.floor(current / 60);
+    const minutes = current % 60;
+    rowsTime[uid] += duration;
+
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+}
+
+function updatePosition() {
+    const now = new Date();
+    const etWidth = el.value.offsetWidth;
+    const posX = Math.floor((now.getUTCHours() * 60 + now.getUTCMinutes()) * WIDTH - (etWidth / 2));
+    cursorPosition.value = (posX + etWidth / 2) + 'px';
+    el.value.scrollLeft = posX;
+}
+
+function resetSize() {
+    if (interval.value) {
+        clearInterval(interval.value);
+        interval.value = null;
+    }
+
+    updatePosition();
+    interval.value = setInterval(updatePosition, ONE_MINUTE);
+}
+
+onMounted(() => {
+    updatePosition();
+    interval.value = setInterval(updatePosition, ONE_MINUTE);
+
+    window.addEventListener('resize', resetSize);
 });
 
-function movePointer() {
-    // Get the time (server time = UTC time)
-    var currentTime = moment.utc();
-    var localTime = moment();
+onUnmounted(() => {
+    clearInterval(interval.value);
+    interval.value = null;
+});
 
-    // Format with leading 0s so 09:08 doesn't end up as 9:8
-    var hour = ("00" + currentTime.hour()).slice(-2);
-    var minute = ("00" + currentTime.minute()).slice(-2);
 
-    var localHour = ("00" + localTime.hour()).slice(-2);
-    var localMinute = ("00" + localTime.minute()).slice(-2);
-
-    // How far along are we (in  % ) of the current 2 hour event cycles?
-    var percentOfTwoHours = ((hour % 2) + (minute / 60)) * 50;
-
-    data.hour = hour;
-    data.minute = minute;
-    data.localHour = localHour;
-    data.localMinute = localMinute;
-
-    // Set the text and move the pointer to that %
-    // $('.pointer .server span').text(hour + ":" + minute);
-    // $('.pointer .local span').text(localHour + ":" + localMinute);
-    $('.pointer').css('left', percentOfTwoHours + "%");
-}
-
-// Function for updating the times
-function updateTimes() {
-
-    // For each block within a map
-    $('.bar>div').each(function () {
-
-        var offset = $(this).data('offset');
-
-        var currentTime = moment.utc();
-
-        // What hour was the start of this 2 hour block?
-        var startHour = Math.floor(currentTime.hour() / 2) * 2;
-        var correctedTime = "" + (startHour + (offset > 59 ? 1 : 0));
-
-        // Format the time so 9:8 becomes 09:08
-        var hour = ("00" + correctedTime).slice(-2);
-        var minute = ("00" + (offset % 60)).slice(-2);
-
-        // Set the text
-        $(this).find('span').text(hour + ":" + minute);
-    });
-}
-
-// Function for setting up the bars when first loaded
-// based on the meta event info at the start
-function setupBars() {
-
-    // For each meta event..
-    $.each(metas, function (key, metaEvent) {
-        if (!metaEvent.phases) return;
-
-        // Create a bar for it on the page
-        var bar = $('<div class="bar"></div>');
-        var offset = 0;
-
-        // For each phase within a bar
-        $.each(metaEvent.phases, function (i, metaPhase) {
-
-            // Create a block to represent that phase, and set the color
-            // and width based on the duration and color info
-            var block = $('<div style="background-color: #F5F5F5;" data-offset="0"> <span></span> <strong></strong></div>');
-            block.css('background', metaPhase.color);
-            block.css('width', (100 * metaPhase.duration / 120) + "%");
-
-            // Store the bar's offset for use in updating the time
-            block.data('offset', offset);
-            offset += metaPhase.duration;
-
-            // Set the phase name for this block (e.g. Sandstorm)
-            block.find('strong').text(metaPhase.name);
-
-            // add this block to the bar
-            bar.append(block);
-        });
-
-        // Set the name for the meta event and add the bar to the page
-        $('.wrapper').append($('<h2>' + metaEvent.name + '</h2>'));
-        $('.wrapper').append(bar);
-    });
-}
-
-// Now lets do the things
-// setupBars();
-
-// Start the pointer/times at the right place
-movePointer();
-// updateTimes();
-
-// set up a timer to update the pointer and times every 5 seconds
-setInterval(movePointer, 5000);
-// setInterval(updateTimes, 5000);
 </script>
 
 <template>
-    <div class="wrapper">
-        <div class="pointer">
-            <span class="server"><strong>Server time</strong><span>{{ data.hour }}:{{ data.minute }}</span></span>
-            <span class="local"><strong>Your time</strong><span>{{ data.localHour }}:{{ data.localMinute }}</span></span>
+    <div class="lbm-et" ref="el">
+        <div v-for="category in categories" :key="category.uid">
+            <div class="lbm-et__category" :style="{ width: WIDTH * 24 * 60 + 'px' }">
+                <span class="sticky left-2">{{ category.name }}</span>
+            </div>
+            <div class="lbm-et__row flex flex-col" v-for="row in category.rows" :key="row.uid">
+                <div class="lbm-et__row__name" :style="{ width: WIDTH * 24 * 60 + 'px' }" v-if="row.name">
+                    <span class="sticky left-2">{{ row.name }}</span>
+                </div>
+                <div class="lbm-et__events">
+                    <div class="lbm-et__events__event" v-for="e, i in row.pattern" :key="row.uid + i"
+                        :style="{ width: row.events[e].duration * WIDTH + 'px', background: row.events[e].background }">
+                        <div v-text="getTheTime(row.uid, row.events[e].duration)"></div>
+                        <div class="truncate font-bold">{{ row.events[e].name }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <div class="lbm-et__cursor" :style="{ '--left': cursorPosition }"></div>
     </div>
 </template>
 
-<style scoped>
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400, 700);
+<style lang="scss" scoped>
+@import '@/assets/main.scss';
 
-body {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 14px;
-    color: #333;
+$scrollbar: .75rem;
+
+* {
+    scrollbar-width: $scrollbar;
+    scrollbar-color: hsl(var(--p) / var(--tw-bg-opacity)) hsl(var(--n) / var(--tw-bg-opacity));
 }
 
-.wrapper {
-    position: relative;
-    padding-top: 2em;
+*::-webkit-scrollbar {
+    height: $scrollbar;
+    width: $scrollbar;
 }
 
-.pointer {
-    position: absolute;
-    height: 4000%;
-    border-left: 2px solid red;
-    z-index: 400;
-    top: 0;
-    transition: left 1s ease-in-out;
+*::-webkit-scrollbar-track {
+    @apply bg-neutral;
+    border-radius: $scrollbar;
 }
 
-.pointer .server {
-    position: absolute;
-    left: 0;
-    background: red;
-    color: white;
-    font-size: 0.8em;
-    font-weight: bold;
-    padding: 4px 6px;
-    margin-left: -2px;
+*::-webkit-scrollbar-thumb {
+    @apply bg-primary;
+    border-radius: $scrollbar;
 }
 
-.pointer .local {
-    position: absolute;
-    right: 2px;
-    background: #B6B6B6;
-    color: white;
-    font-size: 0.8em;
-    font-weight: bold;
-    padding: 4px 6px;
-    margin-left: 0px;
-}
 
-.pointer .server strong {
-    position: absolute;
-    top: 2.1em;
-    color: #B9B9B9;
-    left: 6px;
-    width: 10em;
-}
+.lbm-et {
+    @apply overflow-hidden relative pb-2 leading-4;
 
-.pointer .local strong {
-    position: absolute;
-    top: 2.1em;
-    color: #B9B9B9;
-    right: 6px;
-    width: 10em;
-    text-align: right;
-}
 
-.bar {
-    display: flex;
-    flex-wrap: nowrap;
-}
+    &__cursor {
+        @apply absolute bg-red-500 top-0 bottom-0;
+        width: 2px;
+        transform: translateX(-50%);
+        left: var(--left);
+    }
 
-h2 {
-    font-size: 1em;
-    font-weight: bold;
-    width: 100%;
-    margin: 0.25em 0;
-    color: #AAA;
-}
+    &__category {
+        @apply text-2xl font-bold;
+    }
 
-.bar>div {
-    box-sizing: border-box;
-    padding: 0.5em;
-    font-size: 0.8em;
-    position: relative;
-    font-weight: bold;
-}
+    &__row {
+        &__name {
+            @apply text-xl font-semibold;
+        }
+    }
 
-.bar>div>span {
-    display: inline-block;
-    padding: 0px 0 2px 0;
-    margin: 2px;
-    color: rgba(0, 0, 0, 0.6);
-    font-weight: normal;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
+    &__events {
+        @apply flex text-black my-1;
 
-.bar>div>strong {
-    display: block;
+        &__event {
+            @apply text-sm shrink-0 py-1 px-2 leading-4;
+        }
+    }
+
 }
 </style>
