@@ -51,3 +51,8 @@ $gw2-rarity-colors: "Junk", "Basic", "Fine", "Masterwork", "Rare", "Exotic", "As
         border-color: var(--gw2-rarity-#{$color}) !important;
     }
 }
+
+.bangers {
+    font-family: 'Bangers';
+    letter-spacing: .05rem;
+}
