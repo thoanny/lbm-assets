@@ -74,42 +74,42 @@
                         "duration": 25,
                         "name": "Nuit",
                         "background": "#1998B6",
-                        "chatlink": "[&BKgBAAA=]",
+                        "chatlink": null,
                         "link": null
                     },
                     "dawn": {
                         "duration": 5,
                         "name": "Aube",
                         "background": "linear-gradient( 90deg, #1998B6, #BFEFFF )",
-                        "chatlink": "[&BH4BAAA=]",
+                        "chatlink": null,
                         "link": null
                     },
                     "day": {
                         "duration": 70,
                         "name": "Jour",
                         "background": "#BFEFFF",
-                        "chatlink": "[&BM0CAAA=]",
+                        "chatlink": null,
                         "link": null
                     },
                     "dusk": {
                         "duration": 5,
                         "name": "Soir",
                         "background": "linear-gradient( 90deg, #BFEFFF, #1998B6 )",
-                        "chatlink": "[&BM0CAAA=]",
+                        "chatlink": null,
                         "link": null
                     },
                     "night": {
                         "duration": 40,
                         "name": "Nuit",
                         "background": "#1998B6",
-                        "chatlink": "[&BE4DAAA=]",
+                        "chatlink": null,
                         "link": null
                     },
                     "end": {
                         "duration": 15,
                         "name": "Nuit",
                         "background": "#1998B6",
-                        "chatlink": "[&BE4DAAA=]",
+                        "chatlink": null,
                         "link": null
                     }
                 },

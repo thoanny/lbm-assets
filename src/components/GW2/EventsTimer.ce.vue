@@ -16,6 +16,12 @@ const settings = ref({
     isCentered: true,
 });
 const currentTime = ref('00:00');
+const eventModal = ref({
+    isActive: false,
+    row: {},
+    event: {}
+});
+const eventsCompleted = ref([]);
 
 function convertMinutesToText(duration) {
     const date = new Date();
@@ -73,7 +79,47 @@ function saveSettings() {
     localStorage.setItem('lbm-et-settings', JSON.stringify(settings.value));
 }
 
+function handleEventModal(row, event) {
+    if (event.name && (event.link || event.chatlink)) {
+        eventModal.value.isActive = !eventModal.value.isActive;
+        eventModal.value.row = row;
+        eventModal.value.event = event;
+    }
+}
+
+function handleEventComplete() {
+    const eventId = eventModal.value.event.id;
+    const i = eventsCompleted.value.indexOf(eventId);
+    if (i < 0) {
+        eventsCompleted.value.push(eventId);
+    } else {
+        eventsCompleted.value.splice(i, 1);
+    }
+    localStorage.setItem('lbm-et-events', JSON.stringify(eventsCompleted.value));
+}
+
+function isEventCompleted(id) {
+    return eventsCompleted.value.indexOf(id) >= 0;
+}
+
+function initEventsCompleted() {
+    const localEventsCompleted = JSON.parse(localStorage.getItem('lbm-et-events'));
+    if (localEventsCompleted) {
+        eventsCompleted.value = localEventsCompleted;
+    }
+}
+
+function resetEventsCompleted() {
+    eventsCompleted.value = [];
+    localStorage.removeItem('lbm-et-events');
+}
+
 initSettings();
+initEventsCompleted();
+
+function copyToClipboard(txt) {
+    navigator.clipboard.writeText(txt);
+}
 
 categories.value = eventsTimerData.map(c => {
     c.rows.map(r => {
@@ -114,6 +160,7 @@ onUnmounted(() => {
 
 <template>
     <!-- <pre>{{ categories }}</pre> -->
+    <!-- <pre>{{ eventsCompleted }}</pre> -->
     <div class="lbm-et" v-if="categories">
         <div class="lbm-et__hscroll" ref="el">
             <div v-for="category in categories" :key="category.uid">
@@ -123,13 +170,27 @@ onUnmounted(() => {
                 <div class="lbm-et__row flex flex-col" v-for="row in category.rows" :key="row.uid">
                     <div class="lbm-et__row__name" :style="{ width: WIDTH * 24 * 60 + 'px' }"
                         v-if="row.name && settings.showRowName">
-                        <span class="sticky left-2 bangers">{{ row.name }}</span>
+                        <a :href="row.link" target="_blank"
+                            class="sticky left-2 bangers text-white inline-flex gap-1 items-center no-underline"
+                            v-if="row.link">
+                            {{ row.name }}
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
+                                class="w-5 h-5" fill="currentColor">
+                                <path
+                                    d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z" />
+                            </svg>
+                        </a>
+                        <span class="sticky left-2 bangers" v-else>{{ row.name }}</span>
                     </div>
                     <div class="lbm-et__events">
                         <div class="lbm-et__events__event" v-for="e in row.data" :key="e.uid"
-                            :style="{ width: e.duration * WIDTH + 'px', background: e.background }">
+                            :style="{ width: e.duration * WIDTH + 'px', background: e.background }"
+                            @click.prevent="handleEventModal(row, e)">
                             <div v-text="convertMinutesToText(e.start)" v-if="settings.showEventHour"></div>
-                            <div class="truncate font-bold">{{ e.name }}</div>
+                            <div class="truncate font-bold"
+                                :class="{ 'line-through italic opacity-50': isEventCompleted(e.id) }">{{
+                                    e.name }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -188,18 +249,67 @@ onUnmounted(() => {
                                 <span class="lbm-label-text">Afficher le nom des lignes</span>
                             </label>
                         </div>
-                        <div class="mb-2">
+                        <div class="mb-3">
                             <label class="cursor-pointer flex items-center justify-start gap-2">
                                 <input type="checkbox" class="lbm-toggle lbm-toggle-sm lbm-toggle-success"
                                     v-model="settings.showEventHour" @change="saveSettings" />
                                 <span class="lbm-label-text">Afficher l'heure des événements</span>
                             </label>
                         </div>
+                        <div>
+                            <button class="lbm-btn lbm-btn-sm text-xs" @click.prevent="resetEventsCompleted">Réinitialiser
+                                le suivi des événements</button>
+                        </div>
+
                         <label for="modalSettings" class="lbm-btn lbm-btn-primary lbm-btn-sm mt-4">Fermer</label>
                     </div>
                     <label class="lbm-modal-backdrop" for="modalSettings">Close</label>
                 </div>
             </div>
+        </div>
+
+        <input type="checkbox" id="modalEvent" class="lbm-modal-toggle" v-model="eventModal.isActive" />
+        <div class="lbm-modal lbm-modal-bottom sm:lbm-modal-middle">
+            <div class="lbm-modal-box">
+                <h3 class="text-lg font-bold mb-6 text-center">
+                    {{ eventModal.event.name }}
+                </h3>
+                <h4 class="font-bold italic -mt-5 mb-6 opacity-50 text-center" v-if="eventModal.row.name">
+                    {{ eventModal.row.name }}
+                </h4>
+                <a :href="eventModal.event.link" target="_blank" class="lbm-btn lbm-btn-block mb-2"
+                    v-if="eventModal.event.link">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="w-5 h-5"
+                        fill="currentColor">
+                        <path
+                            d="M440-280H280q-83 0-141.5-58.5T80-480q0-83 58.5-141.5T280-680h160v80H280q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h320v80H320Zm200 160v-80h160q50 0 85-35t35-85q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H520Z" />
+                    </svg>
+                    Plus d'infos sur cet événement
+                </a>
+                <button class="lbm-btn lbm-btn-block mb-2" v-if="eventModal.event.chatlink"
+                    @click.prevent="copyToClipboard(`${eventModal.event.name} - ${eventModal.event.chatlink}`)">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="h-5 w-5"
+                        fill="currentColor">
+                        <path d="M600-160v-80h120v-480H600v-80h200v640H600Zm-440 0v-640h200v80H240v480h120v80H160Z" />
+                    </svg>
+                    Copier le code de chat GW2
+                </button>
+                <button class="lbm-btn lbm-btn-block mb-2" @click.prevent="handleEventComplete">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="h-5 w-5"
+                        fill="currentColor" v-if="!isEventCompleted(eventModal.event.id)">
+                        <path
+                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Z" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="h-5 w-5"
+                        fill="currentColor" v-else>
+                        <path
+                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q8 0 15 1.5t14 4.5l-74 74H200v560h560v-266l80-80v346q0 33-23.5 56.5T760-120H200Zm261-160L235-506l56-56 170 170 367-367 57 55-424 424Z" />
+                    </svg>
+                    {{ (isEventCompleted(eventModal.event.id)) ? 'Marquer comme non terminé' : 'Marquer comme terminé' }}
+                </button>
+                <label for="modalEvent" class="lbm-btn lbm-btn-primary mt-4 lbm-btn-block">Fermer</label>
+            </div>
+            <label class="lbm-modal-backdrop" for="modalEvent">Close</label>
         </div>
     </div>
 </template>
