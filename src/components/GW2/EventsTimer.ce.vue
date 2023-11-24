@@ -1,9 +1,11 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
 import eventsTimerData from '../../data/EventsTimer.events.json';
 
 const WIDTH = 10;
 const ONE_MINUTE = 60000;
+const TOAST_TIMEOUT = 3000;
 
 const el = ref();
 const cursorPosition = ref(0);
@@ -22,6 +24,7 @@ const eventModal = ref({
     event: {}
 });
 const eventsCompleted = ref([]);
+const toasts = ref({});
 
 function convertMinutesToText(duration) {
     const date = new Date();
@@ -89,12 +92,18 @@ function handleEventModal(row, event) {
 
 function handleEventComplete() {
     const eventId = eventModal.value.event.id;
+    const eventName = eventModal.value.event.name;
     const i = eventsCompleted.value.indexOf(eventId);
+    const t = uuidv4();
+
     if (i < 0) {
         eventsCompleted.value.push(eventId);
+        toasts.value[t] = `"${eventName}" marqué comme terminé.`;
     } else {
         eventsCompleted.value.splice(i, 1);
+        toasts.value[t] = `"${eventName}" marqué comme non terminé.`;
     }
+    setTimeout(removeToast, TOAST_TIMEOUT, t);
     localStorage.setItem('lbm-et-events', JSON.stringify(eventsCompleted.value));
 }
 
@@ -112,13 +121,32 @@ function initEventsCompleted() {
 function resetEventsCompleted() {
     eventsCompleted.value = [];
     localStorage.removeItem('lbm-et-events');
+
+    const t = uuidv4();
+    toasts.value[t] = 'Suivi des événements réinitialisé.';
+    setTimeout(removeToast, TOAST_TIMEOUT, t);
 }
 
 initSettings();
 initEventsCompleted();
 
-function copyToClipboard(txt) {
-    navigator.clipboard.writeText(txt);
+function copyToClipboard(name, content) {
+    if (!name || !content) {
+        return;
+    }
+
+    navigator.clipboard.writeText(`${name} - ${content}`);
+
+    const t = uuidv4();
+    toasts.value[t] = `Code de chat copié : "${name}".`;
+    setTimeout(removeToast, TOAST_TIMEOUT, t);
+}
+
+function removeToast(t) {
+    if (typeof toasts.value[t] === 'undefined') {
+        return;
+    }
+    delete toasts.value[t];
 }
 
 categories.value = eventsTimerData.map(c => {
@@ -185,7 +213,8 @@ onUnmounted(() => {
                     <div class="lbm-et__events">
                         <div class="lbm-et__events__event" v-for="e in row.data" :key="e.uid"
                             :style="{ width: e.duration * WIDTH + 'px', background: e.background }"
-                            @click.prevent="handleEventModal(row, e)">
+                            @contextmenu.prevent="handleEventModal(row, e)"
+                            @click.prevent="copyToClipboard(e.name, e.chatlink)">
                             <div v-text="convertMinutesToText(e.start)" v-if="settings.showEventHour"></div>
                             <div class="truncate font-bold"
                                 :class="{ 'line-through italic opacity-50': isEventCompleted(e.id) }">{{
@@ -287,7 +316,7 @@ onUnmounted(() => {
                     Plus d'infos sur cet événement
                 </a>
                 <button class="lbm-btn lbm-btn-block mb-2" v-if="eventModal.event.chatlink"
-                    @click.prevent="copyToClipboard(`${eventModal.event.name} - ${eventModal.event.chatlink}`)">
+                    @click.prevent="copyToClipboard(eventModal.event.name, eventModal.event.chatlink)">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="h-5 w-5"
                         fill="currentColor">
                         <path d="M600-160v-80h120v-480H600v-80h200v640H600Zm-440 0v-640h200v80H240v480h120v80H160Z" />
@@ -310,6 +339,16 @@ onUnmounted(() => {
                 <label for="modalEvent" class="lbm-btn lbm-btn-primary mt-4 lbm-btn-block">Fermer</label>
             </div>
             <label class="lbm-modal-backdrop" for="modalEvent">Close</label>
+        </div>
+        <div class="lbm-toast" style="z-index:1001" v-if="toasts">
+            <div class="lbm-alert lbm-alert-success text-xs py-2 px-3 font-bold gap-1" v-for="toast, t in toasts" :key="t">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-4 w-4" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{{ toast }}</span>
+            </div>
         </div>
     </div>
 </template>

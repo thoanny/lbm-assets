@@ -12,6 +12,7 @@
   "dependencies": {
     "markdown-it": "^13.0.2",
     "tippy.vue": "^3.2.1",
+    "uuid": "^9.0.1",
     "vue": "^3.3.4"
   },
   "devDependencies": {

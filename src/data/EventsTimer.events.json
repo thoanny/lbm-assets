@@ -57,6 +57,210 @@
                     "convergence",
                     "end"
                 ]
+            },
+            {
+                "uid": "archipel",
+                "name": "Archipel de l'observatoire céleste",
+                "icon": null,
+                "link": "https://www.lebusmagique.fr/pages/gw2-soto/archipel-de-l-observatoire-celeste/",
+                "events": {
+                    "start": {
+                        "duration": 60,
+                        "name": null,
+                        "background": "#ffd88c",
+                        "chatlink": null,
+                        "link": null
+                    },
+                    "tour": {
+                        "duration": 25,
+                        "name": "Déverouiller la Tour du sorcier",
+                        "background": "#ffbb33",
+                        "chatlink": "[&BL4NAAA=]",
+                        "link": "https://www.lebusmagique.fr/pages/gw2-soto/archipel-de-l-observatoire-celeste/metasoto-deverrouiller-la-tour-du-sorcier.html"
+                    },
+                    "pause": {
+                        "duration": 155,
+                        "name": null,
+                        "background": "#ffd88c",
+                        "chatlink": null,
+                        "link": null
+                    },
+                    "end": {
+                        "duration": 95,
+                        "name": null,
+                        "background": "#ffd88c",
+                        "chatlink": null,
+                        "link": null
+                    }
+                },
+                "pattern": [
+                    "start",
+                    "tour",
+                    "pause",
+                    "tour",
+                    "pause",
+                    "tour",
+                    "pause",
+                    "tour",
+                    "pause",
+                    "tour",
+                    "pause",
+                    "tour",
+                    "pause",
+                    "tour",
+                    "pause",
+                    "tour",
+                    "end"
+                ]
+            },
+            {
+                "uid": "tour-sorcier",
+                "name": "Tour du sorcier",
+                "icon": null,
+                "link": "https://www.lebusmagique.fr/pages/gw2-soto/la-tour-du-sorcier/",
+                "events": {
+                    "start": {
+                        "duration": 20,
+                        "name": "Vol de nuit",
+                        "background": "#ffbb33",
+                        "chatlink": "[&BLUNAAA=]",
+                        "link": "https://www.lebusmagique.fr/pages/gw2-soto/la-tour-du-sorcier/la-tour-du-sorcier-succes-d-exploration.html#aventures"
+                    },
+                    "pause": {
+                        "duration": 40,
+                        "name": null,
+                        "background": "#ffd88c",
+                        "chatlink": null,
+                        "link": null
+                    },
+                    "cible-dracaille": {
+                        "duration": 40,
+                        "name": "Cible de dracaille",
+                        "background": "#ffbb33",
+                        "chatlink": "[&BB8OAAA=]",
+                        "link": "https://www.lebusmagique.fr/pages/gw2-soto/la-tour-du-sorcier/la-tour-du-sorcier-succes-d-exploration.html#aventures"
+                    },
+                    "cible-vol-nuit": {
+                        "duration": 15,
+                        "name": "Cible & vol de nuit",
+                        "background": "#ffbb33",
+                        "chatlink": "[&BLUNAAA=]",
+                        "link": "https://www.lebusmagique.fr/pages/gw2-soto/la-tour-du-sorcier/la-tour-du-sorcier-succes-d-exploration.html#aventures"
+                    },
+                    "vol-nuit": {
+                        "duration": 25,
+                        "name": "Vol de nuit",
+                        "background": "#ffbb33",
+                        "chatlink": "[&BLUNAAA=]",
+                        "link": "https://www.lebusmagique.fr/pages/gw2-soto/la-tour-du-sorcier/la-tour-du-sorcier-succes-d-exploration.html#aventures"
+                    },
+                    "end": {
+                        "duration": 5,
+                        "name": "Vol de nuit",
+                        "background": "#ffbb33",
+                        "chatlink": "[&BLUNAAA=]",
+                        "link": "https://www.lebusmagique.fr/pages/gw2-soto/la-tour-du-sorcier/la-tour-du-sorcier-succes-d-exploration.html#aventures"
+                    }
+                },
+                "pattern": [
+                    "start",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "vol-nuit",
+                    "pause",
+                    "cible-dracaille",
+                    "cible-vol-nuit",
+                    "end"
+                ]
+            },
+            {
+                "uid": "amnytas",
+                "name": "Amnytas",
+                "icon": null,
+                "link": "https://www.lebusmagique.fr/pages/gw2-soto/amnytas/",
+                "events": {
+                    "defense": {
+                        "duration": 25,
+                        "name": "La défense d'Amnytas",
+                        "background": "#ffbb33",
+                        "chatlink": "[&BDQOAAA=]",
+                        "link": "https://www.lebusmagique.fr/pages/gw2-soto/amnytas/metasoto-la-defense-d-amnytas.html"
+                    },
+                    "pause": {
+                        "duration": 95,
+                        "name": null,
+                        "background": "#ffd88c",
+                        "chatlink": null,
+                        "link": null
+                    }
+                },
+                "pattern": [
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause",
+                    "defense",
+                    "pause"
+                ]
             }
         ]
     },
