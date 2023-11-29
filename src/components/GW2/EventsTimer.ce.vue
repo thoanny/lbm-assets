@@ -25,6 +25,8 @@ const eventModal = ref({
 });
 const eventsCompleted = ref([]);
 const toasts = ref({});
+const hiddenCategories = ref([]);
+const hiddenRows = ref([]);
 
 function convertMinutesToText(duration) {
     const date = new Date();
@@ -111,6 +113,14 @@ function isEventCompleted(id) {
     return eventsCompleted.value.indexOf(id) >= 0;
 }
 
+function isCategoryHidden(uid) {
+    return hiddenCategories.value.indexOf(uid) >= 0;
+}
+
+function isRowHidden(uid) {
+    return hiddenRows.value.indexOf(uid) >= 0;
+}
+
 function initEventsCompleted() {
     const localEventsCompleted = JSON.parse(localStorage.getItem('lbm-et-events'));
     if (localEventsCompleted) {
@@ -127,8 +137,21 @@ function resetEventsCompleted() {
     setTimeout(removeToast, TOAST_TIMEOUT, t);
 }
 
+function initHiddenCategoriesAndRows() {
+    const localHiddenCategories = JSON.parse(localStorage.getItem('lbm-et-hidden-categories'));
+    if (localHiddenCategories) {
+        hiddenCategories.value = localHiddenCategories;
+    }
+
+    const localHiddenRows = JSON.parse(localStorage.getItem('lbm-et-hidden-rows'));
+    if (localHiddenRows) {
+        hiddenRows.value = localHiddenRows;
+    }
+}
+
 initSettings();
 initEventsCompleted();
+initHiddenCategoriesAndRows();
 
 function copyToClipboard(name, content) {
     if (!name || !content) {
@@ -147,6 +170,28 @@ function removeToast(t) {
         return;
     }
     delete toasts.value[t];
+}
+
+function toggleHideCategory(uid) {
+    const i = hiddenCategories.value.indexOf(uid);
+
+    if (i < 0) {
+        hiddenCategories.value.push(uid);
+    } else {
+        hiddenCategories.value.splice(i, 1);
+    }
+    localStorage.setItem('lbm-et-hidden-categories', JSON.stringify(hiddenCategories.value));
+}
+
+function toggleHideRow(uid) {
+    const i = hiddenRows.value.indexOf(uid);
+
+    if (i < 0) {
+        hiddenRows.value.push(uid);
+    } else {
+        hiddenRows.value.splice(i, 1);
+    }
+    localStorage.setItem('lbm-et-hidden-rows', JSON.stringify(hiddenRows.value));
 }
 
 categories.value = eventsTimerData.map(c => {
@@ -191,11 +236,12 @@ onUnmounted(() => {
     <!-- <pre>{{ eventsCompleted }}</pre> -->
     <div class="lbm-et" v-if="categories">
         <div class="lbm-et__hscroll" ref="el">
-            <div v-for="category in categories" :key="category.uid">
+            <div v-for="category in categories" :key="category.uid" v-show="!isCategoryHidden(category.uid)">
                 <div class="lbm-et__category" :style="{ width: WIDTH * 24 * 60 + 'px' }" v-if="settings.showCategoryName">
                     <span class="sticky left-2 bangers">{{ category.name }}</span>
                 </div>
-                <div class="lbm-et__row flex flex-col" v-for="row in category.rows" :key="row.uid">
+                <div class="lbm-et__row flex flex-col" v-for="row in category.rows" :key="row.uid"
+                    v-show="!isRowHidden(row.uid)">
                     <div class="lbm-et__row__name" :style="{ width: WIDTH * 24 * 60 + 'px' }"
                         v-if="row.name && settings.showRowName">
                         <a :href="row.link" target="_blank"
@@ -246,6 +292,62 @@ onUnmounted(() => {
                         <path d="M440-80v-800h80v800h-80Zm160-200v-400h120v400H600Zm-360 0v-400h120v400H240Z" />
                     </svg>
                 </button>
+                <label for="modalVisibility" class="lbm-btn lbm-btn-square lbm-btn-sm lbm-btn-primary" @click="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="h-5 w-5"
+                        fill="currentColor">
+                        <path
+                            d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
+                    </svg>
+                </label>
+                <input type="checkbox" id="modalVisibility" class="lbm-modal-toggle" />
+                <div class="lbm-modal">
+                    <div class="lbm-modal-box">
+                        <h3 class="text-lg font-bold mb-4 flex justify-start iems-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
+                                class="h-8 w-8" fill="currentColor">
+                                <path
+                                    d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
+                            </svg>
+                            Afficher/masquer des catégories et lignes
+                        </h3>
+                        <ul class="lbm-menu bg-base-200 rounded-box">
+                            <li v-for="category in categories" :key="category.uid">
+                                <a @click.prevent="toggleHideCategory(category.uid)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
+                                        class="h-4 w-4" fill="currentColor" v-if="isCategoryHidden(category.uid)">
+                                        <path
+                                            d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z" />
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
+                                        class="h-4 w-4" fill="currentColor" v-else>
+                                        <path
+                                            d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
+                                    </svg>
+                                    {{ category.name || 'Sans titre' }}
+                                </a>
+                                <ul v-if="!isCategoryHidden(category.uid)">
+                                    <li v-for="row in category.rows" :key="row.uid">
+                                        <a @click.prevent="toggleHideRow(row.uid)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                width="24" class="h-4 w-4" fill="currentColor" v-if="isRowHidden(row.uid)">
+                                                <path
+                                                    d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z" />
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960"
+                                                width="24" class="h-4 w-4" fill="currentColor" v-else>
+                                                <path
+                                                    d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
+                                            </svg>
+                                            {{ row.name || 'Sans titre' }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <label for="modalVisibility" class="lbm-btn lbm-btn-primary lbm-btn-sm mt-4">Fermer</label>
+                    </div>
+                    <label class="lbm-modal-backdrop" for="modalVisibility">Close</label>
+                </div>
                 <label for="modalSettings" class="lbm-btn lbm-btn-square lbm-btn-sm lbm-btn-primary" @click="openSettings">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="h-5 w-5"
                         fill="currentColor">
