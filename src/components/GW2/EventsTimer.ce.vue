@@ -1,7 +1,26 @@
 <script setup>
+
+// [ ] Ajouter du drag and drop pour naviguer
+// [ ] Ajout de props pour personnaliser l'affichage par le rédacteur
+// [ ] Terminer de saisir tous les événements
+// [ ] Ajouter les agents du pacte
+// [ ] Créer un service Toast
+// [ ] Créer un userStore pour stocker les infos utilisateur et les partager entre les web-apps
+// [ ] Demander l'autorisation pour stocker dans le navigateur (localStorage)
+
 import { onMounted, onUnmounted, ref } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import eventsTimerData from '../../data/EventsTimer.events.json';
+
+const props = defineProps({
+    hideToolbar: Boolean,
+    ignoreUserSettings: Boolean,
+    events: {
+        type: String,
+        default: null
+    }
+});
+console.table(props);
 
 const WIDTH = 10;
 const ONE_MINUTE = 60000;
@@ -69,6 +88,8 @@ function isCenteredToggle() {
 }
 
 function initSettings() {
+    if (props.ignoreUserSettings) return;
+
     const localSettings = JSON.parse(localStorage.getItem('lbm-et-settings'));
     if (localSettings) {
         settings.value = {
@@ -138,6 +159,8 @@ function resetEventsCompleted() {
 }
 
 function initHiddenCategoriesAndRows() {
+    if (props.ignoreUserSettings) return;
+
     const localHiddenCategories = JSON.parse(localStorage.getItem('lbm-et-hidden-categories'));
     if (localHiddenCategories) {
         hiddenCategories.value = localHiddenCategories;
@@ -207,19 +230,21 @@ categories.value = eventsTimerData.map(c => {
         r.events = [];
 
         return r;
-    })
+    });
     return c;
 });
 
 onMounted(() => {
     updatePosition();
-    interval.value = setInterval(updatePosition, ONE_MINUTE);
+    interval.value = setInterval(updatePosition, ONE_MINUTE / 4);
 
     window.addEventListener('resize', resetSize);
 
     el.value.addEventListener("wheel", (evt) => {
         evt.preventDefault();
         el.value.scrollLeft += evt.deltaY * WIDTH / 2;
+
+        if (props.hideToolbar) return;
         settings.value.isCentered = false;
     });
 });
@@ -275,7 +300,7 @@ onUnmounted(() => {
                     style="transform: translateX(calc(-50% + 1px));background:red;" v-text="currentTime"></span>
             </div>
         </div>
-        <div class="lbm-et__toolbar absolute top-0 right-0">
+        <div class="lbm-et__toolbar absolute top-0 right-0" v-if="!props.hideToolbar">
             <div class="flex gap-1 bg-neutral rounded-bl-xl p-1">
                 <button class="lbm-btn lbm-btn-sm lbm-btn-primary text-xs">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="h-5 w-5"
