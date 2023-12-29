@@ -1,19 +1,7 @@
-<script>
-import { Tippy, TippyDirective } from 'tippy.vue';
-
-export default {
-    components: {
-        Tippy
-    },
-    directives: {
-        tippy: TippyDirective
-    }
-}
-</script>
-
 <script setup>
 import { ref } from 'vue';
 import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json';
+import Gw2ApiItemTooltip from '@/components/Gw2ApiItemTooltip.vue';
 
 import MarkdownIt from "markdown-it";
 const markdown = new MarkdownIt();
@@ -23,7 +11,7 @@ const tab = ref('daily');
 const objectives = ref({ 'daily': [], 'weekly': [], 'special': [] });
 const rewards = ref(null);
 const legacyRewards = ref(null);
-const itemTooltipData = ref(null);
+
 const currentVaultTotal = ref(0);
 
 function switchPanel(p) {
@@ -53,21 +41,6 @@ getObjectives().then(data => {
     });
 });
 
-async function getItem(id) {
-    try {
-        const res = await fetch('https://api.guildwars2.com/v2/items/' + id + '?lang=fr');
-        return await res.json();
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-function showItemToolip(id) {
-    itemTooltipData.value = null;
-    getItem(id).then(data => {
-        itemTooltipData.value = data;
-    });
-}
 
 async function getApiItems() {
     const ids = GW2WizardVaultRewards.current.map((r) => r.item_id).join(',');
@@ -207,36 +180,7 @@ function formatGold(total) {
                 <div class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
                     v-if="rewards">
                     <div v-for="reward, r in rewards" class="wizard-vault__reward" :key="r">
-                        <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
-                            :class="'border-gw2-rarity-' + reward.rarity" v-if="reward.icon" v-tippy>
-                        <tippy @show="showItemToolip(reward.item_id)" placement="auto" followCursor="true">
-                            <div v-if="itemTooltipData">
-                                <div v-if="itemTooltipData.text">Error: {{ itemTooltipData.text }}</div>
-                                <div v-else class="flex flex-col gap-2 text-md">
-                                    <div class="flex gap-3 items-center">
-                                        <img :src="itemTooltipData.icon" class="self-start rounded w-12 h-12" alt="">
-                                        <div class="font-bold text-base">{{ itemTooltipData.name }}</div>
-                                    </div>
-                                    <div>
-                                        <div>{{ itemTooltipData.rarity }}</div>
-                                        <div>
-                                            {{ itemTooltipData.type }}
-                                            <span v-if="itemTooltipData.details?.type">
-                                                ({{ itemTooltipData.details?.type }})
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div v-if="itemTooltipData.description">{{ itemTooltipData.description }}</div>
-                                    <div v-if="itemTooltipData.flags.length > 0"
-                                        class="flex flex-wrap gap-1 text-xs text-white opacity-60">
-                                        <span v-for="flag in itemTooltipData.flags" :key="flag">
-                                            {{ flag }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-else>Chargement en cours...</div>
-                        </tippy>
+                        <Gw2ApiItemTooltip :item="reward" />
                         <div class="wizard-vault__reward__price text-white">
                             {{ reward.price }}
                             <img src="@/assets/img/CurrencyAstralAcclaim.png" />
@@ -254,36 +198,7 @@ function formatGold(total) {
                 <div class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
                     v-if="legacyRewards">
                     <div v-for="reward, r in legacyRewards" class="wizard-vault__reward" :key="r">
-                        <img :src="reward.icon" alt="" class="wizard-vault__reward__icon"
-                            :class="'border-gw2-rarity-' + reward.rarity" v-if="reward.icon" v-tippy>
-                        <tippy @show="showItemToolip(reward.item_id)" placement="auto" followCursor="true">
-                            <div v-if="itemTooltipData">
-                                <div v-if="itemTooltipData.text">Error: {{ itemTooltipData.text }}</div>
-                                <div v-else class="flex flex-col gap-2 text-md">
-                                    <div class="flex gap-3 items-center">
-                                        <img :src="itemTooltipData.icon" class="self-start rounded w-12 h-12" alt="">
-                                        <div class="font-bold text-base">{{ itemTooltipData.name }}</div>
-                                    </div>
-                                    <div>
-                                        <div>{{ itemTooltipData.rarity }}</div>
-                                        <div>
-                                            {{ itemTooltipData.type }}
-                                            <span v-if="itemTooltipData.details?.type">
-                                                ({{ itemTooltipData.details?.type }})
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div v-if="itemTooltipData.description">{{ itemTooltipData.description }}</div>
-                                    <div v-if="itemTooltipData.flags.length > 0"
-                                        class="flex flex-wrap gap-1 text-xs text-white opacity-60">
-                                        <span v-for="flag in itemTooltipData.flags" :key="flag">
-                                            {{ flag }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-else>Chargement en cours...</div>
-                        </tippy>
+                        <Gw2ApiItemTooltip :item="reward" />
                         <div class="wizard-vault__reward__price text-white">
                             {{ reward.price }}
                             <img src="@/assets/img/CurrencyAstralAcclaim.png" />
@@ -302,6 +217,7 @@ function formatGold(total) {
 
 <style lang="scss" scoped>
 @import '../../assets/main.scss';
+
 
 // input[type="checkbox"] {
 //     @apply hidden;
@@ -429,11 +345,6 @@ function formatGold(total) {
 
         &__reward {
             @apply border border-neutral p-4 rounded-lg flex flex-col items-center justify-start text-center gap-2;
-
-            &__icon {
-                @apply w-16 h-16 rounded;
-                border: 3px solid transparent;
-            }
 
             &__name {
                 @apply font-semibold leading-5;
