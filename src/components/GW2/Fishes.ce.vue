@@ -1,5 +1,12 @@
 <script setup>
 
+// [ ] Mettre à jour les infos de tous les poissons
+// [ ] Ajouter les horloges Tyrie centrale + Cantha
+// [ ] Ajouter un filtre basé sur les horloges
+// [ ] Mettre à jour l'aspect graphique du poisson du jour
+// [ ] Afficher le succès strange diet
+// [ ] Afficher les spécialisations élites (EoD) sur les poissons concernés
+
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 const refreshFishesInterval = ref(null);
@@ -10,7 +17,7 @@ const token = ref(null);
 
 const allFishes = ref(null);
 const fishes = ref(null);
-const daily = ref(null);
+const daily = ref({});
 
 const achievements = ref([]);
 const holes = ref([]);
@@ -143,27 +150,18 @@ async function loadFishes() {
 }
 
 function fishHolesToString(holes) {
-    const freq = {
-        'low': 'faible chance',
-        'best': 'meilleure chance',
-        'high': 'fréquemment repéré',
-    };
     let res = [];
     holes.forEach((h) => {
-        res.push(h.hole.name + ((h.frequency) ? ' (' + freq[h.frequency] + ')' : ''));
+        res.push(((h.frequency) ? '<span class="frequency-' + h.frequency + '">' : '') + h.hole.name + ((h.frequency) ? '</span>' : ''));
     });
 
     return res.join(', ');
 }
 
 function fishTimesToString(times) {
-    const freq = {
-        'low': 'faible chance',
-        'best': 'meilleure chance',
-    };
     let res = [];
     times.forEach((t) => {
-        res.push(t.time.name + ((t.frequency) ? ' (' + freq[t.frequency] + ')' : ''));
+        res.push(((t.frequency) ? '<span class="frequency-' + t.frequency + '">' : '') + t.time.name + ((t.frequency) ? '</span>' : ''));
     });
 
     return res.join(', ');
@@ -221,7 +219,7 @@ watch(apiKey, async () => {
             </div>
         </div>
         <div class="flex flex-col md:flex-row justify-between gap-4 items-center mt-4">
-            <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap gap-2 w-full sm:w-auto">
                 <select class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto" v-model="currentAchievement"
                     @change="updateFishes(1)">
                     <option value="">- Région -</option>
@@ -274,13 +272,14 @@ watch(apiKey, async () => {
         <div v-if="fishes && !isLoading">
             <div class="flex flex-col gap-3 mt-4">
                 <!-- Daily -->
-                <div v-if="daily" class="flex gap-4 items-center p-4 bg-black rounded rounded-lg border border-base-100">
-                    <img :src="'https://api.lebusmagique.fr/uploads/api/gw2/items/' + daily.fish.item.uid + '.png'"
-                        class="rounded rounded-lg border w-18 h-18 shrink-0"
-                        :class="'border-gw2-rarity-' + daily.fish.item.rarity" alt="">
+                <div v-if="daily && daily.fish"
+                    class="flex gap-4 items-center p-4 bg-black rounded rounded-lg border border-base-100">
+                    <img :src="'https://api.lebusmagique.fr/uploads/api/gw2/items/' + daily.fish?.item.uid + '.png'"
+                        class="rounded rounded-lg border border-2 w-18 h-18 shrink-0"
+                        :class="'border-gw2-rarity-' + daily.fish?.item.rarity" alt="">
                     <div class="flex flex-col gap-1">
                         <div class="inline-flex flex-wrap gap-2 items-center">
-                            <span class="font-bold text-white">{{ daily.fish.item.name }}</span>
+                            <span class="font-bold text-white">{{ daily.fish?.item.name }}</span>
                             <span class="lbm-badge lbm-badge-primary">
                                 Poisson du jour
                             </span>
@@ -347,65 +346,78 @@ watch(apiKey, async () => {
                     </div>
                 </div>
                 <div id="fishes"
-                    class="grid grid-cols-1 lg:grid-cols-2 gap-3 max-h-screen border border-base-100 overflow-y-auto p-4 rounded rounded-lg items-start"
+                    class="flex flex-wrap gap-2 max-h-screen border border-base-100 overflow-y-auto p-2 rounded rounded-lg items-start"
                     v-else>
-                    <div v-for="fish in fishes" :key="fish.uid" class="flex gap-4 items-center">
-                        <div class="lbm-indicator w-18 h-18 shrink-0">
+                    <div class="hidden md:block sticky -top-2 -mt-2 -mx-2 bg-base-100 z-50 p-2"
+                        style="width: calc(100% + 1rem);">
+                        <div class="flex gap-2 text-sm font-semibold">
+                            <div class="w-12 shrink-0"></div>
+                            <div class="w-1/4 shrink-0 text-left">
+                                Poisson
+                            </div>
+                            <div class="w-full flex gap-2 text-center">
+                                <div class="w-1/4">
+                                    Coin de pêche
+                                </div>
+                                <div class="w-1/4">
+                                    Appât
+                                </div>
+                                <div class="w-1/4">
+                                    Puissance
+                                </div>
+                                <div class="w-1/4">
+                                    Horaire
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div v-for="fish in fishes" :key="fish.uid"
+                        class="flex flex-wrap md:flex-nowrap gap-2 items-center w-full">
+
+                        <div class="lbm-indicator w-12 h-12 shrink-0">
                             <span class="lbm-indicator-item lbm-indicator-bottom lbm-badge bottom-2 right-2 shadow"
                                 v-if="fish.status" :class="'fish-completed-' + fish.status"></span>
                             <img :src="'https://api.lebusmagique.fr/uploads/api/gw2/items/' + fish.item.uid + '.png'"
-                                class="rounded rounded-lg border w-18 h-18 shrink-0"
+                                class="rounded rounded-lg border border-2 w-12 h-12 shrink-0"
                                 :class="'border-gw2-rarity-' + fish.item.rarity" alt="">
                         </div>
 
-                        <div>
-                            <div class="font-bold text-white">
+                        <div class="w-auto md:w-1/4 shrink-0">
+                            <div class="font-semibold text-sm" :class="'text-gw2-rarity-' + fish.item.rarity">
                                 {{ fish.item.name }}
                             </div>
-                            <div class="flex flex-wrap gap-x-2 gap-y-1 text-sm">
-                                <span class="inline-flex gap-1 items-center" v-if="fish.achievement">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"
-                                        fill="currentColor" class="h-3 w-3">
-                                        <path
-                                            d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z" />
-                                    </svg>
-                                    {{ fish.achievement.name }}
-                                </span>
-                                <span class="inline-flex gap-1 items-center" v-if="fish.fishHoles.length > 0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="h-3 w-3" height="1em"
-                                        viewBox="0 0 352 512">
-                                        <path
-                                            d="M205.22 22.09c-7.94-28.78-49.44-30.12-58.44 0C100.01 179.85 0 222.72 0 333.91 0 432.35 78.72 512 176 512s176-79.65 176-178.09c0-111.75-99.79-153.34-146.78-311.82zM176 448c-61.75 0-112-50.25-112-112 0-8.84 7.16-16 16-16s16 7.16 16 16c0 44.11 35.89 80 80 80 8.84 0 16 7.16 16 16s-7.16 16-16 16z" />
-                                    </svg>
-                                    <span>{{ fishHolesToString(fish.fishHoles) }}</span>
-                                </span>
-                                <span class="inline-flex gap-1 items-center" v-if="fish.bait || fish.baitAny">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" fill="currentColor" class="h-3 w-3"
-                                        viewBox="0 0 512 512">
-                                        <path
-                                            d="M511.988 288.9c-.478 17.43-15.217 31.1-32.653 31.1H424v16c0 21.864-4.882 42.584-13.6 61.145l60.228 60.228c12.496 12.497 12.496 32.758 0 45.255-12.498 12.497-32.759 12.496-45.256 0l-54.736-54.736C345.886 467.965 314.351 480 280 480V236c0-6.627-5.373-12-12-12h-24c-6.627 0-12 5.373-12 12v244c-34.351 0-65.886-12.035-90.636-32.108l-54.736 54.736c-12.498 12.497-32.759 12.496-45.256 0-12.496-12.497-12.496-32.758 0-45.255l60.228-60.228C92.882 378.584 88 357.864 88 336v-16H32.666C15.23 320 .491 306.33.013 288.9-.484 270.816 14.028 256 32 256h56v-58.745l-46.628-46.628c-12.496-12.497-12.496-32.758 0-45.255 12.498-12.497 32.758-12.497 45.256 0L141.255 160h229.489l54.627-54.627c12.498-12.497 32.758-12.497 45.256 0 12.496 12.497 12.496 32.758 0 45.255L424 197.255V256h56c17.972 0 32.484 14.816 31.988 32.9zM257 0c-61.856 0-112 50.144-112 112h224C369 50.144 318.856 0 257 0z" />
-                                    </svg>
-                                    <span v-if="fish.bait">{{ fish.bait.item.name }}</span>
-                                    <span v-if="fish.baitAny">Quelconque</span>
-                                </span>
-                                <span class="inline-flex gap-1 items-center" v-if="fish.power">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"
-                                        fill="currentColor" class="h-3 w-3">
-                                        <path
-                                            d="M510.28 445.86l-73.03-292.13c-3.8-15.19-16.44-25.72-30.87-25.72h-60.25c3.57-10.05 5.88-20.72 5.88-32 0-53.02-42.98-96-96-96s-96 42.98-96 96c0 11.28 2.3 21.95 5.88 32h-60.25c-14.43 0-27.08 10.54-30.87 25.72L1.72 445.86C-6.61 479.17 16.38 512 48.03 512h415.95c31.64 0 54.63-32.83 46.3-66.14zM256 128c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32z" />
-                                    </svg>
-                                    {{ fish.power }}
-                                </span>
-                                <span class="inline-flex gap-1 items-center" v-if="fish.fishTimes.length > 0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"
-                                        fill="currentColor" class="h-3 w-3">
-                                        <path
-                                            d="M256,8C119,8,8,119,8,256S119,504,256,504,504,393,504,256,393,8,256,8Zm92.49,313h0l-20,25a16,16,0,0,1-22.49,2.5h0l-67-49.72a40,40,0,0,1-15-31.23V112a16,16,0,0,1,16-16h32a16,16,0,0,1,16,16V256l58,42.5A16,16,0,0,1,348.49,321Z" />
-                                    </svg>
-                                    {{ fishTimesToString(fish.fishTimes) }}
-                                </span>
+                            <div class="text-sm" v-if="fish.achievement">
+                                {{ fish.achievement.name }}
                             </div>
                         </div>
+
+                        <div
+                            class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-0 sm:gap-2 items-center text-sm text-left sm:text-center">
+                            <div class="rounded border-0 sm:border md:border-0 border-gray-500 p-0 sm:p-1 md:p-0">
+                                <span class="inline sm:hidden">Coin de pêche : </span>
+                                <span v-if="fish.fishHoles.length > 0" v-html="fishHolesToString(fish.fishHoles)"></span>
+                            </div>
+
+                            <div class="rounded border-0 sm:border md:border-0 border-gray-500 p-0 sm:p-1 md:p-0">
+                                <span class="inline sm:hidden">Appât : </span>
+                                <span v-if="fish.bait">
+                                    {{ fish.bait.item.name }}
+                                </span>
+                                <span v-if="fish.baitAny">Quelconque</span>
+                            </div>
+
+                            <div class="rounded border-0 sm:border md:border-0 border-gray-500 p-0 sm:p-1 md:p-0">
+                                <span class="inline sm:hidden">Puissance : </span>
+                                <span v-if="fish.power">{{ fish.power }}</span>
+                            </div>
+
+                            <div class="rounded border-0 sm:border md:border-0 border-gray-500 p-0 sm:p-1 md:p-0">
+                                <span class="inline sm:hidden">Horaire : </span>
+                                <span v-if="fish.fishTimes.length > 0" v-html="fishTimesToString(fish.fishTimes)"></span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -443,10 +455,6 @@ watch(apiKey, async () => {
 <style lang="scss" scoped>
 @import '../../assets/main.scss';
 
-img.border {
-    border-width: 3px;
-}
-
 #fishes {
     max-height: calc(100dvh - 17rem);
     min-height: 13rem;
@@ -459,5 +467,17 @@ img.border {
 
 .fish-completed-repeat {
     @apply bg-info;
+}
+
+:deep(.frequency-low) {
+    color: var(--gw2-rarity-Fine);
+}
+
+:deep(.frequency-best) {
+    color: var(--gw2-rarity-Rare);
+}
+
+:deep(.frequency-high) {
+    color: var(--gw2-rarity-Ascended);
 }
 </style>

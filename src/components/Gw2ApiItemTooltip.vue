@@ -38,7 +38,7 @@ function showItemTooltip() {
 </script>
 
 <template>
-    <img :src="props.item.icon" alt="" class="w-16 h-16 border border-2" :class="'border-gw2-rarity-' + props.item.rarity"
+    <img :src="props.item.icon" alt="" :class="['border-gw2-rarity-' + props.item.rarity, 'w-16 h-16 border border-2']"
         v-if="props.item.icon" v-tippy>
     <tippy @show="showItemTooltip" placement="auto" followCursor="true">
         <div v-if="itemTooltipData">
