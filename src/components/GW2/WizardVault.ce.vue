@@ -306,32 +306,26 @@ function formatGold(total) {
             @apply w-full bg-no-repeat bg-left bg-black py-3 px-4 border-2 rounded-xl;
 
             &--pve {
-                border-color: var(--gw2-wizard-vault-objective-pve) !important;
+                @apply border-gw2-wizard-vault-objective-pve;
 
                 .lbm-badge {
-                    @apply text-white text-neutral uppercase;
-                    background: var(--gw2-wizard-vault-objective-pve);
-                    border-color: var(--gw2-wizard-vault-objective-pve);
+                    @apply text-white text-neutral uppercase bg-gw2-wizard-vault-objective-pve border-gw2-wizard-vault-objective-pve;
                 }
             }
 
             &--pvp {
-                border-color: var(--gw2-wizard-vault-objective-pvp) !important;
+                @apply border-gw2-wizard-vault-objective-pvp;
 
                 .lbm-badge {
-                    @apply text-white text-white uppercase;
-                    background: var(--gw2-wizard-vault-objective-pvp);
-                    border-color: var(--gw2-wizard-vault-objective-pvp);
+                    @apply text-white text-white uppercase bg-gw2-wizard-vault-objective-pvp border-gw2-wizard-vault-objective-pvp;
                 }
             }
 
             &--wvw {
-                border-color: var(--gw2-wizard-vault-objective-wvw) !important;
+                @apply border-gw2-wizard-vault-objective-wvw;
 
                 .lbm-badge {
-                    @apply text-white text-neutral uppercase;
-                    background: var(--gw2-wizard-vault-objective-wvw);
-                    border-color: var(--gw2-wizard-vault-objective-wvw);
+                    @apply text-white text-neutral uppercase bg-gw2-wizard-vault-objective-wvw border-gw2-wizard-vault-objective-wvw;
                 }
             }
 

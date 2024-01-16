@@ -470,14 +470,14 @@ watch(apiKey, async () => {
 }
 
 :deep(.frequency-low) {
-    color: var(--gw2-rarity-Fine);
+    @apply text-gw2-rarity-Fine;
 }
 
 :deep(.frequency-best) {
-    color: var(--gw2-rarity-Rare);
+    @apply text-gw2-rarity-Rare;
 }
 
 :deep(.frequency-high) {
-    color: var(--gw2-rarity-Ascended);
+    @apply text-gw2-rarity-Ascended;
 }
 </style>

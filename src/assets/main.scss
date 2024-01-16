@@ -2,21 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-    --gw2-rarity-Junk: #bbb;
-    --gw2-rarity-Basic: #fff;
-    --gw2-rarity-Fine: #5291f0;
-    --gw2-rarity-Masterwork: #32b112;
-    --gw2-rarity-Rare: #f0d022;
-    --gw2-rarity-Exotic: #fa0;
-    --gw2-rarity-Ascended: #f48;
-    --gw2-rarity-Legendary: #93f;
-
-    --gw2-wizard-vault-objective-wvw: #ccaa00;
-    --gw2-wizard-vault-objective-pvp: #cc5252;
-    --gw2-wizard-vault-objective-pve: #44cc00;
-}
-
 *,
 ::before,
 ::after {
@@ -34,22 +19,6 @@ h5,
 h6 {
     font-size: 1rem;
     margin: 0;
-}
-
-$gw2-rarity-colors: "Junk", "Basic", "Fine", "Masterwork", "Rare", "Exotic", "Ascended", "Legendary";
-
-@each $color in $gw2-rarity-colors {
-    .text-gw2-rarity-#{$color} {
-        color: var(--gw2-rarity-#{$color}) !important;
-    }
-
-    .bg-gw2-rarity-#{$color} {
-        background-color: var(--gw2-rarity-#{$color}) !important;
-    }
-
-    .border-gw2-rarity-#{$color} {
-        border-color: var(--gw2-rarity-#{$color}) !important;
-    }
 }
 
 .bangers {
