@@ -13,7 +13,7 @@ export default {
 
 <script setup>
 import { ref } from 'vue';
-import i18n from '@/services/i18n'
+import i18n from '@/services/i18n';
 import fr from '@/i18n/gw2-api-item-tooltip.json';
 
 const props = defineProps(['item']);

@@ -1,8 +1,8 @@
 <script setup>
 
-// [ ] Mettre à jour les infos de tous les poissons
-// [ ] Ajouter les horloges Tyrie centrale + Cantha
-// [ ] Ajouter un filtre basé sur les horloges
+// [x] Mettre à jour les infos de tous les poissons
+// [x] Ajouter les horloges Tyrie centrale + Cantha
+// [x] Ajouter un filtre basé sur les horloges
 // [ ] Mettre à jour l'aspect graphique du poisson du jour
 // [ ] Afficher le succès strange diet
 // [ ] Afficher les spécialisations élites (EoD) sur les poissons concernés
@@ -10,9 +10,12 @@
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 
 const refreshFishesInterval = ref(null);
+const refreshClocksInterval = ref(null);
 
 const apiKey = ref(null);
 const hideCompleted = ref(false);
+const hideOutClock = ref(false);
+const hideDayNight = ref(false);
 const token = ref(null);
 
 const allFishes = ref(null);
@@ -44,12 +47,28 @@ async function getDailyFish() {
 
 function updateFishes(reset = false) {
     fishes.value = allFishes.value;
+    console.log('updateFishes');
 
     if (reset) {
         holes.value = [];
         baits.value = [];
         currentHole.value = '';
         currentBait.value = '';
+    }
+
+    if (hideOutClock.value) {
+        let moments = [];
+        moments.push('any');
+        moments.push(`tyria-${currentClocks.value['tyria']}`);
+        moments.push(`cantha-${currentClocks.value['cantha']}`);
+        if (!hideDayNight.value) {
+            moments.push('tyria-d');
+            moments.push('tyria-n');
+            moments.push('cantha-d');
+            moments.push('cantha-n');
+        }
+
+        fishes.value = fishes.value.filter(f => f.fishTimes.find(x => moments.indexOf(x.time.uid) >= 0));
     }
 
     if (hideCompleted.value) {
@@ -139,6 +158,16 @@ function initUserSettings() {
     if (localHideCompleted) {
         hideCompleted.value = (localHideCompleted === 'true');
     }
+
+    const localHideOutClock = localStorage.getItem('gw2-fishes-hide-out-clock');
+    if (localHideOutClock) {
+        hideOutClock.value = (localHideOutClock === 'true');
+    }
+
+    const localHideDayNight = localStorage.getItem('gw2-fishes-hide-day-night');
+    if (localHideDayNight) {
+        hideDayNight.value = (localHideDayNight === 'true');
+    }
 }
 
 async function loadFishes() {
@@ -167,6 +196,70 @@ function fishTimesToString(times) {
     return res.join(', ');
 }
 
+const currentClocks = ref({
+    tyria: null,
+    cantha: null,
+});
+
+const clocks = {
+    'tyria': {
+        0: 'n',
+        25: 'dd',
+        30: 'd',
+        140: 'dd',
+        145: 'n',
+
+    },
+    'cantha': {
+        0: 'n',
+        35: 'dd',
+        40: 'd',
+        135: 'dd',
+        140: 'n',
+    }
+};
+
+const findDayPeriod = (timer, region) => {
+    for (const key of Object.keys(clocks[region]).reverse()) {
+        if (timer >= Number(key)) {
+            return clocks[region][key];
+        }
+    }
+    return clocks[region][0];
+}
+
+function updateClocks() {
+
+    const date = new Date();
+    const currentMinutes = date.getUTCMinutes();
+    const t = parseInt((date.getUTCHours() % 2).toString() + pad(currentMinutes));
+
+    const tyriaTime = findDayPeriod(t, 'tyria');
+    const canthaTime = findDayPeriod(t, 'cantha');
+
+    let fireFishUpdate = false;
+
+    if (currentClocks.value.tyria !== tyriaTime) {
+        currentClocks.value.tyria = tyriaTime;
+        fireFishUpdate = true;
+    }
+
+    if (currentClocks.value.cantha !== canthaTime) {
+        currentClocks.value.cantha = canthaTime;
+        fireFishUpdate = true;
+    }
+
+    console.log('updateClocks')
+
+    if (!isLoading.value && fireFishUpdate) {
+        updateFishes();
+    }
+}
+
+const pad = (number) => {
+    return number.toString().padStart(2, '0');
+}
+
 initUserSettings();
 
 onMounted(() => {
@@ -176,6 +269,11 @@ onMounted(() => {
         console.error(error);
     }
 
+    updateClocks();
+
+    if (!refreshClocksInterval.value) {
+        refreshClocksInterval.value = setInterval(updateClocks, 3 * 1000);
+    }
 
     if (!refreshFishesInterval.value) {
         refreshFishesInterval.value = setInterval(() => {
@@ -191,10 +289,27 @@ onMounted(() => {
 onUnmounted(() => {
     if (refreshFishesInterval.value) clearInterval(refreshFishesInterval.value);
     refreshFishesInterval.value = null;
+
+    if (refreshClocksInterval.value) clearInterval(refreshClocksInterval.value);
+    refreshClocksInterval.value = null;
 });
 
 watch(hideCompleted, async () => {
     localStorage.setItem('gw2-fishes-hide-completed', hideCompleted.value);
+    if (fishes.value) {
+        resetFilters();
+    }
+});
+
+watch(hideOutClock, async () => {
+    localStorage.setItem('gw2-fishes-hide-out-clock', hideOutClock.value);
+    if (fishes.value) {
+        resetFilters();
+    }
+});
+
+watch(hideDayNight, async () => {
+    localStorage.setItem('gw2-fishes-hide-day-night', hideDayNight.value);
     if (fishes.value) {
         resetFilters();
     }
@@ -249,23 +364,25 @@ watch(apiKey, async () => {
                     </svg>
                 </button>
             </div>
-            <div class="flex gap-2 items-center">
-                <label class="lbm-btn lbm-btn-error lbm-btn-sm gap-1" v-if="token === 'notok'">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                        <path
-                            d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                    </svg>
-
-                    API GW2
-                </label>
-                <label class="lbm-btn lbm-btn-sm w-full sm:w-auto" for="fishes-settings-modal">
+            <div class="flex-col sm:flex-row flex gap-2 items-center w-full sm:w-auto">
+                <div class="lbm-btn lbm-btn-sm pl-8 relative overflow-hidden w-full sm:w-auto"
+                    :class="`bg-moment-${currentClocks.tyria}`">
+                    <img :src="`/img/${currentClocks.tyria}.svg`" alt="" />
+                    Tyrie centrale
+                </div>
+                <div class="lbm-btn lbm-btn-sm pl-8 relative overflow-hidden w-full sm:w-auto"
+                    :class="`bg-moment-${currentClocks.cantha}`">
+                    <img :src="`/img/${currentClocks.cantha}.svg`" alt="" />
+                    Cantha
+                </div>
+                <label class="lbm-btn lbm-btn-sm sm:lbm-btn-square w-full sm:w-auto" for="fishes-settings-modal">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    Paramètres
+                    <span class="block sm:hidden">Paramètres</span>
                 </label>
             </div>
         </div>
@@ -445,6 +562,18 @@ watch(apiKey, async () => {
                     <span class="label-text">Masquer les poissons pêchés</span>
                 </label>
             </div>
+            <div class="lbm-form-control mt-1">
+                <label class="lbm-label cursor-pointer justify-start gap-2">
+                    <input type="checkbox" class="lbm-toggle lbm-toggle-success" v-model="hideOutClock" />
+                    <span class="label-text">Masquer les poissons indisponibles</span>
+                </label>
+            </div>
+            <div class="lbm-form-control mt-1" v-if="hideOutClock">
+                <label class="lbm-label cursor-pointer justify-start gap-2">
+                    <input type="checkbox" class="lbm-toggle lbm-toggle-success" v-model="hideDayNight" />
+                    <span class="label-text">Exclure Jour/Nuit pendant Aube/Crépuscule</span>
+                </label>
+            </div>
             <div class="lbm-modal-action">
                 <label for="fishes-settings-modal" class="lbm-btn lbm-btn-primary">Fermer</label>
             </div>
@@ -479,5 +608,28 @@ watch(apiKey, async () => {
 
 :deep(.frequency-high) {
     @apply text-gw2-rarity-Ascended;
+}
+
+.bg-moment {
+    &-d {
+        @apply no-animation bg-gradient-to-b from-cyan-500 to-sky-500 text-sky-100;
+    }
+
+    &-dd {
+        @apply no-animation bg-gradient-to-b from-purple-700 to-orange-500 text-orange-100;
+    }
+
+    &-n {
+        @apply no-animation bg-gradient-to-b from-slate-800 to-blue-900 text-blue-100;
+    }
+
+    &-d,
+    &-dd,
+    &-n {
+        img {
+            @apply absolute top-0 left-0;
+            height: 1.875rem;
+        }
+    }
 }
 </style>
