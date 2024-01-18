@@ -47,7 +47,6 @@ async function getDailyFish() {
 
 function updateFishes(reset = false) {
     fishes.value = allFishes.value;
-    console.log('updateFishes');
 
     if (reset) {
         holes.value = [];
@@ -248,8 +247,6 @@ function updateClocks() {
         currentClocks.value.cantha = canthaTime;
         fireFishUpdate = true;
     }
-
-    console.log('updateClocks')
 
     if (!isLoading.value && fireFishUpdate) {
         updateFishes();
