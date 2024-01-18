@@ -367,12 +367,12 @@ watch(apiKey, async () => {
             <div class="flex-col sm:flex-row flex gap-2 items-center w-full sm:w-auto">
                 <div class="lbm-btn lbm-btn-sm pl-8 relative overflow-hidden w-full sm:w-auto"
                     :class="`bg-moment-${currentClocks.tyria}`">
-                    <img :src="`/img/${currentClocks.tyria}.svg`" alt="" />
+                    <img :src="`https://lbm-assets.vercel.app/img/${currentClocks.tyria}.svg`" alt="" />
                     Tyrie centrale
                 </div>
                 <div class="lbm-btn lbm-btn-sm pl-8 relative overflow-hidden w-full sm:w-auto"
                     :class="`bg-moment-${currentClocks.cantha}`">
-                    <img :src="`/img/${currentClocks.cantha}.svg`" alt="" />
+                    <img :src="`https://lbm-assets.vercel.app/img/${currentClocks.cantha}.svg`" alt="" />
                     Cantha
                 </div>
                 <label class="lbm-btn lbm-btn-sm sm:lbm-btn-square w-full sm:w-auto" for="fishes-settings-modal">
