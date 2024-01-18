@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 import GW2WizardVaultRewards from '@/data/gw2-wizard-vault-rewards.json';
-import Gw2ApiItemTooltip from '@/components/Gw2ApiItemTooltip.vue';
 
 import MarkdownIt from "markdown-it";
 const markdown = new MarkdownIt();
@@ -180,7 +179,7 @@ function formatGold(total) {
                 <div class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
                     v-if="rewards">
                     <div v-for="reward, r in rewards" class="wizard-vault__reward" :key="r">
-                        <Gw2ApiItemTooltip :item="reward" />
+                        <gw2-api-item-tooltip :item="reward"></gw2-api-item-tooltip>
                         <div class="wizard-vault__reward__price text-white">
                             {{ reward.price }}
                             <img src="@/assets/img/CurrencyAstralAcclaim.png" />
@@ -198,7 +197,7 @@ function formatGold(total) {
                 <div class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
                     v-if="legacyRewards">
                     <div v-for="reward, r in legacyRewards" class="wizard-vault__reward" :key="r">
-                        <Gw2ApiItemTooltip :item="reward" />
+                        <gw2-api-item-tooltip :item="reward"></gw2-api-item-tooltip>
                         <div class="wizard-vault__reward__price text-white">
                             {{ reward.price }}
                             <img src="@/assets/img/CurrencyAstralAcclaim.png" />
@@ -217,25 +216,6 @@ function formatGold(total) {
 
 <style lang="scss" scoped>
 @import '../../assets/main.scss';
-
-
-// input[type="checkbox"] {
-//     @apply hidden;
-// }
-
-// input[type="checkbox"]+label {
-//     @apply inline-flex gap-1 items-center cursor-pointer;
-// }
-
-// input[type="checkbox"]+label:before {
-//     @apply w-5 h-5 block bg-center bg-no-repeat;
-//     content: '';
-//     background-image: url('@/assets/img/CheckboxUnchecked.png');
-// }
-
-// input[type="checkbox"]:checked+label:before {
-//     background-image: url('@/assets/img/CheckboxChecked.png');
-// }
 
 .gw2-wizard-vault {
 
