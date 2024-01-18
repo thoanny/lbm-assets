@@ -632,4 +632,26 @@ watch(apiKey, async () => {
         }
     }
 }
+
+/* Scrollbar */
+
+* {
+    scrollbar-width: none;
+    scrollbar-color: hsl(var(--nc)) hsl(var(--b1));
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: hsl(var(--b1));
+    border-radius: 0 4px 4px 0;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--nc));
+    border-radius: 4px;
+    border: 0px none hsl(var(--nc));
+}
 </style>
