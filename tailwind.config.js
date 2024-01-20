@@ -1,34 +1,32 @@
 /** @type {import('tailwindcss').Config} */
+import daisyui from 'daisyui'
 module.exports = {
-  content: [
-    "./index.html",
-    "./src/**/*.{vue,js}",
-  ],
+  content: ['./index.html', './src/**/*.{vue,js}'],
   corePlugins: {
-    preflight: false,
+    preflight: false
   },
   theme: {
     extend: {
       colors: {
-        'gw2': {
-          'rarity': {
-            'Junk': '#bbb',
-            'Basic': '#fff',
-            'Fine': '#5291f0',
-            'Masterwork': '#32b112',
-            'Rare': '#f0d022',
-            'Exotic': '#fa0',
-            'Ascended': '#f48',
-            'Legendary': '#93f'
+        gw2: {
+          rarity: {
+            Junk: '#bbb',
+            Basic: '#fff',
+            Fine: '#5291f0',
+            Masterwork: '#32b112',
+            Rare: '#f0d022',
+            Exotic: '#fa0',
+            Ascended: '#f48',
+            Legendary: '#93f'
           },
           'wizard-vault-objective': {
-            'wvw': '#ccaa00',
-            'pvp': '#cc5252',
-            'pve': '#44cc00'
+            wvw: '#ccaa00',
+            pvp: '#cc5252',
+            pve: '#44cc00'
           }
         }
       }
-    },
+    }
   },
   safelist: [
     'text-gw2-rarity-Junk',
@@ -63,13 +61,12 @@ module.exports = {
     'border-gw2-rarity-Legendary',
     'border-gw2-wizard-vault-objective-wvw',
     'border-gw2-wizard-vault-objective-pvp',
-    'border-gw2-wizard-vault-objective-pve',
+    'border-gw2-wizard-vault-objective-pve'
   ],
-  plugins: [require("daisyui")],
+  plugins: [daisyui],
   daisyui: {
-    themes: ["dark"],
+    themes: ['dark'],
     base: false,
-    prefix: "lbm-",
-  },
+    prefix: 'lbm-'
+  }
 }
-
