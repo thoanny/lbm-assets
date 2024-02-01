@@ -18,6 +18,8 @@ const hideCompleted = ref(false);
 const hideOutClock = ref(false);
 const hideDayNight = ref(false);
 const token = ref(null);
+const showSearchInput = ref(false);
+const searchValue = ref('');
 
 const allFishes = ref(null);
 const fishes = ref(null);
@@ -78,6 +80,23 @@ const updateFishes = (reset = false) => {
     baits.value = [];
     currentHole.value = '';
     currentBait.value = '';
+  }
+
+  if (searchValue.value) {
+    currentAchievement.value = '';
+    const s = searchValue.value
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase();
+    fishes.value = fishes.value.filter(
+      (f) =>
+        f.item.name
+          .normalize('NFD')
+          .replace(/\p{Diacritic}/gu, '')
+          .toLowerCase()
+          .indexOf(s) >= 0,
+    );
+    return;
   }
 
   if (hideOutClock.value) {
@@ -249,6 +268,13 @@ const updateClocks = () => {
   }
 };
 
+const toggleSearchInput = () => {
+  if (showSearchInput.value) {
+    searchValue.value = '';
+  }
+  showSearchInput.value = !showSearchInput.value;
+};
+
 onMounted(() => {
   initUserSettings();
 
@@ -308,6 +334,10 @@ watch(apiKey, async () => {
   localStorage.setItem('gw2-fishes-api-key', apiKey.value);
   loadFishes();
 });
+
+watch(searchValue, async () => {
+  updateFishes(1);
+});
 </script>
 
 <template>
@@ -326,10 +356,37 @@ watch(apiKey, async () => {
       v-if="!isLoading"
     >
       <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+        <button
+          class="lbm-btn lbm-btn-sm sm:lbm-btn-square"
+          :class="{ 'lbm-btn-primary': showSearchInput }"
+          @click="toggleSearchInput"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            class="w-5 h-5"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <div class="flex gap-2" v-if="showSearchInput">
+          <input
+            type="text"
+            class="lbm-input lbm-input-sm w-full"
+            placeholder="Chercher un poisson..."
+            v-model="searchValue"
+          />
+        </div>
         <select
           class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto"
           v-model="currentAchievement"
           @change="updateFishes(1)"
+          v-if="!showSearchInput"
         >
           <option value="">- Région -</option>
           <option v-for="achievement in achievements" :key="achievement.id" :value="achievement.id">
@@ -340,7 +397,7 @@ watch(apiKey, async () => {
           class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto"
           v-model="currentHole"
           @change="updateFishes()"
-          v-if="currentAchievement"
+          v-if="currentAchievement && !showSearchInput"
         >
           <option value="">- Zone -</option>
           <option v-for="hole in holes" :key="hole.id" :value="hole.id">
@@ -351,7 +408,7 @@ watch(apiKey, async () => {
           class="lbm-select lbm-select-sm lbm-selected-bordered w-full sm:w-auto"
           v-model="currentBait"
           @change="updateFishes()"
-          v-if="currentAchievement"
+          v-if="currentAchievement && !showSearchInput"
         >
           <option value="">- Appât -</option>
           <option v-for="bait in baits" :key="bait.uid" :value="bait.uid">
@@ -361,7 +418,7 @@ watch(apiKey, async () => {
         <button
           class="lbm-btn lbm-btn-sm lbm-btn-square"
           @click="resetFilters"
-          v-if="currentAchievement || currentHole || currentBait"
+          v-if="(currentAchievement || currentHole || currentBait) && !showSearchInput"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -393,7 +450,7 @@ watch(apiKey, async () => {
           Cantha
         </div>
         <label
-          class="lbm-btn lbm-btn-sm sm:lbm-btn-square w-full sm:w-auto"
+          class="lbm-btn lbm-btn-sm sm:lbm-btn-square w-full w-auto sm:w-8"
           for="fishes-settings-modal"
         >
           <svg
