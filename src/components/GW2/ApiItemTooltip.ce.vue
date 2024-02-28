@@ -30,7 +30,7 @@ async function getItem(id) {
 
 function showItemTooltip() {
   itemTooltipData.value = null;
-  getItem(props.item.item_id).then((data) => {
+  getItem(props.item.id).then((data) => {
     itemTooltipData.value = data;
   });
 }
