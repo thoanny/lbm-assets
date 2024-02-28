@@ -310,7 +310,10 @@ function formatGold(total) {
             </div>
           </div>
         </div>
-        <div v-else>Aucun objectif dans cette catégorie pour le moment...</div>
+        <div v-else>
+          Une clé API Guild Wars 2 est requise pour afficher la rubrique des objectifs quotidiens,
+          hebdomadaires et spéciaux...
+        </div>
       </div>
       <div id="wizard-vault__rewards-panel" class="w-full" v-if="panel == 'rewards'">
         <!-- [ ] Recalculer le max, sachant que la limite ne peut être calculé que si clé API -->
