@@ -4,12 +4,17 @@ import { ref, watch, onMounted } from 'vue';
 import MarkdownIt from 'markdown-it';
 const markdown = new MarkdownIt();
 
+const GW2_API = 'https://api.guildwars2.com/v2';
+const LBM_API = 'https://api.lebusmagique.fr/api';
+
 const apiKey = ref('');
 const panel = ref('objectives');
 const tab = ref('daily');
 const objectives = ref({ daily: null, weekly: null, special: null });
 const rewards = ref([]);
 const accountRewards = ref([]);
+const lbmApiObjectives = ref([]);
+const isLoading = ref(true);
 
 const itemsIds = ref([]);
 const itemsData = ref([]);
@@ -29,13 +34,13 @@ function switchTab(t) {
 }
 
 const getWizardsVaultListing = async () => {
-  const res = await fetch('https://api.guildwars2.com/v2/wizardsvault/listings?ids=all');
+  const res = await fetch(`${GW2_API}/wizardsvault/listings?ids=all`);
   return await res.json();
 };
 
 const getItemsData = async () => {
   const ids = itemsIds.value.join(',');
-  const res = await fetch(`https://api.guildwars2.com/v2/items?ids=${ids}`);
+  const res = await fetch(`${GW2_API}/items?ids=${ids}`);
   return await res.json();
 };
 
@@ -43,38 +48,45 @@ const initUserSettings = () => {
   const localApiKey = localStorage.getItem('gw2-wizard-vault-api-key');
   if (localApiKey) {
     apiKey.value = localApiKey;
+  } else {
+    loadWizardsVault();
   }
 };
 
 const getAccountDaily = async () => {
-  const res = await fetch(
-    `https://api.guildwars2.com/v2/account/wizardsvault/daily?access_token=${apiKey.value}`,
-  );
-  return await res.json();
+  const res = await fetch(`${GW2_API}/account/wizardsvault/daily?access_token=${apiKey.value}`);
+  objectives.value.daily = await res.json();
 };
 
 const getAccountWeekly = async () => {
-  const res = await fetch(
-    `https://api.guildwars2.com/v2/account/wizardsvault/weekly?access_token=${apiKey.value}`,
-  );
-  return await res.json();
+  const res = await fetch(`${GW2_API}/account/wizardsvault/weekly?access_token=${apiKey.value}`);
+  objectives.value.weekly = await res.json();
 };
 
 const getAccountSpecial = async () => {
-  const res = await fetch(
-    `https://api.guildwars2.com/v2/account/wizardsvault/special?access_token=${apiKey.value}`,
-  );
-  return await res.json();
+  const res = await fetch(`${GW2_API}/account/wizardsvault/special?access_token=${apiKey.value}`);
+  objectives.value.special = await res.json();
 };
 
 const getAccountRewards = async () => {
-  const res = await fetch(
-    `https://api.guildwars2.com/v2/account/wizardsvault/listings?access_token=${apiKey.value}`,
-  );
+  const res = await fetch(`${GW2_API}/account/wizardsvault/listings?access_token=${apiKey.value}`);
+  return await res.json();
+};
+
+const getLbmApiObjectives = async (ids) => {
+  const res = await fetch(`${LBM_API}/gw2/wizard-vault/objectives`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ids }),
+  });
+  isLoading.value = false;
   return await res.json();
 };
 
 const loadWizardsVault = async () => {
+  isLoading.value = true;
   getWizardsVaultListing()
     .then((data) => {
       data.forEach((d) => {
@@ -92,14 +104,20 @@ const loadWizardsVault = async () => {
 
   if (apiKey.value) {
     accountRewards.value = await getAccountRewards();
-    objectives.value = {
-      daily: await getAccountDaily(),
-      weekly: await getAccountWeekly(),
-      special: await getAccountSpecial(),
-    };
+
+    Promise.all([getAccountDaily(), getAccountWeekly(), getAccountSpecial()]).then(async () => {
+      const objectivesIds = [
+        ...objectives.value.daily.objectives.map((objective) => objective.id),
+        ...objectives.value.weekly.objectives.map((objective) => objective.id),
+        ...objectives.value.special.objectives.map((objective) => objective.id),
+      ];
+
+      lbmApiObjectives.value = await getLbmApiObjectives(objectivesIds);
+    });
   } else {
     accountRewards.value = [];
     objectives.value = { daily: null, weekly: null, special: null };
+    isLoading.value = false;
   }
 };
 
@@ -126,21 +144,28 @@ const getAccountRewardLimit = (reward_id) => {
 
   const reward = accountRewards.value.find((r) => r.id === reward_id);
 
-  if (!reward) {
-    return;
-  }
-
-  if (!reward.purchase_limit) {
-    return 'illimité';
-  }
-
-  if (reward.purchased === reward.purchase_limit) {
-    return 'Épuisé';
-  }
+  if (!reward) return;
+  if (!reward.purchase_limit) return 'illimité';
+  if (reward.purchased === reward.purchase_limit) return 'Épuisé';
 
   return `${reward.purchased}/${reward.purchase_limit} acheté${
     reward.purchase_limit > 1 ? 's' : ''
   }`;
+};
+
+const getObjectiveTitle = (obj) => {
+  const LbmObjective = lbmApiObjectives.value.find((objective) => objective.uid === obj.id);
+  if (LbmObjective) {
+    return LbmObjective.title;
+  }
+
+  return `[${obj.id}] ${obj.title}`;
+};
+
+const getObjectiveTip = (id) => {
+  const LbmObjective = lbmApiObjectives.value.find((objective) => objective.uid === id);
+  if (!LbmObjective) return;
+  return markdown.render(LbmObjective.tip);
 };
 
 watch(apiKey, async () => {
@@ -148,29 +173,9 @@ watch(apiKey, async () => {
   loadWizardsVault();
 });
 
-// async function getObjectives() {
-//   try {
-//     const res = await fetch('https://api.lebusmagique.fr/api/gw2/wizard-vault/objectives');
-//     return await res.json();
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-
-// getObjectives().then((data) => {
-//   data.forEach((o) => {
-//     objectives.value[o.period].push(o);
-//   });
-// });
-
 onMounted(() => {
   initUserSettings();
-  loadWizardsVault();
 });
-
-function markdownToHtml(md) {
-  return markdown.render(md);
-}
 
 function formatGold(total) {
   const copper = Math.floor(total % 100);
@@ -224,7 +229,11 @@ function formatGold(total) {
         placeholder="Clé API Guild Wars 2"
       />
     </div>
-    <div class="wizard-vault flex-col md:flex-row">
+    <div v-if="isLoading" class="px-4 flex gap-2">
+      <span class="lbm-loading lbm-loading-spinner"></span>
+      Chargement en cours...
+    </div>
+    <div class="wizard-vault flex-col md:flex-row" v-else>
       <div class="wizard-vault__menu flex-row md:flex-col">
         <button
           @click="switchPanel('objectives')"
@@ -284,29 +293,41 @@ function formatGold(total) {
           </button>
         </div>
         <div class="wizard-vault__objectives" v-if="objectives[tab]">
+          <progress
+            class="lbm-progress lbm-progress-primary w-full"
+            :value="objectives[tab].meta_progress_current"
+            :max="objectives[tab].meta_progress_complete"
+            v-if="objectives[tab].meta_progress_complete"
+          ></progress>
           <div
             class="wizard-vault__objective flex gap-4 items-center relative"
             v-for="obj in objectives[tab].objectives"
             :key="obj.title"
-            :class="'wizard-vault__objective--' + obj.track"
+            :class="[`wizard-vault__objective--${obj.track}`, obj.claimed ? 'opacity-25' : '']"
           >
             <div class="w-full">
               <div class="lbm-badge lbm-badge-sm absolute -top-2 left-2">{{ obj.track }}</div>
               <div class="font-bold text-white">
-                {{ obj.title }}
+                <span v-text="getObjectiveTitle(obj)"></span>&nbsp;
                 <small class="opacity-75 font-semibold"
                   >({{ obj.progress_current }}/{{ obj.progress_complete }})</small
                 >
               </div>
-              <!-- <div class="wizard-vault__objective__tip" v-html="markdownToHtml(obj.tip)"></div> -->
+              <div
+                class="wizard-vault__objective__tip text-sm"
+                v-html="getObjectiveTip(obj.id)"
+                v-if="!obj.claimed"
+              ></div>
             </div>
-            <div class="text-lg font-bold w-20 shrink-0 flex gap-2 items-center justify-end">
-              {{ obj.acclaim }}
-              <img
-                src="@/assets/img/CurrencyAstralAcclaim.png"
-                class="inline w-6 h-6"
-                alt="Acclamation astrale"
-              />
+            <div class="text-lg font-bold w-20 shrink-0 self-start">
+              <span class="flex gap-1 items-center justify-end">
+                {{ obj.acclaim }}
+                <img
+                  src="@/assets/img/CurrencyAstralAcclaim.png"
+                  class="inline w-6 h-6"
+                  alt="Acclamation astrale"
+                />
+              </span>
             </div>
           </div>
         </div>
