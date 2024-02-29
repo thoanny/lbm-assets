@@ -309,10 +309,10 @@ function formatGold(total) {
             </svg>
             <span>
               <strong>
-                Acuellement, la liste de vos objectifs est mise à jour dans l'API de Guild Wars 2
+                Actuellement, la liste de vos objectifs est mise à jour dans l'API de Guild Wars 2
                 seulement lorsque que vous vous connectez en jeu et patientez plusieurs minutes.
               </strong>
-              Ne vous vous étonnez donc pas de voir des objectifs précédents.
+              Ne vous étonnez donc pas de voir des objectifs précédents.
             </span>
           </div>
           <progress
