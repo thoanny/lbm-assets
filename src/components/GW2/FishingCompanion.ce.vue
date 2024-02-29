@@ -357,7 +357,7 @@ watch(searchValue, async () => {
     >
       <div class="flex flex-wrap gap-2 w-full sm:w-auto">
         <button
-          class="lbm-btn lbm-btn-sm sm:lbm-btn-square"
+          class="lbm-btn lbm-btn-sm sm:lbm-btn-square sm:!h-8 sm:!w-8"
           :class="{ 'lbm-btn-primary': showSearchInput }"
           @click="toggleSearchInput"
         >
@@ -450,7 +450,7 @@ watch(searchValue, async () => {
           Cantha
         </div>
         <label
-          class="lbm-btn lbm-btn-sm sm:lbm-btn-square w-full w-auto sm:w-8"
+          class="lbm-btn lbm-btn-sm sm:lbm-btn-square w-full w-auto sm:!h-8 sm:!w-8"
           for="fishes-settings-modal"
         >
           <svg
