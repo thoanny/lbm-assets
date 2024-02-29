@@ -416,7 +416,7 @@ watch(searchValue, async () => {
           </option>
         </select>
         <button
-          class="lbm-btn lbm-btn-sm lbm-btn-square"
+          class="lbm-btn lbm-btn-sm lbm-btn-square !h-8 !w-8 p-0"
           @click="resetFilters"
           v-if="(currentAchievement || currentHole || currentBait) && !showSearchInput"
         >
