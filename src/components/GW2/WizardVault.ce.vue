@@ -293,8 +293,30 @@ function formatGold(total) {
           </button>
         </div>
         <div class="wizard-vault__objectives" v-if="objectives[tab]">
+          <div class="lbm-alert lbm-alert-info">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              class="stroke-current shrink-0 w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span>
+              <strong>
+                Acuellement, la liste de vos objectifs est mise à jour dans l'API de Guild Wars 2
+                seulement lorsque que vous vous connectez en jeu et patientez plusieurs minutes.
+              </strong>
+              Ne vous vous étonnez donc pas de voir des objectifs précédents.
+            </span>
+          </div>
           <progress
-            class="lbm-progress lbm-progress-primary w-full"
+            class="lbm-progress lbm-progress-primary w-full h-4"
             :value="objectives[tab].meta_progress_current"
             :max="objectives[tab].meta_progress_complete"
             v-if="objectives[tab].meta_progress_complete"
