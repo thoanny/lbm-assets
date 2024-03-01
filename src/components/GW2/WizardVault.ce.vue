@@ -16,6 +16,8 @@ const accountRewards = ref([]);
 const lbmApiObjectives = ref([]);
 const isLoading = ref(true);
 
+const now = new Date().toISOString();
+
 const itemsIds = ref([]);
 const itemsData = ref([]);
 
@@ -54,17 +56,23 @@ const initUserSettings = () => {
 };
 
 const getAccountDaily = async () => {
-  const res = await fetch(`${GW2_API}/account/wizardsvault/daily?access_token=${apiKey.value}`);
+  const res = await fetch(
+    `${GW2_API}/account/wizardsvault/daily?access_token=${apiKey.value}&v=${now}`,
+  );
   objectives.value.daily = await res.json();
 };
 
 const getAccountWeekly = async () => {
-  const res = await fetch(`${GW2_API}/account/wizardsvault/weekly?access_token=${apiKey.value}`);
+  const res = await fetch(
+    `${GW2_API}/account/wizardsvault/weekly?access_token=${apiKey.value}&v=${now}`,
+  );
   objectives.value.weekly = await res.json();
 };
 
 const getAccountSpecial = async () => {
-  const res = await fetch(`${GW2_API}/account/wizardsvault/special?access_token=${apiKey.value}`);
+  const res = await fetch(
+    `${GW2_API}/account/wizardsvault/special?access_token=${apiKey.value}&v=${now}`,
+  );
   objectives.value.special = await res.json();
 };
 
@@ -307,13 +315,6 @@ function formatGold(total) {
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               ></path>
             </svg>
-            <span>
-              <strong>
-                Actuellement, la liste de vos objectifs est mise à jour dans l'API de Guild Wars 2
-                seulement lorsque que vous vous connectez en jeu et patientez plusieurs minutes.
-              </strong>
-              Ne vous étonnez donc pas de voir des objectifs précédents.
-            </span>
           </div>
           <progress
             class="lbm-progress lbm-progress-primary w-full h-4"
