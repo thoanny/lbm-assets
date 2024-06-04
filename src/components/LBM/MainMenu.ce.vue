@@ -6,13 +6,19 @@ const showMenu = ref(false);
 const menuOpen = ref(null);
 const submenuOpen = ref(null);
 const menuEl = ref();
+const responsiveMenuEl = ref();
 
 const onClickOutsideMenu = (event) => {
   // console.log(event.composedPath().includes(menuEl.value));
-  if (!event.composedPath().includes(menuEl.value) && menuOpen.value !== null) {
+  if (
+    !event.composedPath().includes(menuEl.value) &&
+    !event.composedPath().includes(responsiveMenuEl.value) &&
+    menuOpen.value !== null
+  ) {
     console.log('onClickOutsideMenu');
-    // menuOpen.value = null;
-    // submenuOpen.value = null;
+    menuOpen.value = null;
+    submenuOpen.value = null;
+    showMenu.value = false;
   }
 };
 
@@ -25,7 +31,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <nav role="navigation" class="menu">
+  <nav role="navigation" class="menu" style="--color: #c59308">
     <ul class="bg-black bg-opacity-50 py-2 flex justify-end gap-2 px-4 social-networks">
       <li>
         <a href="#!">
@@ -91,7 +97,7 @@ onBeforeUnmount(() => {
         </a>
       </li>
     </ul>
-    <ul class="bg-red-500 px-4" ref="menuEl">
+    <ul class="main-menu px-4" ref="menuEl">
       <li class="mr-4">
         <a href="#!" id="logo" class="-my-4 relative z-20">
           <img
@@ -369,8 +375,8 @@ onBeforeUnmount(() => {
         </ul>
       </li>
     </ul>
-    <div class="menu-responsive" v-show="showMenu">
-      <ul class="sm:ml-28 !pt-4 !px-0 sm:!p-0 sm:max-w-sm bg-green-500 !absolute w-full z-10">
+    <div class="menu-responsive" v-show="showMenu" ref="responsiveMenuEl">
+      <ul class="sm:ml-28 !pt-4 !px-0 sm:!p-0 sm:max-w-sm !absolute w-full z-10">
         <li
           v-for="(m, i) in menu"
           :class="{ 'menu-hasdropdown block lg:hidden': m.childs?.length, active: menuOpen === i }"
@@ -381,8 +387,11 @@ onBeforeUnmount(() => {
             v-if="m.childs?.length"
             @click.prevent="menuOpen = menuOpen === i ? null : i"
           >
-            <img :src="m.icon" v-if="m.icon" alt="" />
-            {{ m.title }}
+            <span>
+              <img :src="m.icon" v-if="m.icon" alt="" />
+              {{ m.title }}
+            </span>
+
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fill-rule="evenodd"
@@ -453,12 +462,52 @@ onBeforeUnmount(() => {
   </nav>
 </template>
 
-<style>
+<style scoped>
 @import '../../assets/main.scss';
+
+nav {
+  --color: #ef4444;
+  --color-dark: color-mix(in srgb, var(--color), #000 15%);
+  --color-darker: color-mix(in srgb, var(--color), #000 25%);
+  --color-darkest: color-mix(in srgb, var(--color), #000 35%);
+}
+
+ul {
+  --sb-track-color: #ffffff;
+  --sb-thumb-color: #ef4444;
+  --sb-size: 11px;
+}
+
+ul::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+ul::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 1px;
+}
+
+ul::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 1px;
+  border: 2px solid #ffffff;
+  border-left: 0;
+  border-right: 0;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  ul {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
+}
 
 .menu > ul {
   display: flex;
   align-items: center;
+}
+
+.menu .main-menu {
+  background: var(--color);
 }
 
 .menu ul {
@@ -500,6 +549,15 @@ onBeforeUnmount(() => {
   padding: 0;
   margin: 0;
   display: none;
+  background: var(--color-dark);
+}
+
+.menu-responsive ul {
+  background: var(--color-dark);
+}
+
+.menu-responsive ul ul {
+  background: var(--color);
 }
 
 .menu img {
@@ -532,7 +590,8 @@ onBeforeUnmount(() => {
 }
 
 .menu ul.social-networks a {
-  @apply w-6 h-6 bg-red-500 p-0 flex items-center justify-center rounded-full;
+  @apply w-6 h-6 p-0 flex items-center justify-center rounded-full;
+  background: var(--color);
 }
 
 .menu ul.social-networks a svg {
@@ -581,11 +640,31 @@ onBeforeUnmount(() => {
   position: relative;
 }
 
-.active {
-  background: green;
+.menu .active {
+  background: var(--color-dark);
+}
+
+.menu ul ul .active {
+  background: var(--color-darker);
 }
 
 .menu li:hover:not(.active):not(.no-hover) {
-  background: gray;
+  background: var(--color-dark);
+}
+
+.menu ul ul li:hover:not(.active):not(.no-hover) {
+  background: var(--color-darker);
+}
+
+.menu ul ul ul li:hover:not(.active):not(.no-hover) {
+  background: var(--color-darkest);
+}
+
+.social-networks li:hover {
+  background: none !important;
+}
+
+.social-networks li:hover a {
+  background: var(--color-darker);
 }
 </style>
