@@ -132,7 +132,7 @@ onBeforeUnmount(() => {
         :key="i"
       >
         <a href="#!" v-if="m.childs?.length" @click.prevent="menuOpen = menuOpen === i ? null : i">
-          <img :src="m.icon" v-if="m.icon" alt="" />
+          <span :class="['lbm-icon self-start', m.icon]" v-if="m.icon"></span>
           {{ m.title }}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path
@@ -143,8 +143,15 @@ onBeforeUnmount(() => {
           </svg>
         </a>
         <a :href="m.url" v-else>
-          <img :src="m.icon" v-if="m.icon" alt="" />
-          {{ m.title }}
+          <span :class="['lbm-icon self-start', m.icon]" v-if="m.icon"></span>
+          <span class="flex flex-col flex-1">
+            {{ m.title }}
+            <span class="flex gap-1 text-xxs">
+              <span :class="`bg-access-${access} px-1 rounded`" v-for="access in m.access">{{
+                access
+              }}</span>
+            </span>
+          </span>
         </a>
         <ul class="menu-dropdown" v-if="m.childs?.length" :class="{ active: menuOpen == i }">
           <li
@@ -161,10 +168,16 @@ onBeforeUnmount(() => {
               @click.prevent="submenuOpen = submenuOpen === j ? null : j"
             >
               <span>
-                <img :src="s0.icon" v-if="s0.icon" alt="" />
-                {{ s0.title }}
+                <span :class="['lbm-icon self-start', s0.icon]" v-if="s0.icon"></span>
+                <span class="flex flex-col flex-1">
+                  {{ s0.title }}
+                  <span class="flex gap-1 text-xxs">
+                    <span :class="`bg-access-${access} px-1 rounded`" v-for="access in s0.access">{{
+                      access
+                    }}</span>
+                  </span>
+                </span>
               </span>
-              <span v-if="s0.extensions" :class="'ext-' + s0.extensions.join('-')"></span>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path
                   fill-rule="evenodd"
@@ -175,10 +188,16 @@ onBeforeUnmount(() => {
             </a>
             <a v-else :href="s0.url">
               <span>
-                <img :src="s0.icon" v-if="s0.icon" alt="" />
-                {{ s0.title }}
+                <span :class="['lbm-icon self-start', s0.icon]" v-if="s0.icon"></span>
+                <span class="flex flex-col flex-1">
+                  {{ s0.title }}
+                  <span class="flex gap-1 text-xxs">
+                    <span :class="`bg-access-${access} px-1 rounded`" v-for="access in s0.access">{{
+                      access
+                    }}</span>
+                  </span>
+                </span>
               </span>
-              <span v-if="s0.extensions" :class="'ext-' + s0.extensions.join('-')"></span>
             </a>
             <ul
               class="menu-dropdown"
@@ -188,8 +207,17 @@ onBeforeUnmount(() => {
               <li v-for="s1 in s0.childs" :key="s1">
                 <a :href="s1.url">
                   <span>
-                    <img :src="s1.icon" v-if="s1.icon" alt="" />
-                    {{ s1.title }}
+                    <span :class="['lbm-icon self-start', s1.icon]" v-if="s1.icon"></span>
+                    <span class="flex flex-col flex-1">
+                      {{ s1.title }}
+                      <span class="flex gap-1 text-xxs">
+                        <span
+                          :class="`bg-access-${access} px-1 rounded`"
+                          v-for="access in s1.access"
+                          >{{ access }}</span
+                        >
+                      </span>
+                    </span>
                   </span>
                   <span v-if="s1.extensions" :class="'ext-' + s1.extensions.join('-')"></span>
                 </a>
@@ -388,8 +416,15 @@ onBeforeUnmount(() => {
             @click.prevent="menuOpen = menuOpen === i ? null : i"
           >
             <span>
-              <img :src="m.icon" v-if="m.icon" alt="" />
-              {{ m.title }}
+              <span :class="['lbm-icon self-start', m.icon]" v-if="m.icon"></span>
+              <span class="flex flex-col flex-1">
+                {{ m.title }}
+                <span class="flex gap-1 text-xxs">
+                  <span :class="`bg-access-${access} px-1 rounded`" v-for="access in m.access">{{
+                    access
+                  }}</span>
+                </span>
+              </span>
             </span>
 
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -401,8 +436,15 @@ onBeforeUnmount(() => {
             </svg>
           </a>
           <a :href="m.url" v-else>
-            <img :src="m.icon" v-if="m.icon" alt="" />
-            {{ m.title }}
+            <span :class="['lbm-icon self-start', m.icon]" v-if="m.icon"></span>
+            <span class="flex flex-col flex-1">
+              {{ m.title }}
+              <span class="flex gap-1 text-xxs">
+                <span :class="`bg-access-${access} px-1 rounded`" v-for="access in m.access">{{
+                  access
+                }}</span>
+              </span>
+            </span>
           </a>
 
           <ul class="menu-dropdown" v-if="m.childs?.length" :class="{ active: menuOpen == i }">
@@ -420,8 +462,17 @@ onBeforeUnmount(() => {
                 @click.prevent="submenuOpen = submenuOpen === j ? null : j"
               >
                 <span>
-                  <img :src="s0.icon" v-if="s0.icon" alt="" />
-                  {{ s0.title }}
+                  <span :class="['lbm-icon self-start', s0.icon]" v-if="s0.icon"></span>
+                  <span class="flex flex-col flex-1">
+                    {{ s0.title }}
+                    <span class="flex gap-1 text-xxs">
+                      <span
+                        :class="`bg-access-${access} px-1 rounded`"
+                        v-for="access in s0.access"
+                        >{{ access }}</span
+                      >
+                    </span>
+                  </span>
                 </span>
                 <span v-if="s0.extensions" :class="'ext-' + s0.extensions.join('-')"></span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -434,8 +485,17 @@ onBeforeUnmount(() => {
               </a>
               <a v-else :href="s0.url">
                 <span>
-                  <img :src="s0.icon" v-if="s0.icon" alt="" />
-                  {{ s0.title }}
+                  <span :class="['lbm-icon self-start', s0.icon]" v-if="s0.icon"></span>
+                  <span class="flex flex-col flex-1">
+                    {{ s0.title }}
+                    <span class="flex gap-1 text-xxs">
+                      <span
+                        :class="`bg-access-${access} px-1 rounded`"
+                        v-for="access in s0.access"
+                        >{{ access }}</span
+                      >
+                    </span>
+                  </span>
                 </span>
                 <span v-if="s0.extensions" :class="'ext-' + s0.extensions.join('-')"></span>
               </a>
@@ -447,8 +507,17 @@ onBeforeUnmount(() => {
                 <li v-for="s1 in s0.childs" :key="s1">
                   <a :href="s1.url">
                     <span>
-                      <img :src="s1.icon" v-if="s1.icon" alt="" />
-                      {{ s1.title }}
+                      <span :class="['lbm-icon self-start', s1.icon]" v-if="s1.icon"></span>
+                      <span class="flex flex-col flex-1">
+                        {{ s1.title }}
+                        <span class="flex gap-1 text-xxs">
+                          <span
+                            :class="`bg-access-${access} px-1 rounded`"
+                            v-for="access in s1.access"
+                            >{{ access }}</span
+                          >
+                        </span>
+                      </span>
                     </span>
                     <span v-if="s1.extensions" :class="'ext-' + s1.extensions.join('-')"></span>
                   </a>

@@ -2,38 +2,38 @@
   {
     "title": "LBM",
     "url": "#!",
-    "icon": "https://www.lebusmagique.fr/medias/images/157354.png",
+    "icon": "tp",
     "type": "list",
     "childs": [
       {
         "title": "Qui sommes-nous ?",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/157354.png"
+        "icon": "tp"
       },
       {
         "title": "Les activités",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/ic.ne-coeur-plein.png"
+        "icon": "coeur-plein"
       },
       {
         "title": "Nous rejoindre ?",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/041633-yellow-comment-bubbles-icon-transport-travel-transportation-school-bus2.png"
+        "icon": "bus"
       },
       {
         "title": "L'équipe Staff LBM",
         "url": "Rejoindre le staff",
-        "icon": "https://www.lebusmagique.fr/medias/images/commandantrouge.png"
+        "icon": "commandant-rouge"
       },
       {
         "title": "Rejoindre le staff",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/blogecrireregistrar.png"
+        "icon": "ecrire"
       },
       {
         "title": "Rangs, purge et règles",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/coup-de-pied-guerrier-.jpg"
+        "icon": "coup-de-pied"
       },
       {
         "title": "Soutenir le LBM",
@@ -60,12 +60,12 @@
   {
     "title": "Succès",
     "url": "",
-    "icon": "https://www.lebusmagique.fr/medias/images/ic.ne-succ.s.png",
+    "icon": "succes",
     "childs": [
       {
         "title": "Événements bonus",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "evenements-bonus",
         "childs": [
           {
             "title": "Indisponible actuellement",
@@ -87,7 +87,7 @@
       {
         "title": "Guide d'aventure de personnage",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "guide-aventure",
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -119,59 +119,66 @@
       {
         "title": "Chroniques",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "etoile-viollette",
         "childs": [
           {
             "title": "Saison 1",
             "url": "",
-            "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png"
+            "icon": "succes"
           },
           {
             "title": "Saison 2",
             "url": "",
-            "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png"
+            "icon": "succes"
           },
           {
             "title": "Heart of Thorns",
             "url": "",
-            "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png"
+            "icon": "succes",
+            "access": ["HoT"]
           },
           {
             "title": "Saison 3",
             "url": "",
-            "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png"
+            "icon": "succes",
+            "access": ["HoT"]
           },
           {
             "title": "Path of Fire",
             "url": "",
-            "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png"
+            "icon": "succes",
+            "access": ["PoF"]
           },
           {
             "title": "Saison 4",
             "url": "",
-            "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png"
+            "icon": "succes",
+            "access": ["PoF"]
           },
           {
             "title": "L'Épopée du givre",
             "url": "",
-            "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png"
+            "icon": "succes",
+            "access": ["PoF"]
           },
           {
             "title": "End of Dragons",
             "url": "",
-            "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png"
+            "icon": "succes",
+            "access": ["EoD"]
           },
           {
             "title": "Secrets of the Obscure",
             "url": "",
-            "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png"
+            "icon": "succes",
+            "access": ["SotO"]
           }
         ]
       },
       {
         "title": "Général",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "succes",
         "childs": [
           {
             "title": "Donjons",
@@ -278,7 +285,7 @@
       {
         "title": "Festivals",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "festivites",
         "childs": [
           {
             "title": "Nouvel an lunaire",
@@ -335,7 +342,8 @@
       {
         "title": "Secrets of the Obscure",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "soto",
+        "access": ["SotO"],
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -347,7 +355,8 @@
       {
         "title": "End of Dragons",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "eod",
+        "access": ["EoD"],
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -359,7 +368,8 @@
       {
         "title": "Path of Fire",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "pof",
+        "access": ["PoF"],
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -371,7 +381,8 @@
       {
         "title": "Heart of Thorns",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "soto",
+        "access": ["HoT"],
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -383,7 +394,7 @@
       {
         "title": "Histoires secondaires",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "evenements-actuels",
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -395,7 +406,7 @@
       {
         "title": "Monde contre Monde",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "mcm",
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -407,7 +418,7 @@
       {
         "title": "Joueur contre joueur",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "jcj",
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -419,7 +430,7 @@
       {
         "title": "Raids",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "raids",
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -431,7 +442,7 @@
       {
         "title": "Fractales des Brumes",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "fractales",
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -443,7 +454,7 @@
       {
         "title": "Collections",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "collections",
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -455,7 +466,7 @@
       {
         "title": "Missions d'attaque",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "mission-attaque",
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -467,7 +478,7 @@
       {
         "title": "Historique",
         "url": "",
-        "icon": "https://www.lebusmagique.fr/medias/images/evenement-bonus.png",
+        "icon": "etoile-histoire-vivante",
         "childs": [
           {
             "title": "Guide d'aventure : Volume I",
@@ -481,19 +492,23 @@
   {
     "title": "Outils",
     "url": "",
-    "icon": "https://www.lebusmagique.fr/medias/images/panel-shop2.png",
+    "icon": "outils",
     "childs": [
+      { "title": "Chambre forte du sorcier", "url": "", "icon": "chambre-forte-sorcier" },
+      { "title": "Timer World Boss", "url": "", "icon": "boss" },
+      { "title": "Timer métas et World Boss", "url": "", "icon": "metas" },
       {
-        "title": "Sub-menu",
+        "title": "Liste des poissons",
         "url": "#!",
-        "icon": "https://www.lebusmagique.fr/medias/images/157354.png"
+        "icon": "fishing",
+        "access": ["EoD", "SotO"]
       }
     ]
   },
   {
     "title": "Guides",
     "url": "",
-    "icon": "https://www.lebusmagique.fr/medias/images/ic.ne-.claireur.png",
+    "icon": "eclaireur",
     "childs": [
       {
         "title": "Sub-menu",
@@ -505,7 +520,7 @@
   {
     "title": "Expéditions",
     "url": "",
-    "icon": "https://www.lebusmagique.fr/medias/images/258335iconskritt.png",
+    "icon": "skritt",
     "childs": [
       {
         "title": "Sub-menu",
@@ -517,7 +532,7 @@
   {
     "title": "Extensions",
     "url": "",
-    "icon": "https://www.lebusmagique.fr/medias/images/iconehotnews.png",
+    "icon": "hotnews",
     "childs": [
       {
         "title": "Dossier - HoTobus",
