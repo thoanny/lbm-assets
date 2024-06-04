@@ -2,6 +2,7 @@
 import { onMounted, onBeforeUnmount, ref } from 'vue';
 import menu from '@/data/lbm-menu.json';
 
+const showMenu = ref(false);
 const menuOpen = ref(null);
 const submenuOpen = ref(null);
 const menuEl = ref();
@@ -9,8 +10,9 @@ const menuEl = ref();
 const onClickOutsideMenu = (event) => {
   // console.log(event.composedPath().includes(menuEl.value));
   if (!event.composedPath().includes(menuEl.value) && menuOpen.value !== null) {
-    menuOpen.value = null;
-    submenuOpen.value = null;
+    console.log('onClickOutsideMenu');
+    // menuOpen.value = null;
+    // submenuOpen.value = null;
   }
 };
 
@@ -24,22 +26,6 @@ onBeforeUnmount(() => {
 
 <template>
   <nav role="navigation" class="menu">
-    <label for="menu" class="!hidden"
-      >Menu
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        class="w-5 h-5"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"
-          clip-rule="evenodd"
-        />
-      </svg>
-    </label>
-    <input type="checkbox" id="menu" />
     <ul class="bg-black bg-opacity-50 py-2 flex justify-end gap-2 px-4 social-networks">
       <li>
         <a href="#!">
@@ -107,7 +93,7 @@ onBeforeUnmount(() => {
     </ul>
     <ul class="bg-red-500 px-4" ref="menuEl">
       <li class="mr-4">
-        <a href="" id="logo" class="-my-4">
+        <a href="#!" id="logo" class="-my-4 relative z-20">
           <img
             src="https://gaming.lebusmagique.fr/genshin-impact-timeline/logo-192.png"
             class="!w-20 !h-20 rounded"
@@ -115,8 +101,8 @@ onBeforeUnmount(() => {
           />
         </a>
       </li>
-      <li class="flex lg:hidden">
-        <a href="#!" @click.prevent="" class="!pr-3 !h-12">
+      <li class="flex lg:hidden" :class="{ active: showMenu }">
+        <a href="#!" @click.prevent="showMenu = !showMenu" class="!pr-3 !h-12">
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -154,8 +140,7 @@ onBeforeUnmount(() => {
           <img :src="m.icon" v-if="m.icon" alt="" />
           {{ m.title }}
         </a>
-        <input type="checkbox" :id="'menu-' + i" v-if="m.childs?.length" :checked="menuOpen == i" />
-        <ul class="menu-dropdown" v-if="m.childs?.length">
+        <ul class="menu-dropdown" v-if="m.childs?.length" :class="{ active: menuOpen == i }">
           <li
             v-for="(s0, j) in m.childs"
             :class="{
@@ -189,13 +174,11 @@ onBeforeUnmount(() => {
               </span>
               <span v-if="s0.extensions" :class="'ext-' + s0.extensions.join('-')"></span>
             </a>
-            <input
-              type="checkbox"
-              :id="'submenu-' + j"
+            <ul
+              class="menu-dropdown"
               v-if="s0.childs?.length"
-              :checked="submenuOpen == j"
-            />
-            <ul class="menu-dropdown" v-if="s0.childs?.length">
+              :class="{ active: submenuOpen == j }"
+            >
               <li v-for="s1 in s0.childs" :key="s1">
                 <a :href="s1.url">
                   <span>
@@ -211,7 +194,11 @@ onBeforeUnmount(() => {
       </li>
       <li class="flex-1"></li>
       <li class="menu-hasdropdown menu-hasdropdown-right" :class="{ active: menuOpen == 9999998 }">
-        <a href="#!" class="!pr-3 !h-12 w-12 !justify-center" @click.prevent="menuOpen = 9999998">
+        <a
+          href="#!"
+          class="!pr-3 !h-12 w-12 !justify-center"
+          @click.prevent="menuOpen = menuOpen === 9999998 ? null : 9999998"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -227,8 +214,7 @@ onBeforeUnmount(() => {
             />
           </svg>
         </a>
-        <input type="checkbox" :checked="menuOpen == 9999998" />
-        <ul class="menu-dropdown">
+        <ul class="menu-dropdown" :class="{ active: menuOpen == 9999998 }">
           <li class="py-2 px-3 no-hover">
             <div class="lbm-join">
               <div>
@@ -263,7 +249,11 @@ onBeforeUnmount(() => {
         class="menu-hasdropdown menu-hasdropdown-right h-12"
         :class="{ active: menuOpen == 9999999 }"
       >
-        <a href="#!" class="!pr-3" @click.prevent="menuOpen = 9999999">
+        <a
+          href="#!"
+          class="!pr-3"
+          @click.prevent="menuOpen = menuOpen === 9999999 ? null : 9999999"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
             <path fill="#fff" d="M10 4H22V28H10z"></path>
             <path d="M5,4h6V28H5c-2.208,0-4-1.792-4-4V8c0-2.208,1.792-4,4-4Z" fill="#092050"></path>
@@ -283,8 +273,7 @@ onBeforeUnmount(() => {
             ></path>
           </svg>
         </a>
-        <input type="checkbox" :checked="menuOpen == 9999999" />
-        <ul class="menu-dropdown">
+        <ul class="menu-dropdown" :class="{ active: menuOpen == 9999999 }">
           <li>
             <a href="#!">
               <svg
@@ -380,10 +369,91 @@ onBeforeUnmount(() => {
         </ul>
       </li>
     </ul>
+    <div class="menu-responsive" v-show="showMenu">
+      <ul class="sm:ml-28 !pt-4 !px-0 sm:!p-0 sm:max-w-sm bg-green-500 !absolute w-full z-10">
+        <li
+          v-for="(m, i) in menu"
+          :class="{ 'menu-hasdropdown block lg:hidden': m.childs?.length, active: menuOpen === i }"
+          :key="i"
+        >
+          <a
+            href="#!"
+            v-if="m.childs?.length"
+            @click.prevent="menuOpen = menuOpen === i ? null : i"
+          >
+            <img :src="m.icon" v-if="m.icon" alt="" />
+            {{ m.title }}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </a>
+          <a :href="m.url" v-else>
+            <img :src="m.icon" v-if="m.icon" alt="" />
+            {{ m.title }}
+          </a>
+
+          <ul class="menu-dropdown" v-if="m.childs?.length" :class="{ active: menuOpen == i }">
+            <li
+              v-for="(s0, j) in m.childs"
+              :class="{
+                'menu-hasdropdown menu-hasflyout': s0.childs?.length,
+                active: submenuOpen === j,
+              }"
+              :key="j"
+            >
+              <a
+                href="#!"
+                v-if="s0.childs?.length"
+                @click.prevent="submenuOpen = submenuOpen === j ? null : j"
+              >
+                <span>
+                  <img :src="s0.icon" v-if="s0.icon" alt="" />
+                  {{ s0.title }}
+                </span>
+                <span v-if="s0.extensions" :class="'ext-' + s0.extensions.join('-')"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </a>
+              <a v-else :href="s0.url">
+                <span>
+                  <img :src="s0.icon" v-if="s0.icon" alt="" />
+                  {{ s0.title }}
+                </span>
+                <span v-if="s0.extensions" :class="'ext-' + s0.extensions.join('-')"></span>
+              </a>
+              <ul
+                class="menu-dropdown"
+                v-if="s0.childs?.length"
+                :class="{ active: submenuOpen == j }"
+              >
+                <li v-for="s1 in s0.childs" :key="s1">
+                  <a :href="s1.url">
+                    <span>
+                      <img :src="s1.icon" v-if="s1.icon" alt="" />
+                      {{ s1.title }}
+                    </span>
+                    <span v-if="s1.extensions" :class="'ext-' + s1.extensions.join('-')"></span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </nav>
 </template>
 
-<style scoped>
+<style>
 @import '../../assets/main.scss';
 
 .menu > ul {
@@ -473,10 +543,8 @@ onBeforeUnmount(() => {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-input[type='checkbox']:checked + ul {
+.menu-dropdown.active {
   display: block;
-  /* -webkit-animation: grow 0.5s ease-in-out; */
-  /* animation: grow 0.5s ease-in-out; */
 }
 
 .menu-hasdropdown > ul {
@@ -484,6 +552,15 @@ input[type='checkbox']:checked + ul {
   /* top: 0; */
   left: 0;
   background: #035e8d;
+}
+
+.menu-responsive > ul {
+  max-height: calc(100dvh - 8rem);
+  overflow: auto;
+}
+
+.menu-responsive .menu-hasdropdown > ul {
+  position: relative;
 }
 
 .menu-hasdropdown-right > ul {
@@ -494,6 +571,10 @@ input[type='checkbox']:checked + ul {
 .menu-hasflyout > ul {
   left: 100%;
   top: 0;
+}
+
+.menu-responsive .menu-hasflyout > ul {
+  left: 0;
 }
 
 .menu li {
