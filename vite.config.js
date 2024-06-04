@@ -16,7 +16,7 @@ export default defineConfig({
       },
     }),
     Spritesmith({
-      watch: true,
+      watch: false,
       src: {
         cwd: './src/sprites',
         glob: '*.png',
