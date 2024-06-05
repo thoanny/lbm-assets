@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu editor | Le Bus Magique</title>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+      }
+
+      body {
+        background: url('https://www.lebusmagique.fr/medias/images/shingjea-05-concept02-compressed.jpg')
+          no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+        font-family: 'Open Sans';
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: 'Bangers';
+      }
+    </style>
+  </head>
+
+  <body>
+    <lbm-menu></lbm-menu>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/menu-editor.js"></script>
+  </body>
+</html>
