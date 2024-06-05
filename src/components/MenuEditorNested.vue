@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { VueDraggable } from 'vue-draggable-plus';
 import { computed, ref } from 'vue';
-import { v4 as uuidv4 } from 'uuid';
+import sprite from '@/data/sprite.json';
 
 interface IList {
   id: string;
   title: string;
   url: string;
   icon: string;
+  active: boolean;
   access: array;
   childs: IList[];
 }
@@ -94,6 +95,7 @@ const deleteHandle = (id) => {
               :class="{
                 'font-semibold': el.title.length > 0,
                 'italic text-base-content': el.title.length === 0,
+                'line-through italic text-base-content': !el.active,
               }"
               >{{ el.title.length > 0 ? el.title : 'Aucun titre' }}</span
             >
@@ -130,11 +132,13 @@ const deleteHandle = (id) => {
             class="lbm-input lbm-input-bordered lbm-input-sm w-full"
             placeholder="URL de la page"
           />
-          <input
-            type="text"
+          <select
+            class="lbm-select lbm-select-bordered lbm-select-sm w-full"
             v-model="currentItem.icon"
-            class="lbm-input lbm-input-bordered lbm-input-sm w-full"
-          />
+          >
+            <option value="">Choisir une icone</option>
+            <option v-for="icon in sprite">{{ icon.name }}</option>
+          </select>
           <template v-for="a in accessList">
             <label class="flex gap-1 items-center text-sm">
               <input
@@ -146,6 +150,11 @@ const deleteHandle = (id) => {
               {{ a }}
             </label>
           </template>
+          <input
+            type="checkbox"
+            class="lbm-toggle lbm-toggle-sm lbm-toggle-secondary"
+            v-model="currentItem.active"
+          />
           <button type="button" @click="cancelEdit" class="lbm-btn lbm-btn-xs">Annuler</button>
           <button type="submit" class="lbm-btn lbm-btn-success lbm-btn-xs">Enregistrer</button>
         </form>

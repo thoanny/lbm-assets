@@ -30,6 +30,12 @@ export default defineConfig({
               format: 'handlebars_based_template',
             },
           ],
+          [
+            './src/data/sprite.json',
+            {
+              format: 'json_array',
+            },
+          ],
         ],
       },
       apiOptions: {
