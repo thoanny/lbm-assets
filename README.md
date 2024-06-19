@@ -23,17 +23,35 @@ npm run lint
 ## Intégrer au site du Bus Magique
 
 Sur e-monsie, dans "Options de référencement" puis "Balises méta supplémentaires", importer le script `<script type="module" src="https://lbm-assets.vercel.app/index.js"></script>`
- (ne pas oublier l'atribut type=module !) et `<link rel="stylesheet" href="https://lbm-assets.vercel.app/index.css">` puis dans le code de la page, utiliser les balises CustomElements.
+(ne pas oublier l'atribut type=module !) et `<link rel="stylesheet" href="https://lbm-assets.vercel.app/index.css">` puis dans le code de la page, utiliser les balises CustomElements.
 
 ## CustomElements
 
 ### LBM Menu
 
+Pour afficher le menu :
+
 ```html
 <lbm-menu></lbm-menu>
 ```
 
-*Work in progress*
+**Attributs**
+
+| Attribut | Description                                             | Exemple         |
+| -------- | ------------------------------------------------------- | --------------- |
+| color    | Changer la couleur principale du menu, code hexadécimal | color="#ff00ff" |
+
+**Sprites**
+
+Les images pour le sprite se trouvent dans : `src\sprites`. Le taille doit être de 24&times;24px.
+
+**Éditeur de menu**
+
+Pour utiliser l'éditeur du menu, il faut ajouter dans la page :
+
+```html
+<div id="lbm-menu-editor"></div>
+```
 
 ### GW2 Wizard Vault
 
@@ -41,9 +59,9 @@ Sur e-monsie, dans "Options de référencement" puis "Balises méta supplémenta
 <gw2-wizard-vault></gw2-wizard-vault>
 ```
 
-Application de la chambre forte du sorcier en 3 onglets (objectifs, récompenses et héritage). L'API GW2 n'est pas encore à jour, donc tout est statique/manuel pour le moment.
+Application de la chambre forte du sorcier en 3 onglets (objectifs, récompenses et héritage).
 
-### GW2 Timers
+### GW2 Timers (Work in progress)
 
 ```html
 <gw2-events-timer></gw2-events-timer>
@@ -51,4 +69,14 @@ Application de la chambre forte du sorcier en 3 onglets (objectifs, récompenses
 
 Nouvelle version des timers des événements et worl boss de Guild Wars 2.
 
-*Work in progress*
+### Demande de ticket (Work in progress)
+
+```html
+<lbm-ticket-request></lbm-ticket-request>
+```
+
+### Compagnon de pêche
+
+```html
+<gw2-fishes></gw2-fishes>
+```
