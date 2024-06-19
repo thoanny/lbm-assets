@@ -6,7 +6,7 @@ import Spritesmith from 'vite-plugin-spritesmith';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: 'https://lbm-assets.vercel.app',
+  // base: 'https://lbm-assets.vercel.app',
   plugins: [
     vue({
       template: {
