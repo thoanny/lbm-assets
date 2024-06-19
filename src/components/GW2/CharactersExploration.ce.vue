@@ -1,12 +1,15 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
+import AES from 'crypto-js/aes';
+import CryptoJS from 'crypto-js';
 import { useGw2CharactersExploration } from '@/stores/gw2-characters-exploration.js';
 import exploration from '@/data/gw2-characters-exploration.json';
 
 const Gw2CharactersExploration = useGw2CharactersExploration();
 const { progression, characters } = storeToRefs(Gw2CharactersExploration);
 
+const importExportModal = ref();
 const editProgression = ref(null);
 
 const handleEditProgression = (character) => {
@@ -42,12 +45,92 @@ const handleDeleteCharacter = (name) => {
 
 const characterName = ref(null);
 const handleAddCharacter = () => {
+  if (!characterName.value) {
+    alert('Tu as oublié le nom de ton personnage ?');
+    return;
+  }
   Gw2CharactersExploration.onAddCharacter(characterName.value);
   characterName.value = null;
+};
+
+const exportLink = ref(null);
+const SECRET = 'XjXke*!trt0GA3vb&pWTBxne$';
+
+const handleImportExportModal = () => {
+  if (Object.entries(progression.value).length > 0 && characters.value.length > 0) {
+    const encrypted = AES.encrypt(
+      JSON.stringify({
+        progression: progression.value,
+        characters: characters.value,
+      }),
+      SECRET,
+    );
+    const blob = new Blob([encrypted], { type: 'text/plain' });
+    exportLink.value = window.URL.createObjectURL(blob);
+  }
+  importExportModal.value.showModal();
+};
+
+const importedFileError = ref(null);
+
+const importFile = (event) => {
+  importedFileError.value = null;
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (res) => {
+    try {
+      const data = res.target.result;
+      const decrypt = AES.decrypt(data, SECRET).toString(CryptoJS.enc.Utf8);
+      const value = JSON.parse(decrypt);
+      if (value.progression) {
+        progression.value = value.progression;
+        Gw2CharactersExploration.onSaveProgression();
+      }
+      if (value.characters) {
+        characters.value = value.characters;
+        Gw2CharactersExploration.onSaveCharacters();
+      }
+    } catch (error) {
+      importedFileError.value = "Impossible d'importer ce fichier...";
+    }
+  };
+  reader.onerror = (err) => (importedFileError.value = 'Impossible de lire ce fichier...');
+  reader.readAsText(file);
 };
 </script>
 
 <template>
+  <dialog ref="importExportModal" class="lbm-modal">
+    <div class="lbm-modal-box">
+      <h3 class="font-bold text-lg">Exporter</h3>
+      <p class="py-2" v-if="exportLink">
+        Clique sur "Télécharger" pour obtenir un fichier des données du suivi d'exploration.
+      </p>
+      <p class="py-2" v-else>Aucune donnée à exporter...</p>
+      <div class="mb-4" v-if="exportLink">
+        <a
+          :href="exportLink"
+          download="gw2-characters-exploration.txt"
+          class="lbm-btn lbm-btn-secondary"
+          >Télécharger</a
+        >
+      </div>
+      <h3 class="font-bold text-lg">Importer</h3>
+      <p class="py-2">
+        Sélectionne le fichier des données du suivi d'exploration. Attention, cela remplace les
+        données existantes.
+      </p>
+      <div class="flex flex-col gap-1">
+        <input type="file" class="lbm-file-input lbm-file-input-secondary" @change="importFile" />
+        <span class="text-error" v-if="importedFileError">{{ importedFileError }}</span>
+      </div>
+      <div class="lbm-modal-action">
+        <form method="dialog">
+          <button class="lbm-btn lbm-btn-primary">Fermer</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
   <h2 class="mb-4">Suivi d'exploration</h2>
   <form @submit.prevent="handleAddCharacter" class="flex gap-2 items-center mb-4">
     <input
@@ -59,6 +142,13 @@ const handleAddCharacter = () => {
     <button type="submit" class="lbm-btn lbm-btn-sm lbm-btn-primary">Ajouter</button>
     <button
       type="button"
+      @click="handleImportExportModal"
+      class="lbm-btn lbm-btn-sm lbm-btn-primary"
+    >
+      Importer/Exporter
+    </button>
+    <button
+      type="button"
       class="lbm-btn lbm-btn-error lbm-btn-sm"
       @click="Gw2CharactersExploration.onReset()"
     >
@@ -66,26 +156,22 @@ const handleAddCharacter = () => {
     </button>
   </form>
   <div class="overflow-x-auto" style="max-height: 75dvh" v-if="characters.length > 0">
-    <table class="lbm-table lbm-table-pin-cols whitespace-nowrap">
+    <table class="lbm-table lbm-table-pin-cols lbm-table-pin-rows whitespace-nowrap">
       <thead class="">
         <tr>
-          <th rowspan="2" class="bg-primary text-white">Personnage</th>
+          <th class="">&nbsp;</th>
           <td
             v-for="exp in exploration"
             :colspan="exp.id === 'tyria' ? exp.maps.length : exp.maps.length + 1"
-            :rowspan="exp.id === 'tyria' ? 2 : 1"
-            class="text-center bg-primary text-white"
+            :class="{ 'text-center bg-primary text-white': exp.id !== 'tyria' }"
           >
-            {{ exp.name }}
+            {{ exp.id === 'tyria' ? '' : exp.name }}
           </td>
         </tr>
         <tr>
+          <th class="bg-primary text-white">Personnage</th>
           <template v-for="exp in exploration">
-            <td
-              v-for="map in exp.maps"
-              v-if="exp.id !== 'tyria'"
-              class="text-center bg-primary text-white"
-            >
+            <td v-for="map in exp.maps" class="text-center bg-primary text-white">
               {{ map.shortname }}
             </td>
             <td v-if="exp.id !== 'tyria'" class="text-center bg-primary text-white">Total</td>

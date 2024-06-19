@@ -96,5 +96,7 @@ export const useGw2CharactersExploration = defineStore('gw2-characters-explorati
     onAddCharacter,
     onDeleteCharacter,
     onReset,
+    onSaveCharacters,
+    onSaveProgression,
   };
 });
