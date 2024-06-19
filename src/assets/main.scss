@@ -2,13 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'sprite';
+.lbm-icon {
+  @include sprites($spritesmith-sprites);
+  display: inline-block;
+}
+
+:deep(.lbm-icon) {
+  @include sprites($spritesmith-sprites);
+  display: inline-block;
+}
+
 *,
 ::before,
 ::after {
-    box-sizing: border-box;
-    border-width: 0;
-    border-style: solid;
-    border-color: #e5e7eb;
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
 }
 
 h1,
@@ -17,15 +28,15 @@ h3,
 h4,
 h5,
 h6 {
-    font-size: 1rem;
-    margin: 0;
+  font-size: 1rem;
+  margin: 0;
 }
 
 .bangers {
-    font-family: 'Bangers';
-    letter-spacing: .05rem;
+  font-family: 'Bangers';
+  letter-spacing: 0.05rem;
 }
 
 .border-3 {
-    border-width: 3px;
+  border-width: 3px;
 }
