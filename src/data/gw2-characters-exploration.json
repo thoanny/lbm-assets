@@ -1,0 +1,88 @@
+[
+  {
+    "id": "tyria",
+    "name": "Tyrie centrale",
+    "maps": [
+      {
+        "id": "central-tyria",
+        "shortname": "Tyrie",
+        "name": "Tyrie centrale"
+      }
+    ]
+  },
+  {
+    "id": "hot",
+    "name": "Heart of Thorns",
+    "maps": [
+      { "id": "verdant-brink", "shortname": "Orée", "name": "" },
+      { "id": "auric-basin", "shortname": "Bassin", "name": "" },
+      { "id": "tangled-depths", "shortname": "Profondeurs", "name": "" },
+      { "id": "dragons-stand", "shortname": "Repli", "name": "" }
+    ]
+  },
+  {
+    "id": "s03",
+    "name": "Saison 3 du Monde vivant",
+    "maps": [
+      { "id": "bloodstone-maw", "shortname": "Marais", "name": "" },
+      { "id": "ember-bay", "shortname": "Baie", "name": "" },
+      { "id": "bitterfrost-frontier", "shortname": "Confins", "name": "" },
+      { "id": "lake-doric", "shortname": "Lac", "name": "" },
+      { "id": "draconis-mons", "shortname": "Mont", "name": "" },
+      { "id": "sirens-landing", "shortname": "Plage", "name": "" }
+    ]
+  },
+  {
+    "id": "pof",
+    "name": "Path of Fire",
+    "maps": [
+      { "id": "crystal-oasis", "shortname": "Oasis", "name": "" },
+      { "id": "desert-highlands", "shortname": "H.-terres", "name": "" },
+      { "id": "elon-riverlands", "shortname": "Rives", "name": "" },
+      { "id": "the-desolation", "shortname": "Désolation", "name": "" },
+      { "id": "domain-of-vabbi", "shortname": "Vabbi", "name": "" }
+    ]
+  },
+  {
+    "id": "s04",
+    "name": "Saison 4 du Monde vivant",
+    "maps": [
+      { "id": "domain-of-istan", "shortname": "Istan", "name": "" },
+      { "id": "sandswept-isles", "shortname": "Ventesable", "name": "" },
+      { "id": "domain-of-kourna", "shortname": "Kourna", "name": "" },
+      { "id": "jahai-bluffs", "shortname": "Jahai", "name": "" },
+      { "id": "thunderhead-peaks", "shortname": "Chef-T.", "name": "" },
+      { "id": "dragonfall", "shortname": "Chute", "name": "" }
+    ]
+  },
+  {
+    "id": "ibs",
+    "name": "Épopée du givre",
+    "maps": [
+      { "id": "grothmar-valley", "shortname": "Grothmar", "name": "" },
+      { "id": "bjora-marches", "shortname": "Bjora", "name": "" },
+      { "id": "drizzlewood-coast", "shortname": "Bruinebois", "name": "" }
+    ]
+  },
+  {
+    "id": "eod",
+    "name": "End of Dragon",
+    "maps": [
+      { "id": "seitung-province", "shortname": "Seitung", "name": "" },
+      { "id": "new-kaineng-city", "shortname": "Néo-Kaineng", "name": "" },
+      { "id": "the-echovald-wilds", "shortname": "Échovald", "name": "" },
+      { "id": "dragons-end", "shortname": "Trépas", "name": "" },
+      { "id": "gyala-delve", "shortname": "Gyala", "name": "" }
+    ]
+  },
+  {
+    "id": "soto",
+    "name": "Secrets of the Obscure",
+    "maps": [
+      { "id": "skywatch-achipelago", "shortname": "Archipel", "name": "" },
+      { "id": "the-wizards-tower-hub", "shortname": "Tour", "name": "" },
+      { "id": "amnytas", "shortname": "Amnytas", "name": "" },
+      { "id": "inner-nayos", "shortname": "Nayos", "name": "" }
+    ]
+  }
+]

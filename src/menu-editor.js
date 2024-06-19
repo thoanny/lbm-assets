@@ -4,4 +4,7 @@ import { createApp } from 'vue';
 import App from '@/MenuEditor.vue';
 
 const app = createApp(App);
-app.mount('#lbm-menu-editor');
+
+if (document.getElementById("lbm-menu-editor'")) {
+  app.mount('#lbm-menu-editor');
+}
