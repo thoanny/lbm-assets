@@ -8,6 +8,11 @@
   display: inline-block;
 }
 
+:deep(.lbm-icon) {
+  @include sprites($spritesmith-sprites);
+  display: inline-block;
+}
+
 *,
 ::before,
 ::after {
@@ -34,24 +39,4 @@ h6 {
 
 .border-3 {
   border-width: 3px;
-}
-
-.text-xxs {
-  font-size: 0.65rem;
-}
-
-.bg-access-HoT {
-  background: #7f9a3d;
-}
-
-.bg-access-PoF {
-  background: #d40143;
-}
-
-.bg-access-EoD {
-  background: #56adcc;
-}
-
-.bg-access-SotO {
-  background: #bd9d2f;
 }

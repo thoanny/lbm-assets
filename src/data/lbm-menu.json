@@ -119,7 +119,7 @@
             "id": "9a104a5b-478d-4220-998d-e31b8431bc72",
             "title": "Indisponible actuellement",
             "url": "",
-            "icon": "",
+            "icon": "bus",
             "active": true,
             "access": [],
             "childs": []
@@ -1671,6 +1671,451 @@
         "active": true,
         "access": [],
         "childs": []
+      }
+    ]
+  },
+  {
+    "id": "827a702a-f8c8-4234-96a1-1aa407bb3a5a",
+    "title": "Guides",
+    "url": "",
+    "icon": "",
+    "active": true,
+    "access": [],
+    "childs": [
+      {
+        "id": "5ff03ab7-8fde-4afc-8564-6b0ccb1131a5",
+        "title": "Équipement",
+        "url": "",
+        "icon": "",
+        "active": true,
+        "access": [],
+        "childs": [
+          {
+            "id": "5a69ea84-a1d3-429a-a847-8d2b48a2cac9",
+            "title": "Fabriquer son équipement",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "9e4ff98f-033b-45d1-a613-474524cb86ab",
+            "title": "Statistiques d'équipement",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "5be61e76-827a-4c66-92b3-f371f6e563c6",
+            "title": "Armes et armures élevées",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "a950ed6b-52ac-4184-88dc-3e3fa63ab035",
+            "title": "Objets de dos",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "ccc9444f-07d7-49f4-a7f4-78e69c96b0b8",
+            "title": "Obtenir ses premiers élevés",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "719467d8-708c-4cc1-9ce8-621c23344458",
+            "title": "Les bijoux élevés",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "851ebc26-d1b2-4ab6-92ac-b92cf43bf3f1",
+            "title": "Armes des Brumes",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "d247e85a-e27a-4e5a-a597-0ce99a80ad58",
+            "title": "Infusions et résistance",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "e47a4dab-3e89-4318-b19d-128c272239e2",
+            "title": "Système de reliques",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "0ba5e6c8-1e01-4bcb-825c-aa1a04a988d1",
+            "title": "Liste des teintures",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "3d6e26cb-fdfb-4d45-b20c-7938037f0587",
+            "title": "Auras cosmétiques",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "9dee9ea1-4817-4b79-9453-df7e31cc3019",
+            "title": "Glyphes de récolte",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          }
+        ]
+      },
+      {
+        "id": "2f861974-44f5-4d95-a69d-0d1edeacf9f4",
+        "title": "Armurerie légendaire",
+        "url": "",
+        "icon": "",
+        "active": true,
+        "access": [],
+        "childs": [
+          {
+            "id": "6c0207d4-ef01-411f-a495-bf8cd3e9e722",
+            "title": "Colifichets légendaires",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": ["HoT", "PoF"],
+            "childs": []
+          },
+          {
+            "id": "3f6cb1fc-0c65-48b2-930f-96f98620c3ff",
+            "title": "Objets de dos légendaires",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "77f8abdb-d3e5-4fc3-865c-dc3349a28969",
+            "title": "Armes légendaires",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "0399a9d7-6151-41d5-b574-5e880811d547",
+            "title": "Runes et cachets légendaires",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "c6984afb-eb67-4c86-881d-a10db21e095e",
+            "title": "Relique légendaire",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": ["SotO"],
+            "childs": []
+          },
+          {
+            "id": "9db03767-f495-4f96-8c17-2d3416e4f451",
+            "title": "Armure légendaire des raids",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": ["HoT"],
+            "childs": []
+          },
+          {
+            "id": "f388743c-e1a7-4755-b308-e2bb9ba863e7",
+            "title": "Armure légendaire JcE",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": ["SotO"],
+            "childs": []
+          },
+          {
+            "id": "a945175a-8be0-4fb3-80d2-f64b96c2ea17",
+            "title": "Armure légendaire McM",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "c07b4e95-cebc-4b5e-b5b5-dfba20eff34f",
+            "title": "Armure légendaire JcJ",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "06cd6d96-a2e6-4d49-9dfa-ae24179d3733",
+            "title": "Obtenir des trèfles mystiques",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "79e9bf3f-4f46-4721-af11-72fa9ee89100",
+            "title": "Coupons de fournisseur",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "f9fbb254-ca91-454f-bd8a-9f532717c491",
+            "title": "Pierres précieuses amalgamées",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          }
+        ]
+      },
+      {
+        "id": "3391b0cb-0276-4e2f-af69-f05808850471",
+        "title": "Les Tutobus",
+        "url": "",
+        "icon": "bus",
+        "active": true,
+        "access": [],
+        "childs": [
+          {
+            "id": "ae194090-afd6-4987-8318-dd96cae48854",
+            "title": "Quel serveur choisir ?",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "7561e909-e8d1-4af2-a2d6-d7e7b04fc46b",
+            "title": "Quelle race choisir ?",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "1add1467-1572-4d27-98b7-1463da2cf676",
+            "title": "Quelle classe choisir ?",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "77bb97c5-ecb9-4955-9563-fac20d1240d8",
+            "title": "Leveling optimisé",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "798b5010-a5e3-4205-b205-17e8e384144a",
+            "title": "Un build pour level-up",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "31d4c87d-8a4e-44fd-a5e5-2ca729b3c5ab",
+            "title": "L'interface décryptée",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "56d11119-f801-45d2-8bff-c87820917743",
+            "title": "Mourir et compagnie",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "bc95ece7-0463-4e22-8c99-27b64ae3650d",
+            "title": "Les combos",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "4f40b24b-2b07-43d2-bd4a-950f599b5425",
+            "title": "Se lancer en donjon",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "72b29502-1c5c-4a1e-8799-8aeb53305bc3",
+            "title": "Les guildes",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "920a2c7f-d2ba-461c-a8cd-f6d02f166bf6",
+            "title": "Gérer son inventaire",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "b819780f-00b3-496e-97b2-132d215a3ec4",
+            "title": "Collections rentables",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "04498c48-a656-4f68-bf20-3e23f03739a6",
+            "title": "Que sont les dragons ?",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "3b319b0e-4b53-49ec-ad08-502f6986892c",
+            "title": "Histoire et géographie",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "5c0b11ca-33f3-4290-b118-85c430836376",
+            "title": "Les disciplines d'artisanat",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "5893aa9e-442f-4709-b474-449eef83ee42",
+            "title": "Histoire personnelle",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "6af9b057-030b-498e-aaa3-7cb4dd65cfc4",
+            "title": "S'équiper au niveau 80",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "69461254-2119-4595-8bba-9449e9f194ab",
+            "title": "Obtenir ses premiers élevés",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "6f710619-023f-41bc-82e6-b25ae95e21bc",
+            "title": "À quoi sert une extension ?",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "d5cc35d7-cd25-4e41-b826-fb31681e38d0",
+            "title": "Maîtrises et spécialisations élites",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          },
+          {
+            "id": "59dffbaf-d80f-4f3c-b605-38910fb6b867",
+            "title": "Endgame : activités",
+            "url": "",
+            "icon": "",
+            "active": true,
+            "access": [],
+            "childs": []
+          }
+        ]
       }
     ]
   }

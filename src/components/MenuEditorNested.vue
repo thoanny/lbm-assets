@@ -36,7 +36,6 @@ const currentItem = ref({});
 const editActive = ref(null);
 
 const editHandle = (el) => {
-  console.log('editHandle', el.id);
   editActive.value = el.id;
   currentItem.value = { ...el };
 };
@@ -47,7 +46,6 @@ const cancelEdit = () => {
 };
 
 const saveHandle = () => {
-  console.log('save');
   const idx = list.value.findIndex((item) => item.id === currentItem.value.id);
   list.value[idx] = currentItem.value;
   editActive.value = null;
