@@ -10,7 +10,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "markdown-it": "^14.0.0",
+    "pinia": "^2.1.7",
     "tippy.vue": "^3.2.1",
     "uuid": "^9.0.1",
     "vue": "^3.4.20",
