@@ -217,136 +217,150 @@ function formatGold(total) {
 </script>
 
 <template>
-  <div class="gw2-wizard-vault w-full bg-black bg-opacity-50 p-4 rounded-lg text-neutral-content">
-    <h4 class="flex-col md:flex-row mb-6 md:mb-0 text-center md:text-left">
-      <img src="@/assets/img/IconWizardVault.png" />
-      <span class="text-white">Chambre forte du&nbsp;sorcier</span>
-      <span class="block text-base mt-2 ml-2" v-if="panel === 'objectives'">&ndash; Objectifs</span>
-      <span class="block text-base mt-2 ml-2" v-if="panel === 'rewards'"
-        >&ndash; Récompenses astrales</span
-      >
-      <span class="block text-base mt-2 ml-2" v-if="panel === 'legacy'"
-        >&ndash; Récompenses d'héritage</span
-      >
-    </h4>
-    <div class="p-4 pt-0">
-      <input
-        type="password"
-        v-model="apiKey"
-        class="lbm-input lbm-inpu-bordered w-full"
-        placeholder="Clé API Guild Wars 2"
-      />
-    </div>
-    <div v-if="isLoading" class="px-4 flex gap-2">
-      <span class="lbm-loading lbm-loading-spinner"></span>
-      Chargement en cours...
-    </div>
-    <div class="wizard-vault flex-col md:flex-row" v-else>
-      <div class="wizard-vault__menu flex-row md:flex-col">
-        <button
-          @click="switchPanel('objectives')"
-          :class="{
-            'lbm-btn-primary': panel === 'objectives',
-            'lbm-btn-neutral': panel !== 'objectives',
-          }"
-          class="lbm-btn lbm-btn-square"
-        >
-          <img src="@/assets/img/IconWizardVaultObjectives.png" alt="Objectifs" title="Objectifs" />
-        </button>
-        <button
-          @click="switchPanel('rewards')"
-          :class="{ 'lbm-btn-primary': panel == 'rewards', 'lbm-btn-neutral': panel !== 'rewards' }"
-          class="lbm-btn lbm-btn-square"
-        >
-          <img
-            src="@/assets/img/IconWizardVaultRewards.png"
-            alt="Récompenses astrales"
-            title="Récompenses astrales"
-          />
-        </button>
-        <button
-          @click="switchPanel('legacy')"
-          :class="{ 'lbm-btn-primary': panel == 'legacy', 'lbm-btn-neutral': panel !== 'legacy' }"
-          class="lbm-btn lbm-btn-square"
-        >
-          <img
-            src="@/assets/img/IconWizardVaultLegacyRewards.png"
-            alt="Récompenses d'héritage"
-            title="Récompenses d'héritage"
-          />
-        </button>
-      </div>
-      <div class="wizard-vault__objectives-panel" v-if="panel == 'objectives'">
-        <div class="wizard-vault__tabs flex-col sm:flex-row">
-          <button
-            @click="switchTab('daily')"
-            class="lbm-btn"
-            :class="{ 'lbm-btn-primary': tab === 'daily', 'lbm-btn-neutral': tab !== 'daily' }"
-          >
-            Quotidien
-          </button>
-          <button
-            @click="switchTab('weekly')"
-            class="lbm-btn"
-            :class="{ 'lbm-btn-primary': tab === 'weekly', 'lbm-btn-neutral': tab !== 'weekly' }"
-          >
-            Hebdomadaire
-          </button>
-          <button
-            @click="switchTab('special')"
-            class="lbm-btn"
-            :class="{ 'lbm-btn-primary': tab === 'special', 'lbm-btn-neutral': tab !== 'special' }"
-          >
-            Spécial
-          </button>
-        </div>
-        <div class="wizard-vault__objectives" v-if="objectives[tab]">
-          <progress
-            class="lbm-progress lbm-progress-primary w-full h-4"
-            :value="objectives[tab].meta_progress_current"
-            :max="objectives[tab].meta_progress_complete"
-            v-if="objectives[tab].meta_progress_complete"
-          ></progress>
-          <div
-            class="wizard-vault__objective flex gap-4 items-center relative"
-            v-for="obj in objectives[tab].objectives"
-            :key="obj.title"
-            :class="[`wizard-vault__objective--${obj.track}`, obj.claimed ? 'opacity-25' : '']"
-          >
-            <div class="w-full">
-              <div class="lbm-badge lbm-badge-sm absolute -top-2 left-2">{{ obj.track }}</div>
-              <div class="font-bold text-white">
-                <span v-text="getObjectiveTitle(obj)"></span>&nbsp;
-                <small class="opacity-75 font-semibold"
-                  >({{ obj.progress_current }}/{{ obj.progress_complete }})</small
-                >
-              </div>
-              <div
-                class="wizard-vault__objective__tip text-sm"
-                v-html="getObjectiveTip(obj.id)"
-                v-if="!obj.claimed"
-              ></div>
-            </div>
-            <div class="text-lg font-bold w-20 shrink-0 self-start">
-              <span class="flex gap-1 items-center justify-end">
-                {{ obj.acclaim }}
-                <img
-                  src="@/assets/img/CurrencyAstralAcclaim.png"
-                  class="inline w-6 h-6"
-                  alt="Acclamation astrale"
-                />
-              </span>
-            </div>
+  <div class="lbm-app">
+    <div class="lbm-app__header">
+      <div class="lbm-app__brand">
+        <img src="@/assets/img/IconWizardVault.png" alt="" class="lbm-app__logo" />
+        <div class="lbm-app__title">
+          Chambre forte du&nbsp;sorcier
+          <div class="lbm-app__subtitle">
+            <template v-if="panel === 'objectives'"> Objectifs </template>
+            <template v-if="panel === 'rewards'"> Récompenses astrales </template>
+            <template v-if="panel === 'legacy'"> Récompenses d'héritage </template>
           </div>
         </div>
-        <div v-else>
-          Une clé API Guild Wars 2 est requise pour afficher la rubrique des objectifs quotidiens,
-          hebdomadaires et spéciaux...
-        </div>
       </div>
-      <div id="wizard-vault__rewards-panel" class="w-full" v-if="panel == 'rewards'">
-        <!-- [ ] Recalculer le max, sachant que la limite ne peut être calculé que si clé API -->
-        <!-- <div class="mb-4">
+    </div>
+    <div class="lbm-app__main gw2-wizard-vault">
+      <div class="p-4 pt-0">
+        <input
+          type="password"
+          v-model="apiKey"
+          class="lbm-input lbm-inpu-bordered w-full"
+          placeholder="Clé API Guild Wars 2"
+          autocomplete="off"
+        />
+      </div>
+      <div v-if="isLoading" class="px-4 flex gap-2">
+        <span class="lbm-loading lbm-loading-spinner"></span>
+        Chargement en cours...
+      </div>
+      <div class="wizard-vault flex-col md:flex-row" v-else>
+        <div class="wizard-vault__menu flex-row md:flex-col">
+          <button
+            @click="switchPanel('objectives')"
+            :class="{
+              'lbm-btn-primary': panel === 'objectives',
+              'lbm-btn-neutral': panel !== 'objectives',
+            }"
+            class="lbm-btn lbm-btn-square"
+          >
+            <img
+              src="@/assets/img/IconWizardVaultObjectives.png"
+              alt="Objectifs"
+              title="Objectifs"
+            />
+          </button>
+          <button
+            @click="switchPanel('rewards')"
+            :class="{
+              'lbm-btn-primary': panel == 'rewards',
+              'lbm-btn-neutral': panel !== 'rewards',
+            }"
+            class="lbm-btn lbm-btn-square"
+          >
+            <img
+              src="@/assets/img/IconWizardVaultRewards.png"
+              alt="Récompenses astrales"
+              title="Récompenses astrales"
+            />
+          </button>
+          <button
+            @click="switchPanel('legacy')"
+            :class="{ 'lbm-btn-primary': panel == 'legacy', 'lbm-btn-neutral': panel !== 'legacy' }"
+            class="lbm-btn lbm-btn-square"
+          >
+            <img
+              src="@/assets/img/IconWizardVaultLegacyRewards.png"
+              alt="Récompenses d'héritage"
+              title="Récompenses d'héritage"
+            />
+          </button>
+        </div>
+        <div class="wizard-vault__objectives-panel" v-if="panel == 'objectives'">
+          <div class="wizard-vault__tabs flex-col sm:flex-row">
+            <button
+              @click="switchTab('daily')"
+              class="lbm-btn"
+              :class="{ 'lbm-btn-primary': tab === 'daily', 'lbm-btn-neutral': tab !== 'daily' }"
+            >
+              Quotidien
+            </button>
+            <button
+              @click="switchTab('weekly')"
+              class="lbm-btn"
+              :class="{ 'lbm-btn-primary': tab === 'weekly', 'lbm-btn-neutral': tab !== 'weekly' }"
+            >
+              Hebdomadaire
+            </button>
+            <button
+              @click="switchTab('special')"
+              class="lbm-btn"
+              :class="{
+                'lbm-btn-primary': tab === 'special',
+                'lbm-btn-neutral': tab !== 'special',
+              }"
+            >
+              Spécial
+            </button>
+          </div>
+          <div class="wizard-vault__objectives" v-if="objectives[tab]">
+            <progress
+              class="lbm-progress lbm-progress-primary w-full h-4"
+              :value="objectives[tab].meta_progress_current"
+              :max="objectives[tab].meta_progress_complete"
+              v-if="objectives[tab].meta_progress_complete"
+            ></progress>
+            <div
+              class="wizard-vault__objective flex gap-4 items-center relative"
+              v-for="obj in objectives[tab].objectives"
+              :key="obj.title"
+              :class="[`wizard-vault__objective--${obj.track}`, obj.claimed ? 'opacity-25' : '']"
+            >
+              <div class="w-full">
+                <div class="lbm-badge lbm-badge-sm absolute -top-2 left-2">{{ obj.track }}</div>
+                <div class="font-bold text-white">
+                  <span v-text="getObjectiveTitle(obj)"></span>&nbsp;
+                  <small class="opacity-75 font-semibold"
+                    >({{ obj.progress_current }}/{{ obj.progress_complete }})</small
+                  >
+                </div>
+                <div
+                  class="wizard-vault__objective__tip text-sm"
+                  v-html="getObjectiveTip(obj.id)"
+                  v-if="!obj.claimed"
+                ></div>
+              </div>
+              <div class="text-lg font-bold w-20 shrink-0 self-start">
+                <span class="flex gap-1 items-center justify-end">
+                  {{ obj.acclaim }}
+                  <img
+                    src="@/assets/img/CurrencyAstralAcclaim.png"
+                    class="inline w-6 h-6"
+                    alt="Acclamation astrale"
+                  />
+                </span>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            Une clé API Guild Wars 2 est requise pour afficher la rubrique des objectifs quotidiens,
+            hebdomadaires et spéciaux...
+          </div>
+        </div>
+        <div id="wizard-vault__rewards-panel" class="w-full" v-if="panel == 'rewards'">
+          <!-- [ ] Recalculer le max, sachant que la limite ne peut être calculé que si clé API -->
+          <!-- <div class="mb-4">
           Vous avez besoin de
           <strong
             >{{ new Intl.NumberFormat('fr-FR').format(currentVaultTotal) }}
@@ -355,57 +369,61 @@ function formatGold(total) {
           >
           pour acheter toutes les récompenses limitées.
         </div> -->
-        <!-- Rewards -->
-        <div
-          class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
-          v-if="rewards"
-        >
-          <div v-for="(reward, r) in currentRewards()" class="wizard-vault__reward" :key="r">
-            <gw2-api-item-tooltip :item="getItemById(reward.item_id)"></gw2-api-item-tooltip>
-            <div class="wizard-vault__reward__price text-white">
-              {{ reward.cost }}
-              <img src="@/assets/img/CurrencyAstralAcclaim.png" />
+          <!-- Rewards -->
+          <div
+            class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+            v-if="rewards"
+          >
+            <div v-for="(reward, r) in currentRewards()" class="wizard-vault__reward" :key="r">
+              <gw2-api-item-tooltip :item="getItemById(reward.item_id)"></gw2-api-item-tooltip>
+              <div class="wizard-vault__reward__price text-white">
+                {{ reward.cost }}
+                <img src="@/assets/img/CurrencyAstralAcclaim.png" />
+              </div>
+              <div
+                v-if="reward.value && reward.price"
+                v-html="formatGold(reward.value / reward.price)"
+              ></div>
+              <div
+                class="wizard-vault__reward__name text-white"
+                v-html="getItemNameById(reward.item_id)"
+              ></div>
+              <div
+                class="wizard-vault__reward__limit"
+                v-text="getAccountRewardLimit(reward.id)"
+              ></div>
             </div>
-            <div
-              v-if="reward.value && reward.price"
-              v-html="formatGold(reward.value / reward.price)"
-            ></div>
-            <div
-              class="wizard-vault__reward__name text-white"
-              v-html="getItemNameById(reward.item_id)"
-            ></div>
-            <div
-              class="wizard-vault__reward__limit"
-              v-text="getAccountRewardLimit(reward.id)"
-            ></div>
           </div>
+          <div v-else>Chargement en cours...</div>
         </div>
-        <div v-else>Chargement en cours...</div>
-      </div>
-      <!-- Legacy Rewards -->
-      <div id="wizard-vault__legacy-panel" class="w-full" v-if="panel == 'legacy'">
-        <div
-          class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
-          v-if="legacyRewards"
-        >
-          <div v-for="(reward, r) in legacyRewards()" class="wizard-vault__reward" :key="r">
-            <gw2-api-item-tooltip :item="getItemById(reward.item_id)"></gw2-api-item-tooltip>
-            <div class="wizard-vault__reward__price text-white">
-              {{ reward.cost }}
-              <img src="@/assets/img/CurrencyAstralAcclaim.png" />
+        <!-- Legacy Rewards -->
+        <div id="wizard-vault__legacy-panel" class="w-full" v-if="panel == 'legacy'">
+          <div
+            class="wizard-vault__rewards grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2"
+            v-if="legacyRewards"
+          >
+            <div v-for="(reward, r) in legacyRewards()" class="wizard-vault__reward" :key="r">
+              <gw2-api-item-tooltip :item="getItemById(reward.item_id)"></gw2-api-item-tooltip>
+              <div class="wizard-vault__reward__price text-white">
+                {{ reward.cost }}
+                <img src="@/assets/img/CurrencyAstralAcclaim.png" />
+              </div>
+              <div
+                class="wizard-vault__reward__name text-white"
+                v-html="getItemNameById(reward.item_id)"
+              ></div>
+              <div
+                class="wizard-vault__reward__limit"
+                v-text="getAccountRewardLimit(reward.id)"
+              ></div>
             </div>
-            <div
-              class="wizard-vault__reward__name text-white"
-              v-html="getItemNameById(reward.item_id)"
-            ></div>
-            <div
-              class="wizard-vault__reward__limit"
-              v-text="getAccountRewardLimit(reward.id)"
-            ></div>
           </div>
+          <div v-else>Chargement en cours...</div>
         </div>
-        <div v-else>Chargement en cours...</div>
       </div>
+    </div>
+    <div class="lbm-app__footer">
+      <lbm-app-footer></lbm-app-footer>
     </div>
   </div>
 </template>
