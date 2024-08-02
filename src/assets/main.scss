@@ -5,12 +5,12 @@
 @import 'sprite';
 .lbm-icon {
   display: inline-block;
-  @include sprites($spritesmith-sprites);
+  @include sprites($spritesheet-sprites);
 }
 
 :deep(.lbm-icon) {
   display: inline-block;
-  @include sprites($spritesmith-sprites);
+  @include sprites($spritesheet-sprites);
 }
 
 *,
