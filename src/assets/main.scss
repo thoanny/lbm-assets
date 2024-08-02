@@ -4,13 +4,13 @@
 
 @import 'sprite';
 .lbm-icon {
-  @include sprites($spritesmith-sprites);
   display: inline-block;
+  @include sprites($spritesmith-sprites);
 }
 
 :deep(.lbm-icon) {
-  @include sprites($spritesmith-sprites);
   display: inline-block;
+  @include sprites($spritesmith-sprites);
 }
 
 *,

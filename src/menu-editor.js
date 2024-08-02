@@ -5,6 +5,6 @@ import App from '@/MenuEditor.vue';
 
 const app = createApp(App);
 
-if (document.getElementById("lbm-menu-editor'")) {
+if (document.getElementById('lbm-menu-editor')) {
   app.mount('#lbm-menu-editor');
 }
