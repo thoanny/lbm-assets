@@ -4,22 +4,22 @@
 
 @import 'sprite';
 .lbm-icon {
-  display: inline-block;
-  @include sprites($spritesheet-sprites);
+    display: inline-block;
+    @include sprites($spritesheet-sprites);
 }
 
 :deep(.lbm-icon) {
-  display: inline-block;
-  @include sprites($spritesheet-sprites);
+    display: inline-block;
+    @include sprites($spritesheet-sprites);
 }
 
 *,
 ::before,
 ::after {
-  box-sizing: border-box;
-  border-width: 0;
-  border-style: solid;
-  border-color: #e5e7eb;
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e5e7eb;
 }
 
 h1,
@@ -28,46 +28,69 @@ h3,
 h4,
 h5,
 h6 {
-  font-size: 1rem;
-  margin: 0;
+    font-size: 1rem;
+    margin: 0;
 }
 
 .bangers {
-  font-family: 'Bangers';
-  letter-spacing: 0.05rem;
+    font-family: 'Bangers';
+    letter-spacing: 0.05rem;
 }
 
 .border-3 {
-  border-width: 3px;
+    border-width: 3px;
 }
 
 .lbm-app {
-  @apply bg-black bg-opacity-50 p-4 rounded-lg text-neutral-content flex flex-col gap-4;
+    @apply bg-black bg-opacity-50 p-4 rounded-lg text-neutral-content flex flex-col gap-4;
 
-  &__header {
-    @apply flex flex-col sm:flex-row justify-between gap-2 sm:gap-4 items-center;
-  }
+    &__header {
+        @apply flex flex-col sm:flex-row justify-between gap-2 sm:gap-4 items-center;
+    }
 
-  &__brand {
-    @apply flex gap-2 items-center text-white;
-  }
+    &__brand {
+        @apply flex gap-2 items-center text-white;
+    }
 
-  &__logo {
-    @apply w-16 h-16 shrink-0;
-  }
+    &__logo {
+        @apply w-16 h-16 shrink-0;
+    }
 
-  &__title {
-    @apply text-2xl font-semibold;
-  }
+    &__title {
+        @apply text-2xl font-semibold;
+    }
 
-  &__subtitle {
-    @apply text-neutral-content text-base;
-  }
+    &__subtitle {
+        @apply text-neutral-content text-base;
+    }
 
-  &__sidebar {
-    @apply flex gap-2 items-center;
-  }
+    &__sidebar {
+        @apply flex gap-2 items-center;
+    }
 
-  &__footer {
-  }
+    &__footer {
+    }
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+/* * {
+  scrollbar-width: auto;
+  scrollbar-color: oklch(var(--p)) oklch(var(--n));
+} */
+
+/* Chrome, Edge, and Safari */
+.lbm-scrollbar::-webkit-scrollbar {
+    width: 1rem;
+}
+
+.lbm-scrollbar::-webkit-scrollbar-track {
+    background: oklch(var(--n));
+    border-radius: 0.5rem;
+}
+
+.lbm-scrollbar::-webkit-scrollbar-thumb {
+    background-color: oklch(var(--p));
+    border-radius: 0.5rem;
+    border: 3px solid oklch(var(--n));
 }
