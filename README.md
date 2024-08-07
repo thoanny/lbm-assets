@@ -80,3 +80,23 @@ Nouvelle version des timers des événements et worl boss de Guild Wars 2.
 ```html
 <gw2-fishes></gw2-fishes>
 ```
+
+### Recettes
+
+Afficher une recette sous la forme d'un bloc :
+
+```html
+<gw2-recipe id="7283"></gw2-recipe>
+```
+
+Afficher une recette sous la forme d'une ligne :
+
+```html
+<gw2-recipe id="7283" display="inline"></gw2-recipe>
+```
+
+Afficher une recette sous la forme d'une liste :
+
+```html
+<gw2-recipe id="7283" display="list"></gw2-recipe>
+```
