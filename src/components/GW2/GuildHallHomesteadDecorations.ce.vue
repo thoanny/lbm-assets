@@ -1,21 +1,205 @@
 <script setup>
 // Icons : https://remixicon.com
-import { ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
+import MarkdownIt from 'markdown-it';
+import pad from '@/utils/pad.js';
+import RecipeNested from '@/components/GW2/RecipeNested.vue';
+
+const LBMApp = ref();
+
 const recipeOpen = ref(true);
+
+const DOMAIN = 'https://api.lebusmagique.fr';
+// const DOMAIN = 'http://localhost:8000';
+const API = `${DOMAIN}/api/gw2`;
+const UPLOADS = `${DOMAIN}/uploads/api/gw2/decorations/`;
+
+const markdown = new MarkdownIt();
+
+const allCategories = ref([]);
+const currentDecoration = ref(null);
+const currentQuantity = ref(1);
+const total = ref([]);
+const totalPrice = ref(0);
+const totalDecorations = ref(0);
+const searchValue = ref('');
+const searchType = ref('');
+
+const loadingCategories = ref(false);
+const loadingDecoration = ref(false);
+
+const getCategories = async () => {
+    loadingCategories.value = true;
+    const res = await fetch(`${API}/decorations`);
+    return await res.json();
+};
+
+const loadCategories = async () => {
+    allCategories.value = await getCategories();
+    // updateCategories();
+    loadingCategories.value = false;
+    const sum = allCategories.value.map((c) => c.decorations.length);
+    totalDecorations.value = sum.reduce((a, b) => a + b, 0);
+};
+
+const loadDecoration = async (id) => {
+    LBMApp.value.scrollIntoView({ behaviour: 'smooth' });
+    loadingDecoration.value = true;
+    total.value = [];
+    currentQuantity.value = 1;
+    currentDecoration.value = null;
+    await fetch(`${API}/decorations/${id}`)
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            currentDecoration.value = data;
+            loadingDecoration.value = false;
+            getTotal(data.item.recipes, 1);
+            loadGuildDecorations();
+            loadPrices();
+        });
+};
+
+const loadGuildDecorations = async () => {
+    const upgradeIds = currentDecoration.value.item.recipes.map((r) =>
+        r.guildIngredients.map((gi) => gi.upgrade_id),
+    );
+
+    if (upgradeIds.length > 0) {
+        await fetch(`https://api.guildwars2.com/v2/guild/upgrades?ids=${upgradeIds.join(',')}`)
+            .then((res) => res.json())
+            .then((data) => {
+                data.forEach((u) => {
+                    const idx = currentDecoration.value.item.recipes[0].guildIngredients.findIndex(
+                        (gi) => gi.upgrade_id === u.id,
+                    );
+                    if (idx >= 0) {
+                        currentDecoration.value.item.recipes[0].guildIngredients[idx] = {
+                            ...currentDecoration.value.item.recipes[0].guildIngredients[idx],
+                            name: u.name,
+                            icon: u.icon,
+                        };
+                    }
+                });
+            });
+    }
+};
+
+const getTotal = (recipes, quantity = 1) => {
+    recipes.forEach((recipe) => {
+        recipe.ingredients.forEach((ingredient) => {
+            if (ingredient.item.recipes.length === 0) {
+                const idx = total.value.findIndex((t) => t.uid === ingredient.item.uid);
+                if (idx >= 0) {
+                    total.value[idx].quantity += ingredient.quantity * quantity;
+                } else {
+                    total.value.push({
+                        uid: ingredient.item.uid,
+                        name: ingredient.item.name,
+                        icon: ingredient.item.icon,
+                        quantity: ingredient.quantity * quantity,
+                    });
+                }
+            } else {
+                getTotal(ingredient.item.recipes, ingredient.quantity * quantity);
+            }
+        });
+    });
+};
+
+const loadPrices = async () => {
+    const ids = total.value.map((t) => t.uid);
+    totalPrice.value = 0;
+    await fetch(`http://api.guildwars2.com/v2/commerce/prices?ids=${ids.join(',')}`)
+        .then((res) => res.json())
+        .then((data) => {
+            data.forEach((price) => {
+                const idx = total.value.findIndex((item) => item.uid === price.id);
+                if (idx >= 0) {
+                    total.value[idx].price = price.sells.unit_price;
+                }
+            });
+            total.value.forEach((item) => {
+                if (item.price) {
+                    totalPrice.value += item.price * item.quantity;
+                }
+            });
+        });
+};
+
+const formatPrice = (amount) => {
+    const copper = amount % 100;
+    const silver = Math.floor((amount % 10000) / 100);
+    const gold = Math.floor(amount / 10000);
+
+    if (gold > 0) {
+        return `<span class="currency"><span class="gold">${gold}</span><span class="silver">${pad(silver)}</span><span class="copper">${pad(copper)}</span>`;
+    } else if (silver > 0) {
+        return `<span class="currency"><span class="silver">${pad(silver)}</span><span class="copper">${pad(copper)}</span>`;
+    }
+
+    return `<span class="currency"><span class="copper">${copper}</span></span>`;
+};
+
+const thumbnailModal = ref();
+
+onMounted(() => {
+    loadCategories();
+});
+
+const categories = computed(() => {
+    const s = searchValue.value
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .toLowerCase();
+
+    return allCategories.value.map((category) => {
+        return {
+            ...category,
+            decorations: category.decorations.filter((decoration) => {
+                if (searchType.value && searchValue.value) {
+                    return (
+                        searchType.value === decoration.type &&
+                        decoration.item.name
+                            .normalize('NFD')
+                            .replace(/\p{Diacritic}/gu, '')
+                            .toLowerCase()
+                            .indexOf(s) >= 0
+                    );
+                } else if (searchType.value) {
+                    return searchType.value === decoration.type;
+                } else if (searchValue.value) {
+                    return (
+                        decoration.item.name
+                            .normalize('NFD')
+                            .replace(/\p{Diacritic}/gu, '')
+                            .toLowerCase()
+                            .indexOf(s) >= 0
+                    );
+                }
+                return true;
+            }),
+        };
+    });
+});
 </script>
 
 <template>
-    <div class="lbm-app">
+    <div class="lbm-app" ref="LBMApp">
         <div class="lbm-app__header">
             <div class="lbm-app__brand">
-                <img src="" alt="" class="lbm-app__logo bg-red-500" />
+                <img src="" alt="" class="lbm-app__logo bg-primary" v-if="false" />
                 <div class="lbm-app__title">
                     Décorations de guilde et du pavillon
-                    <div class="lbm-app__subtitle">00000 décorations</div>
+                    <div class="lbm-app__subtitle">
+                        <!-- {{ totalDecorations ? `${totalDecorations} décorations` : '...' }} -->
+                        Version α (alpha)
+                    </div>
                 </div>
             </div>
             <div class="lbm-app__sidebar">
-                <button class="lbm-btn lbm-btn-primary lbm-btn-square">
+                <button class="lbm-btn lbm-btn-primary lbm-btn-square" v-if="false">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -27,7 +211,7 @@ const recipeOpen = ref(true);
                         ></path>
                     </svg>
                 </button>
-                <button class="lbm-btn lbm-btn-primary">
+                <button class="lbm-btn lbm-btn-primary" v-if="false">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -44,156 +228,67 @@ const recipeOpen = ref(true);
         </div>
 
         <div class="lbm-app__main flex gap-4 items-start">
-            <div class="w-full max-w-xs bg-base-200 rounded-box p-2">
+            <div class="flex gap-2 items-center" v-if="loadingCategories">
+                <span class="lbm-loading lbm-loading-spinner"></span>
+                Chargement en cours...
+            </div>
+            <div class="w-full max-w-xs bg-base-200 rounded-box p-2 sticky top-4" v-else>
+                <div class="flex flex-col gap-2 mb-2">
+                    <select
+                        class="lbm-select lbm-select-bordered lbm-select-sm w-full"
+                        v-model="searchType"
+                    >
+                        <option value="">Toutes les décorations</option>
+                        <option value="guildhall">Hall de guilde</option>
+                        <option value="homestead">Pavillon</option>
+                    </select>
+                    <input
+                        type="text"
+                        class="lbm-input lbm-input-bordered lbm-input-sm w-full"
+                        placeholder="Chercher une décoration"
+                        v-model="searchValue"
+                    />
+                </div>
+
                 <div
                     class="overflow-y-auto lbm-scrollbar min-h-96 pr-2"
                     style="max-height: calc(100dvh - 15rem)"
                 >
                     <ul class="lbm-menu w-full p-0">
-                        <li>
+                        <li
+                            v-for="category in categories"
+                            :key="category.id"
+                            v-show="category.decorations.length > 0"
+                        >
                             <details>
                                 <summary>
                                     <h4 class="lbm-menu-title">
-                                        Décorations favorites
-                                        <span class="lbm-badge lbm-badge-sm lbm-badge-primary"
-                                            >8</span
+                                        {{ category.name }}
+                                        <span
+                                            class="lbm-badge lbm-badge-sm lbm-badge-primary"
+                                            v-if="category.decorations.length > 0"
                                         >
+                                            {{ category.decorations.length }}
+                                        </span>
                                     </h4>
                                 </summary>
                                 <ul>
-                                    <li><a>Submenu 1 </a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">
-                                        Nom de ma guilde 1
-                                        <span class="lbm-badge lbm-badge-sm lbm-badge-primary"
-                                            >3</span
+                                    <li v-for="decoration in category.decorations">
+                                        <a
+                                            @click.prevent="loadDecoration(decoration.id)"
+                                            :class="{
+                                                'active lbm-active':
+                                                    currentDecoration?.id === decoration.id,
+                                            }"
                                         >
-                                    </h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">
-                                        Nom de ma guilde 3
-                                        <span class="lbm-badge lbm-badge-sm lbm-badge-primary"
-                                            >99</span
-                                        >
-                                    </h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">Architecture</h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">Meubles</h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">Éclairage</h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">Autre</h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">Plantes</h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">Statues</h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">Trophées</h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">Monuments</h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <details>
-                                <summary>
-                                    <h4 class="lbm-menu-title">Festival</h4>
-                                </summary>
-                                <ul>
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
+                                            <img
+                                                :src="decoration.item.icon"
+                                                alt=""
+                                                class="h-5 w-5 rounded"
+                                            />
+                                            <span class="truncate">{{ decoration.item.name }}</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </details>
                         </li>
@@ -201,40 +296,39 @@ const recipeOpen = ref(true);
                 </div>
             </div>
             <div class="flex-1">
-                <div class="flex items-start gap-4">
+                <div class="flex gap-2 items-center" v-if="loadingDecoration">
+                    <span class="lbm-loading lbm-loading-spinner"></span>
+                    Chargement en cours...
+                </div>
+                <div class="flex items-start gap-4" v-else-if="currentDecoration">
                     <div class="w-3/5">
-                        <div
-                            class="border border-gray-500 rounded-box h-56 p-4 relative overflow-hidden"
-                        >
-                            <div class="aspect-video h-full absolute top-0 right-0 z-10">
-                                <img
-                                    src="https://lebusmagique.netlify.app/assets/img/guilds/decorations/thumbs/72409.jpg"
-                                    class="w-full h-full object-cover"
-                                    alt=""
-                                    style="
-                                        mask-image: linear-gradient(
-                                            to right,
-                                            rgba(0, 0, 0, 0),
-                                            rgba(0, 0, 0, 1) 25%
-                                        );
-                                    "
-                                />
-                            </div>
+                        <!-- <pre>{{ currentDecoration }}</pre> -->
+                        <div class="">
                             <div class="flex gap-4 items-center relative z-20">
                                 <img
-                                    src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
+                                    :src="currentDecoration.item.icon"
                                     alt=""
-                                    class="w-16 h-16 bg-red-500 rounded"
+                                    class="w-16 h-16 bg-red-500 rounded border-2"
+                                    :class="[`border-gw2-rarity-${currentDecoration.item.rarity}`]"
                                 />
                                 <div class="flex flex-col">
-                                    <h2 class="text-xl font-semibold text-white">Nom de l'objet</h2>
+                                    <h2 class="text-xl font-semibold text-white">
+                                        {{ currentDecoration.item.name }}
+                                    </h2>
                                 </div>
                             </div>
+                            <div
+                                class="mt-2 tip"
+                                v-if="currentDecoration.item.obteningTip"
+                                v-html="markdown.render(currentDecoration.item.obteningTip)"
+                            ></div>
                         </div>
 
-                        <div class="border border-gray-500 rounded-box w-full mt-4">
-                            <div class="flex justify-between">
-                                <h3 class="text-lg px-4 pt-3">Recette</h3>
+                        <div class="mt-4" v-if="currentDecoration.item.recipes.length > 0">
+                            <div
+                                class="flex justify-between items-center bg-neutral rounded-lg px-4 py-1"
+                            >
+                                <h3 class="text-lg pl-2">Recette</h3>
                                 <div class="lbm-form-control">
                                     <label class="lbm-label cursor-pointer">
                                         <span class="lbm-label-text text-sm">Développer</span>
@@ -248,149 +342,65 @@ const recipeOpen = ref(true);
                             </div>
 
                             <ul class="lbm-menu recipe">
-                                <li>
-                                    <span>
-                                        <img
-                                            src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                            alt=""
-                                            class="h-5 w-5 rounded"
-                                        />
-                                        3 &times; Item 1
-                                    </span>
-                                </li>
-                                <li>
-                                    <span>
-                                        <img
-                                            src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                            alt=""
-                                            class="h-5 w-5 rounded"
-                                        />
-                                        1 &times; Item 2
-                                    </span>
-                                    <ul :class="{ hidden: !recipeOpen }">
-                                        <li>
-                                            <span>
-                                                <img
-                                                    src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                    alt=""
-                                                    class="h-5 w-5 rounded"
-                                                />Submenu 1
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <span
-                                                ><img
-                                                    src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                    alt=""
-                                                    class="h-5 w-5 rounded"
-                                                />Submenu 2</span
-                                            >
-                                        </li>
-                                        <li>
-                                            <span
-                                                ><img
-                                                    src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                    alt=""
-                                                    class="h-5 w-5 rounded"
-                                                />Parent</span
-                                            >
-                                            <ul>
-                                                <li>
-                                                    <span
-                                                        ><img
-                                                            src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                            alt=""
-                                                            class="h-5 w-5 rounded"
-                                                        />Submenu 1</span
-                                                    >
-                                                </li>
-                                                <li>
-                                                    <span
-                                                        ><img
-                                                            src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                            alt=""
-                                                            class="h-5 w-5 rounded"
-                                                        />Submenu 2</span
-                                                    >
-                                                    <ul>
-                                                        <li>
-                                                            <span
-                                                                ><img
-                                                                    src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                                    alt=""
-                                                                    class="h-5 w-5 rounded"
-                                                                />Submenu 1</span
-                                                            >
-                                                        </li>
-                                                        <li>
-                                                            <span
-                                                                ><img
-                                                                    src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                                    alt=""
-                                                                    class="h-5 w-5 rounded"
-                                                                />Submenu 2</span
-                                                            >
-                                                        </li>
-                                                        <li>
-                                                            <span
-                                                                ><img
-                                                                    src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                                    alt=""
-                                                                    class="h-5 w-5 rounded"
-                                                                />Parent</span
-                                                            >
-                                                            <ul>
-                                                                <li>
-                                                                    <span
-                                                                        ><img
-                                                                            src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                                            alt=""
-                                                                            class="h-5 w-5 rounded"
-                                                                        />Submenu 1</span
-                                                                    >
-                                                                </li>
-                                                                <li>
-                                                                    <span
-                                                                        ><img
-                                                                            src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                                                            alt=""
-                                                                            class="h-5 w-5 rounded"
-                                                                        />Submenu 2</span
-                                                                    >
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <span>
-                                        <img
-                                            src="https://render.guildwars2.com/file/9EDA0D4C957DA89F653E9D27695592B139ECD035/61049.png"
-                                            alt=""
-                                            class="h-5 w-5 rounded"
-                                        />
-                                        5 &times; Item 3
-                                    </span>
-                                </li>
+                                <RecipeNested
+                                    :recipes="currentDecoration.item.recipes"
+                                    :open="recipeOpen"
+                                    :quantity="currentQuantity"
+                                />
                             </ul>
                         </div>
                     </div>
                     <div class="w-2/5">
-                        <div class="p-4 pt-3 border border-gray-500 rounded-box">
-                            <h3 class="text-lg">Sources</h3>
-                            <ul class="pl-6 mt-2 text-sm">
-                                <li><strong>Illustrateur</strong> (375)</li>
-                                <li><strong>Nouveau métier</strong> (123)</li>
-                                <li><strong>Nom du PNJ</strong> (festival du Nouvel an lunaire)</li>
-                            </ul>
+                        <div
+                            class="aspect-video w-full rounded-lg overflow-hidden"
+                            v-if="currentDecoration.thumbnail"
+                        >
+                            <img
+                                :src="UPLOADS + currentDecoration.thumbnail"
+                                class="w-full h-full object-cover cursor-pointer"
+                                alt=""
+                                @click="thumbnailModal.showModal()"
+                            />
+
+                            <dialog ref="thumbnailModal" class="lbm-modal">
+                                <div class="lbm-modal-box max-w-4xl p-0">
+                                    <form method="dialog">
+                                        <button
+                                            class="lbm-btn lbm-btn-sm lbm-btn-circle absolute right-2 top-2"
+                                        >
+                                            ✕
+                                        </button>
+                                    </form>
+                                    <img
+                                        :src="UPLOADS + currentDecoration.thumbnail"
+                                        class="w-full h-full block"
+                                        alt=""
+                                    />
+                                </div>
+                                <form method="dialog" class="lbm-modal-backdrop">
+                                    <button>close</button>
+                                </form>
+                            </dialog>
                         </div>
-                        <div class="pt-3 border border-gray-500 rounded-box mt-4 overflow-hidden">
-                            <h3 class="text-lg mx-4 mb-3">Détails du prix</h3>
-                            <table class="lbm-table text-xs">
+
+                        <div
+                            :class="{ 'mt-4': currentDecoration.thumbnail }"
+                            v-if="total.length > 0"
+                        >
+                            <h3 class="text-lg mb-2">
+                                Quantité à fabriquer&nbsp;: {{ currentQuantity }}
+                            </h3>
+                            <input
+                                type="range"
+                                min="1"
+                                max="100"
+                                v-model="currentQuantity"
+                                class="lbm-range lbm-range-sm lbm-range-primary"
+                            />
+                        </div>
+                        <div class="mt-4" v-if="total.length > 0">
+                            <h3 class="text-lg mb-2">Liste de course</h3>
+                            <table class="lbm-table text-xs border border-neutral rounded-none">
                                 <thead>
                                     <tr>
                                         <th>Objet</th>
@@ -399,61 +409,37 @@ const recipeOpen = ref(true);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>AAA</td>
-                                        <td class="text-center">3</td>
-                                        <td class="text-end">000</td>
+                                    <tr v-for="item in total">
+                                        <td class="py-1">
+                                            <span class="flex gap-2 items-center">
+                                                <img :src="item.icon" alt="" class="h-5 w-5" />
+                                                {{ item.name }}
+                                            </span>
+                                        </td>
+                                        <td class="text-center py-1">
+                                            {{ item.quantity * currentQuantity }}
+                                        </td>
+                                        <td
+                                            class="text-end py-1"
+                                            v-html="
+                                                item.price
+                                                    ? formatPrice(
+                                                          item.price *
+                                                              item.quantity *
+                                                              currentQuantity,
+                                                      )
+                                                    : '&mdash;'
+                                            "
+                                        ></td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th colspan="2">Total</th>
-                                        <th class="text-end">000</th>
+                                        <th
+                                            class="text-end text-white"
+                                            v-html="formatPrice(totalPrice * currentQuantity)"
+                                        ></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -469,7 +455,7 @@ const recipeOpen = ref(true);
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 @import '@/assets/main.scss';
 
 h4.lbm-menu-title {
@@ -477,19 +463,58 @@ h4.lbm-menu-title {
 }
 
 summary {
-    @apply !flex;
+    @apply flex !important;
 }
 
 ul {
     @apply my-0;
 }
 
-.recipe li ul:before {
+.recipe :deep(li ul:before) {
     @apply bg-gray-500 opacity-100;
+}
+
+.recipe :deep(li) {
+    @apply list-none;
+}
+
+.recipe :deep(li img) {
+    @apply w-5 h-5 rounded;
 }
 
 .lbm-table thead,
 .lbm-table tfoot {
     @apply bg-neutral;
+}
+
+:deep(.currency) {
+    @apply inline-flex gap-1 items-center;
+
+    .gold,
+    .silver,
+    .copper {
+        @apply flex gap-1 items-center;
+
+        &:after {
+            @apply w-2 h-2 rounded-full block;
+            content: '';
+        }
+    }
+
+    .gold:after {
+        @apply bg-yellow-400;
+    }
+
+    .silver:after {
+        @apply bg-gray-400;
+    }
+
+    .copper:after {
+        @apply bg-orange-400;
+    }
+}
+
+.tip :deep(p) {
+    margin-bottom: 0;
 }
 </style>
