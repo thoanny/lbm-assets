@@ -14,6 +14,7 @@ import LoremIpsum from './components/LoremIpsum.ce.vue';
 import GW2_CharactersExploration from './components/GW2/CharactersExploration.ce.vue';
 import LBM_AppFooter from './components/LBM/AppFooter.ce.vue';
 import GW2_GuildHallHomesteadDecorations from './components/GW2/GuildHallHomesteadDecorations.ce.vue';
+import GW2_HomesteadDecorations from './components/GW2/HomesteadDecorations.ce.vue';
 import GW2_ApiItemRecipe from './components/GW2/ApiItemRecipe.ce.vue';
 
 setActivePinia(createPinia());
@@ -31,4 +32,5 @@ customElements.define(
     'gw2-guild-hall-homestead-decorations',
     defineCustomElement(GW2_GuildHallHomesteadDecorations),
 );
+customElements.define('gw2-homestead-decorations', defineCustomElement(GW2_HomesteadDecorations));
 customElements.define('gw2-recipe', defineCustomElement(GW2_ApiItemRecipe));
