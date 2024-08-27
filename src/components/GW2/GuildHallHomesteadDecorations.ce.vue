@@ -191,7 +191,7 @@ const categories = computed(() => {
             <div class="lbm-app__brand">
                 <img src="" alt="" class="lbm-app__logo bg-primary" v-if="false" />
                 <div class="lbm-app__title">
-                    Décorations de guilde et du pavillon
+                    Décorations de guilde
                     <div class="lbm-app__subtitle">
                         <!-- {{ totalDecorations ? `${totalDecorations} décorations` : '...' }} -->
                         Version α (alpha)
@@ -237,6 +237,7 @@ const categories = computed(() => {
                     <select
                         class="lbm-select lbm-select-bordered lbm-select-sm w-full"
                         v-model="searchType"
+                        v-if="false"
                     >
                         <option value="">Toutes les décorations</option>
                         <option value="guildhall">Hall de guilde</option>
