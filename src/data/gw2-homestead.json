@@ -1,0 +1,748 @@
+{
+    "cats": [
+        {
+            "id": 1,
+            "map": "Vallée de la Reine",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BPoAAAA=]",
+            "item_id": "24360",
+            "item_name": "Pavé de viande de volaille",
+            "item_rarity": "Fine",
+            "name": "Pavé de viande de volaille",
+            "description": ""
+        },
+        {
+            "id": 2,
+            "map": "Arche du Lion",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BDEEAAA=]",
+            "item_id": "12209",
+            "item_name": "Volaille grillée",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 3,
+            "map": "Arche du Lion",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BBAEAAA=]",
+            "item_id": "12148",
+            "item_name": "Bifteck épicé",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 4,
+            "map": "Champs de ruine ",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BNMAAAA=]",
+            "item_id": "12429",
+            "item_name": "Bavette très épicée",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 5,
+            "map": "Promontoire divin",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BCoDAAA=]",
+            "item_id": "12466",
+            "item_name": "Assiette de bavette relevée",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 6,
+            "map": "Cimesèche",
+            "map_url": "/pages/mises-a-jour-passees/col-aride/",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BIAHAAA=]",
+            "item_id": "66539",
+            "item_name": "Bol de farce pour sorbet à la figue de barbarie",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 7,
+            "map": "Cimesèche",
+            "map_url": "/pages/mises-a-jour-passees/col-aride/",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BHoHAAA=]",
+            "item_id": "38213",
+            "item_name": "Bol de glace citron-gingembre",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 8,
+            "map": "Contrées sauvages d'Argent",
+            "map_url": "/pages/mises-a-jour-passees/les-contrees-sauvages-d-argent/",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BKcHAAA=]",
+            "item_id": "38210",
+            "item_name": "Bol de glace mangue-safran",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 9,
+            "map": "Contrées sauvages d'Argent",
+            "map_url": "/pages/mises-a-jour-passees/les-contrees-sauvages-d-argent/",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BLcHAAA=]",
+            "item_id": "38211",
+            "item_name": "Bol de glace à la pêche et coulis de framboise",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 10,
+            "map": "Le Bosquet (jour)",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BLwEAAA=]",
+            "item_id": "24360",
+            "item_name": "Pavé de viande de volaille",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 11,
+            "map": "Le Bosquet (nuit)",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
+            "wp": "[&BHgEAAA=]",
+            "item_id": "24360",
+            "item_name": "Pavé de viande de volaille",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 12,
+            "map": "Vallée de la reine ",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
+            "wp": "[&BO8AAAA=]",
+            "item_id": "12213",
+            "item_name": "Cheeseburger",
+            "item_rarity": "Fine",
+            "icon": "https://lebusmagique.fr/medias/images/guerrier.png"
+        },
+        {
+            "id": 13,
+            "map": "Vallée de la reine",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
+            "wp": "[&BO8AAAA=]",
+            "item_id": "20318",
+            "item_name": "Tonique mystérieux",
+            "item_rarity": "Basic",
+            "icon": "https://lebusmagique.fr/medias/images/envouteur.png"
+        },
+        {
+            "id": 14,
+            "map": "Forêt de Caledon ",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
+            "wp": "[&BDQBAAA=]",
+            "item_id": "8752",
+            "item_name": "Cosse de graine curative",
+            "item_rarity": "Basic",
+            "icon": "https://lebusmagique.fr/medias/images/rodeur.png"
+        },
+        {
+            "id": 15,
+            "map": "Province de Métrica",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
+            "wp": "[&BEAAAAA=]",
+            "item_id": "72575",
+            "item_name": "Bol de soupe de moules au curry",
+            "item_rarity": "Rare",
+            "icon": "https://lebusmagique.fr/medias/images/gardien.png"
+        },
+        {
+            "id": 16,
+            "map": "Forêt de Caledon",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
+            "wp": "[&BDQBAAA=]",
+            "item_id": "8517",
+            "item_name": "Tranche de gâteau arc-en-ciel",
+            "item_rarity": "Basic",
+            "icon": "https://lebusmagique.fr/medias/images/elementaliste.png"
+        },
+        {
+            "id": 17,
+            "map": "Plaine d'Ashford",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
+            "wp": "[&BIABAAA=]",
+            "item_id": "67371",
+            "item_name": "Flasque d'huile de citrouille",
+            "item_rarity": "Masterwork",
+            "icon": "https://lebusmagique.fr/medias/images/ingenieur.png"
+        },
+        {
+            "id": 18,
+            "map": "Cœur des Brumes",
+            "map_url": "/pages/les-guides-du-passager/dossier-jcj/coeur-des-brumes.html",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
+            "wp": "",
+            "item_id": "12134",
+            "item_name": "39 Carottes",
+            "item_rarity": "Basic",
+            "icon": "https://lebusmagique.fr/medias/images/revenant-tango-icon-20px.png"
+        },
+        {
+            "id": 19,
+            "map": "Plaine d'Ashford",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
+            "wp": "[&BIABAAA=]",
+            "item_id": "8764",
+            "item_name": "Plumes de harpie",
+            "item_rarity": "Basic",
+            "icon": "https://lebusmagique.fr/medias/images/voleur.png"
+        },
+        {
+            "id": 20,
+            "map": "Contrefort du voyageur",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
+            "wp": "[&BHQBAAA=]",
+            "item_id": "8535",
+            "item_name": "Gâteau grogneur",
+            "item_rarity": "Basic",
+            "icon": "https://lebusmagique.fr/medias/images/necromant.png"
+        },
+        {
+            "id": 21,
+            "map": "Baie des Braises",
+            "map_url": "/pages/gw2-hearth-of-thorns/baie-des-braises/",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/les-chats-de-la-baie-des-braises.html",
+            "wp": "[&BFUJAAA=]",
+            "item_id": "12466",
+            "item_name": "Assiette de bavette relevée",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 22,
+            "map": "Baie des Braises",
+            "map_url": "/pages/gw2-hearth-of-thorns/baie-des-braises/",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/les-chats-de-la-baie-des-braises.html",
+            "wp": "[&BHgJAAA=]",
+            "item_id": "12544",
+            "item_name": "3 Piment Bhut Jolokia",
+            "item_rarity": "Basic",
+            "icon": ""
+        },
+        {
+            "id": 23,
+            "map": "Instance personnelle",
+            "map_url": "/pages/les-guides-du-passager/farm/l-instance-personnelle.html",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chat-de-la-sorciere.html",
+            "wp": "",
+            "item_id": "23763",
+            "item_name": "Grenouille en bocal",
+            "item_rarity": "Masterwork",
+            "icon": ""
+        },
+        {
+            "id": 24,
+            "map": "Confins de Givramer",
+            "map_url": "/pages/gw2-hearth-of-thorns/fissure-dans-la-glace/",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/leopard-des-neiges.html",
+            "wp": "[&BH0JAAA=]",
+            "icon": ""
+        },
+        {
+            "id": 25,
+            "map": "Citadelle noire",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-givres.html",
+            "wp": "[&BDcEAAA=]",
+            "item_id": "12444",
+            "item_name": "Bol de soupe poireau-volaille",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 26,
+            "map": "Hoelbrak",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-givres.html",
+            "wp": "[&BIcDAAA=]",
+            "item_id": "12443",
+            "item_name": "Bol de soupe volaille-légumes d'hiver",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 27,
+            "map": "Rata Sum",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-givres.html",
+            "wp": "[&BLgEAAA=]",
+            "item_id": "12481",
+            "item_name": "Bol de soupe volaille-citronnelle",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 28,
+            "map": "Le Bosquet",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-givres.html",
+            "wp": "[&BLwEAAA=]",
+            "item_id": "12480",
+            "item_name": "Bol de soupe de volaille aux arômes de safran",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 29,
+            "map": "Lac Doric",
+            "map_url": "/pages/gw2-hearth-of-thorns/lac-doric/",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chat-fantome-et-dame-wisteria-moustachnom.html",
+            "wp": "[&BPoAAAA=]",
+            "item_id": "68409",
+            "item_name": "Bol de goulash à la pierre de sang",
+            "item_rarity": "Masterwork",
+            "icon": ""
+        },
+        {
+            "id": 32,
+            "map": "Lac Doric",
+            "map_url": "/pages/gw2-hearth-of-thorns/lac-doric/",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chat-fantome-et-dame-wisteria-moustachnom.html",
+            "wp": "[&BK8JAAA=]",
+            "item_id": "36076",
+            "item_name": "Fantômes à la fraise",
+            "item_rarity": "Fine",
+            "icon": ""
+        },
+        {
+            "id": 33,
+            "map": "Super Adventure Box (monde 2 zone 2)",
+            "map_url": "http://www.lebusmagique.fr/sab",
+            "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-de-la-sab.html",
+            "wp": "[&BBQEAAA=]",
+            "item_id": "",
+            "item_name": "Piranha",
+            "item_rarity": "",
+            "icon": ""
+        },
+        {
+            "id": 35,
+            "map": "Fractale de l'Observatoire détruit",
+            "map_url": "https://www.lebusmagique.fr/pages/expeditions/fractales-des-brumes/fractale-de-l-observatoire-detruit.html",
+            "guide": "/pages/guides/home/chats/simon-le-chat-cosmique-de-l-observatoire-detruit.html",
+            "wp": "[&BDAEAAA=]",
+            "item_id": "",
+            "item_name": "Voir le guide pour plus de détails",
+            "item_rarity": "",
+            "icon": ""
+        }
+    ],
+    "nodes": [
+        {
+            "id": "basic_ore_nodes",
+            "item_id": "44884",
+            "item_name": "Lot de zones de minerai de base",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%gemme%%",
+            "tip": "",
+            "price": "800 %%gemme%%"
+        },
+        {
+            "id": "basic_lumber_nodes",
+            "item_id": "66769",
+            "item_name": "Lot de zones de bois de base",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%gemme%%",
+            "tip": "",
+            "price": "800 %%gemme%%"
+        },
+        {
+            "id": "basic_harvesting_nodes",
+            "item_id": "67290",
+            "item_name": "Lot de zones de moisson de base",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%gemme%%",
+            "tip": "",
+            "price": "800 %%gemme%%"
+        },
+        {
+            "id": "basic_cloth_rack",
+            "item_id": "67842",
+            "item_name": "Râtelier à tissu basique",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%gemme%%",
+            "tip": "",
+            "price": "800 %%gemme%%"
+        },
+        {
+            "id": "advanced_cloth_rack",
+            "item_id": "81853",
+            "item_name": "Râtelier à tissu avancé",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%ccln%%",
+            "tip": "",
+            "price": "<span class=\"gw2ccln\" data-id=\"81853\">...</span>"
+        },
+        {
+            "id": "basic_leather_rack",
+            "item_id": "78019",
+            "item_name": "Râtelier à cuir basique",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%gemme%%",
+            "tip": "",
+            "price": "800 %%gemme%%"
+        },
+        {
+            "id": "advanced_leather_rack",
+            "item_id": "81852",
+            "item_name": "Râtelier à cuir avancé",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%ccln%%",
+            "tip": "",
+            "price": "<span class=\"gw2ccln\" data-id=\"81852\">...</span>"
+        },
+        {
+            "id": "hard_wood_node",
+            "item_id": "79085",
+            "item_name": "Zone de bois dur",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"79085\">...</span>"
+        },
+        {
+            "id": "ancient_wood_node",
+            "item_id": "68091",
+            "item_name": "Zone de bois ancien",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68091\">...</span>"
+        },
+        {
+            "id": "elder_wood_node",
+            "item_id": "68090",
+            "item_name": "Zone de bois ancestral",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68090\">...</span>"
+        },
+        {
+            "id": "iron_ore_node",
+            "item_id": "79260",
+            "item_name": "Zone d\"extraction de minerai de fer",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"79260\">...</span>"
+        },
+        {
+            "id": "platinum_ore_node",
+            "item_id": "68097",
+            "item_name": "Zone de minerai de platine",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68097\">...</span>"
+        },
+        {
+            "id": "mithril_ore_node",
+            "item_id": "68098",
+            "item_name": "Zone de minerai de mithril",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68098\">...</span>"
+        },
+        {
+            "id": "orichalcum_ore_node",
+            "item_id": "68094",
+            "item_name": "Zone de minerai d\"orichalque",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68094\">...</span>"
+        },
+        {
+            "id": "omnomberry_node",
+            "item_id": "68089",
+            "item_name": "Zone de moisson de baies d\"Omnom",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68089\">...</span>"
+        },
+        {
+            "id": "snow_truffle_node",
+            "item_id": "68092",
+            "item_name": "Zone de moisson de truffes des neiges",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68092\">...</span>"
+        },
+        {
+            "id": "lotus_node",
+            "item_id": "68096",
+            "item_name": "Zone de moisson de lotus",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68096\">...</span>"
+        },
+        {
+            "id": "orrian_truffle_node",
+            "item_id": "68095",
+            "item_name": "Zone de moisson de truffes orriennes",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68095\">...</span>"
+        },
+        {
+            "id": "flaxseed_node",
+            "item_id": "79063",
+            "item_name": "Zone de moisson de graines de lin",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"79063\">...</span>"
+        },
+        {
+            "id": "ghost_pepper_node",
+            "item_id": "68093",
+            "item_name": "Zone de moisson de piments Bhut Jolokia",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%ccln%%",
+            "price": "<span class=\"gw2ccln\" data-id=\"68093\">...</span>"
+        },
+        {
+            "id": "aurilium_node",
+            "item_id": "73798",
+            "item_name": "Zone d\"aurillium",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%arenapoints%%",
+            "tip": "Complétez le <a href=\"/pages/gw2-hearth-of-thorns/bassin-aurique/succes-bas-les-masques.html\" target=\"_blank\">Succès : Bas les masques</a>.",
+            "price": "Récompense du succès"
+        },
+        {
+            "id": "enchanted_treasure_chest",
+            "item_id": "67234",
+            "item_name": "Coffre au trésor enchanté",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%arenapoints%%",
+            "tip": "Complétez la <a href=\"/pages/succes/les-collections/collections-rares/collection-rare-chasseur-de-tresors.html\" target=\"_blank\">Collection rare : Chasseur de trésors</a>.",
+            "price": "Récompense du succès"
+        },
+        {
+            "id": "candy_corn_node",
+            "item_id": "48804",
+            "item_name": "Don de bonbons",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%arenapoints%%",
+            "tip": "Halloween 2013, obtenu en récompense du succès <a href=\"/pages/mises-a-jour-passees/sang-et-demence/succes-sang-et-demence.html\" target=\"_blank\">Retourner dans la boîte</a>. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
+            "price": "25 %%laurier%% + 15 %%or%%"
+        },
+        {
+            "id": "king_sized_candy_corn",
+            "item_id": "79646",
+            "item_name": "Grand don de bonbons",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%arenapoints%%",
+            "tip": "Halloween 2016, contre l\"équivalent de 5&nbsp;000 &times; <a href=\"https://v2.lebusmagique.fr/fr/items/36041\" target=\"_blank\">Morceau de bonbons</a>.",
+            "price": "5 &times; <a href=\"https://v2.lebusmagique.fr/fr/items/47909\" target=\"_blank\">Agglomérat de bonbons</a>"
+        },
+        {
+            "id": "wintersday_tree",
+            "item_id": "68367",
+            "item_name": "Don de magnanimité",
+            "itm_clss": "rarity_exotic",
+            "itm_src": "%%arenapoints%%",
+            "tip": "Durant l\"Hivernel, en complétant la collection <a href=\"/pages/succes/les-collections/collections-basiques/collection-basique-ce-n-est-que-pour-les-enfants.html\" target=\"_blank\">Ce n\"est que pour les enfants !</a>",
+            "price": "Récompense du succès"
+        },
+        {
+            "id": "quartz_node",
+            "item_id": "43902",
+            "item_name": "Don de quartz",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%arenapoints%%",
+            "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/bazar-des-quatres-vents/guide-des-succes.html\" target=\"_blank\">Ambassadeur du Bazar</a> de l\"épisode \"Le Bazar des 4 vents\" de la saison 1 de l\"Histoire vivante. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
+            "price": "25 %%laurier%% + 15 %%or%%"
+        },
+        {
+            "id": "sprocket_generator",
+            "item_id": "49825",
+            "item_name": "Don de pignons",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%arenapoints%%",
+            "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/les-origines-de-la-folie/succes-les-origines-de-la-folie.html\" target=\"_blank\">Les Origines de la Folie</a> de l\"épisode \"Les Origines de la Folie\" de la saison 1 de l\"Histoire vivante. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
+            "price": "25 %%laurier%% + 15 %%or%%"
+        },
+        {
+            "id": "krait_obelisk",
+            "item_id": "48875",
+            "item_name": "Eclat d\"obélisque krait",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%arenapoints%%",
+            "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/la-tour-des-cauchemars/succes-la-tour-des-cauchemars.html\" target=\"_blank\">Tour des Cauchemars</a> de l\"épisode \"La Tour des Cauchemars\" de la saison 1 de l\"Histoire vivante. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
+            "price": "25 %%laurier%% + 15 %%or%%"
+        },
+        {
+            "id": "bandit_chest",
+            "item_id": "68495",
+            "item_name": "Coffre de bandit personnel",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%arenapoints%%",
+            "tip": "Terminez l\"épisode <a href=\"/pages/mises-a-jour-passees/chroniques/journal-d-histoire-le-point-de-non-retour.html\" target=\"_blank\">Le point de non-retour</a> de la saison 2 de l\"Histoire vivante.",
+            "price": "Récompense du succès"
+        },
+        {
+            "id": "bauble_gathering_system",
+            "item_id": "87324",
+            "item_name": "Système de récolte de babioles",
+            "itm_clss": "rarity_rare",
+            "itm_src": "&nbsp;",
+            "tip": "À acheter au Marchand de la Super Adventure Box à Rata Sum.",
+            "price": "20 <a href=\"https://v2.lebusmagique.fr/fr/items/41886\" target=\"_blank\">Bulles de babioles</a>"
+        },
+        {
+            "id": "airship_cargo",
+            "item_id": "78468",
+            "item_name": "Bon de cargaison d\"aéronef personnel",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%hot%%",
+            "tip": "Vendu par le marchand de maîtrise Itzel [&BN4HAAA=]. <br /><strong>Nécessite la maîtrise Langage Itzel (niv. 2).</strong>",
+            "price": "250 %%aeronef%%"
+        },
+        {
+            "id": "exalted_chest",
+            "item_id": "78582",
+            "item_name": "Bon de coffre exalté personnel",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%hot%%",
+            "tip": "Vendu par le marchand de maîtrise exalté [&BMYHAAA=]. <br /><strong>Nécessite la maîtrise Acceptance exaltée (niv. 2).</strong>",
+            "price": "250 %%aurilium%%"
+        },
+        {
+            "id": "crystallized_supply_cache",
+            "item_id": "78549",
+            "item_name": "Bon de planque de ravitaillement cristallisée personnel",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%hot%%",
+            "tip": "Vendu par le marchand de maîtrise Nuhoch [&BA4IAAA=]. <br /><strong>Nécessite la maîtrise Langage Nuhoch (niv. 3).</strong>",
+            "price": "250 %%force%%"
+        },
+        {
+            "id": "bloodstone_crystals",
+            "item_id": "79217",
+            "item_name": "Zone de cristaux de pierre de sang",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%hot%%",
+            "tip": "Auprès de Natto [Collecteur de magie déliée] dans le vaisseau du Pacte au Marai de la Pierre de Sang [&BEsJAAA=].",
+            "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
+        },
+        {
+            "id": "petrified_stump",
+            "item_id": "79898",
+            "item_name": "Zone de bois pétrifié",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%hot%%",
+            "tip": "Auprès de Erudite Surra [Collecteur de magie déliée] à côté du portail d\"arrivé de la Baie de Braise [&BF8JAAA=].",
+            "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
+        },
+        {
+            "id": "winterberry_bush",
+            "item_id": "79903",
+            "item_name": "Zone de buissons de houx",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%hot%%",
+            "tip": "Auprès de Slooshoo [Collecteur de magie déliée] au Sanctuaire de l\"eclipse des lamentations des Confin de Givramer.",
+            "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
+        },
+        {
+            "id": "jade_fragment",
+            "item_id": "80450",
+            "item_name": "Zone de fragments de jade",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%hot%%",
+            "tip": "Auprès du Quartier-maître Hitchens [collectionneuse de magie déliée] au nord du débarcadère de Doric.",
+            "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
+        },
+        {
+            "id": "primordial_orchid",
+            "item_id": "81115",
+            "item_name": "Zone d\"orchidées de feu",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%hot%%",
+            "tip": "Auprès du Maître du ravitaillement Hanjo [collectionneur de magie déliée] à côté du point de passage du Débarcadère du marin [&BL0JAAA=].",
+            "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
+        },
+        {
+            "id": "orrian_oyster_node",
+            "item_id": "81696",
+            "item_name": "Zone d\"huitres orriennes",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%hot%%",
+            "tip": "Auprès de la Fournisseuse Anlana [collectionneuse de magie déliée] au nord du Point de passage de Camp Reconquête [&BO8JAAA=].",
+            "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
+        },
+        {
+            "id": "brandstone_node",
+            "item_id": "86297",
+            "item_name": "Zone de pierres stigmatisées",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%pof%%",
+            "tip": "À acheter à Alaleh [collectionneuse de magie volatile] au sud du Point de passage des Quais de Chalon [&BAkLAAA=].",
+            "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%"
+        },
+        {
+            "id": "difluorite_crystal_cluster_node",
+            "item_id": "87132",
+            "item_name": "Zone d\"amas de cristaux de difluorite",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%pof%%",
+            "tip": "Auprès de Ethall [collectionneur de magie volatile] juste à côté du Point de passage d\"Atholma [&BEMLAAA=].",
+            "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%"
+        },
+        {
+            "id": "kournan_supply_cache",
+            "item_id": "",
+            "item_name": "Cache de ravitaillement kournane",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%pof%%",
+            "tip": "Auprès de Nalar [collectionneur de magie volatile] près du point de passage du Campement allié [&BFcLAAA=].",
+            "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%"
+        },
+        {
+            "id": "mistonium_node",
+            "item_id": "88828",
+            "item_name": "Zone de mistonium",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%pof%%",
+            "tip": "Auprès de Hyacinth [collectionneuse de magie volatile] près du point de passage du village de Yatendi [&BH4LAAA=].",
+            "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%"
+        },
+        {
+            "id": "black_lion_hunters_board",
+            "item_id": "88979",
+            "item_name": "Contrat des chasseurs du Lion noir",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%gemme%%",
+            "tip": "Périodiquement disponible à la vente à la Boutique aux gemmes, section Améliorations.",
+            "price": "1&nbsp;200 %%gemme%%"
+        },
+        {
+            "id": "black_lion_expedition_board",
+            "item_id": "81594",
+            "item_name": "Contrat d\"expédition du Lion noir",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%gemme%%",
+            "tip": "Périodiquement disponible à la vente à la Boutique aux gemmes, section Améliorations.",
+            "price": "1&nbsp;000 %%gemme%%"
+        },
+        {
+            "id": "garden_plot_01",
+            "item_id": "86786",
+            "item_name": "Acte de propriété de parcelle de jardin du Lion noir (1)",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%gemme%%",
+            "tip": "Périodiquement disponible à la vente à la Boutique aux gemmes, section Améliorations.",
+            "price": "1&nbsp;000 %%gemme%%"
+        },
+        {
+            "id": "garden_plot_02",
+            "item_id": "86786",
+            "item_name": "Acte de propriété de parcelle de jardin du Lion noir (2)",
+            "itm_clss": "rarity_rare",
+            "itm_src": "%%gemme%%",
+            "tip": "Périodiquement disponible à la vente à la Boutique aux gemmes, section Améliorations.",
+            "price": "1&nbsp;000 %%gemme%%"
+        }
+    ],
+    "glyphs": {}
+}
