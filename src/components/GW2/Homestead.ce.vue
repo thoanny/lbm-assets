@@ -162,6 +162,7 @@ const loadingCategories = ref(false);
 const loadingDecoration = ref(false);
 
 const getDecoration = (decoration_id) => {
+    LBMApp.value.scrollIntoView({ behaviour: 'smooth' });
     currentDecoration.value = decorations.value.find(
         (decoration) => decoration.id === decoration_id,
     );
@@ -314,12 +315,12 @@ const handleHideCheckedCatsAndNodes = () => {
             </div>
         </div>
 
-        <div class="lbm-app__main flex gap-4 items-start">
+        <div class="lbm-app__main flex flex-col-reverse sm:flex-row gap-4 items-start">
             <div class="flex gap-2 items-center" v-if="loadingCategories">
                 <span class="lbm-loading lbm-loading-spinner"></span>
                 Chargement en cours...
             </div>
-            <div class="w-full max-w-xs bg-base-200 rounded-box p-2 sticky top-4" v-else>
+            <div class="w-full sm:max-w-xs bg-base-200 rounded-box p-2 sm:sticky top-4" v-else>
                 <div class="flex flex-col gap-2 mb-2">
                     <select
                         class="lbm-select lbm-select-bordered lbm-select-sm w-full"
@@ -477,7 +478,9 @@ const handleHideCheckedCatsAndNodes = () => {
                                 <button>close</button>
                             </form>
                         </dialog>
-                        <div class="grid grid-cols-3 gap-2 mt-2 text-sm">
+                        <div
+                            class="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 text-sm"
+                        >
                             <button
                                 v-for="cat in cats"
                                 class="lbm-btn"
@@ -498,7 +501,9 @@ const handleHideCheckedCatsAndNodes = () => {
                                         class="rounded h-6 w-6"
                                         v-if="cat.icon || cat.item_id"
                                     />
-                                    {{ cat.name ?? cat.item_name ?? cat.hint }}
+                                    <span class="line-clamp-2">
+                                        {{ cat.name ?? cat.item_name ?? cat.hint }}
+                                    </span>
                                 </div>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -573,7 +578,9 @@ const handleHideCheckedCatsAndNodes = () => {
                                 <button>close</button>
                             </form>
                         </dialog>
-                        <div class="grid grid-cols-3 gap-2 mt-2 text-sm">
+                        <div
+                            class="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 text-sm"
+                        >
                             <button
                                 v-for="node in nodes"
                                 class="lbm-btn"
@@ -591,7 +598,9 @@ const handleHideCheckedCatsAndNodes = () => {
                                         class="rounded h-6 w-6"
                                         v-if="node.item_id"
                                     />
-                                    {{ node.name ?? node.item_name ?? node.id }}
+                                    <span class="line-clamp-2">
+                                        {{ node.name ?? node.item_name ?? node.id }}
+                                    </span>
                                 </div>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -612,7 +621,9 @@ const handleHideCheckedCatsAndNodes = () => {
                     </div>
                     <div class="w-full">
                         <h3 class="text-xl">Glyphes</h3>
-                        <div class="grid grid-cols-3 gap-2 mt-2 text-sm">
+                        <div
+                            class="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 text-sm"
+                        >
                             <button v-for="glyph in glyphs" class="lbm-btn">
                                 <div class="inline-flex flex-1 gap-2 items-center text-left">
                                     <img
@@ -621,7 +632,9 @@ const handleHideCheckedCatsAndNodes = () => {
                                         class="rounded h-6 w-6"
                                         v-if="glyph.item_id"
                                     />
-                                    {{ glyph.name ?? glyph.id }}
+                                    <span class="line-clamp-2">
+                                        {{ glyph.name ?? glyph.id }}
+                                    </span>
                                 </div>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
