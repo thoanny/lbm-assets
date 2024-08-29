@@ -1,6 +1,6 @@
 <script setup>
 // Icons : https://remixicon.com
-import { onMounted, onUnmounted, ref, computed, watch } from 'vue';
+import { onMounted, onUnmounted, ref, computed } from 'vue';
 import MarkdownIt from 'markdown-it';
 
 import { cats as localCats, nodes as localNodes } from '@/data/gw2-homestead.json';
@@ -232,8 +232,9 @@ const initUserSettings = () => {
         userKey.value = localUserKey;
     }
     const localHideCheckedCatsAndNodes = localStorage.getItem('gw2-homestead-hide-cats-nodes');
-    if (localHideCheckedCatsAndNodes) {
-        hideCheckedCatsAndNodes.value = localHideCheckedCatsAndNodes;
+    console.log(typeof localHideCheckedCatsAndNodes);
+    if (!!localHideCheckedCatsAndNodes) {
+        hideCheckedCatsAndNodes.value = localHideCheckedCatsAndNodes == 'true';
     }
 };
 
@@ -250,14 +251,9 @@ const handleUserKey = () => {
     loadUserData();
 };
 
-// watch(userKey, async () => {
-//     localStorage.setItem('gw2-api-key', userKey.value);
-//     loadUserData();
-// });
-
-watch(hideCheckedCatsAndNodes, async () => {
+const handleHideCheckedCatsAndNodes = () => {
     localStorage.setItem('gw2-homestead-hide-cats-nodes', hideCheckedCatsAndNodes.value);
-});
+};
 </script>
 
 <template>
@@ -280,18 +276,15 @@ watch(hideCheckedCatsAndNodes, async () => {
                     type="checkbox"
                     class="lbm-toggle lbm-toggle-primary"
                     v-model="hideCheckedCatsAndNodes"
+                    @change="handleHideCheckedCatsAndNodes"
                 />
-                <form action="javascript:void(0)">
-                    <input
-                        type="password"
-                        placeholder="Clé API GW2"
-                        class="lbm-input lbm-input-bordered"
-                        v-model="userKey"
-                        autocomplete="off"
-                        data-lpignore="true"
-                        @input="handleUserKey"
-                    />
-                </form>
+                <input
+                    type="text"
+                    placeholder="Clé API GW2"
+                    class="lbm-input lbm-input-bordered"
+                    v-model="userKey"
+                    @input="handleUserKey"
+                />
 
                 <button class="lbm-btn lbm-btn-primary lbm-btn-square" v-if="false">
                     <svg
