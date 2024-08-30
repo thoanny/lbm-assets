@@ -77,7 +77,7 @@
             "item_name": "Bol de glace citron-gingembre",
             "item_rarity": "Fine",
             "icon": "",
-            "name": "Chat de la Cimesèche (citron-gingembre)"
+            "name": "Chat de la Cimesèche (citron)"
         },
         {
             "id": 8,
@@ -89,7 +89,7 @@
             "item_name": "Bol de glace mangue-safran",
             "item_rarity": "Fine",
             "icon": "",
-            "name": "Chat des Contrées sauvages d'Argent (mangue-safran)"
+            "name": "Chat des CsA (mangue-safran)"
         },
         {
             "id": 9,
@@ -101,7 +101,7 @@
             "item_name": "Bol de glace à la pêche et coulis de framboise",
             "item_rarity": "Fine",
             "icon": "",
-            "name": "Chat des Contrées sauvages d'Argent (pèche)"
+            "name": "Chat des CsA (pèche)"
         },
         {
             "id": 10,
