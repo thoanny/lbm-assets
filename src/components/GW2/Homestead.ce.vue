@@ -435,29 +435,30 @@ const handleHideCheckedCatsAndNodes = () => {
                                     </button>
                                 </form>
                                 <h3 class="text-lg font-bold text-white">
-                                    Chat&nbsp;: {{ currentCat.name ?? currentCat.hint }}
+                                    {{ currentCat.name ?? currentCat.hint }}
                                 </h3>
                                 <div
                                     v-if="currentCat.description"
                                     v-html="markdown.render(currentCat.description)"
                                 ></div>
-                                <div class="font-bold mt-4">Nourriture&nbsp;:</div>
-                                <a
-                                    class="inline-flex gap-2 items-center mt-2"
-                                    :class="[`text-gw2-rarity-${currentCat.item_rarity}`]"
-                                    :href="`https://v2.lebusmagique.fr/fr/items/${currentCat.item_id}`"
-                                    target="_blank"
-                                    v-if="currentCat.item_name && currentCat.item_id"
-                                >
-                                    <img
-                                        :src="`https://v2.lebusmagique.fr/img/api/items/${currentCat.item_id}.png`"
-                                        alt=""
-                                        v-if="currentCat.item_id"
-                                        class="h-8 w-8 rounded border-2"
-                                        :class="[`border-gw2-rarity-${currentCat.item_rarity}`]"
-                                    />
-                                    {{ currentCat.item_name }}
-                                </a>
+                                <template v-if="currentCat.item_name && currentCat.item_id">
+                                    <div class="font-bold mt-4">Nourriture&nbsp;:</div>
+                                    <a
+                                        class="inline-flex gap-2 items-center mt-2"
+                                        :class="[`text-gw2-rarity-${currentCat.item_rarity}`]"
+                                        :href="`https://v2.lebusmagique.fr/fr/items/${currentCat.item_id}`"
+                                        target="_blank"
+                                    >
+                                        <img
+                                            :src="`https://v2.lebusmagique.fr/img/api/items/${currentCat.item_id}.png`"
+                                            alt=""
+                                            v-if="currentCat.item_id"
+                                            class="h-8 w-8 rounded border-2"
+                                            :class="[`border-gw2-rarity-${currentCat.item_rarity}`]"
+                                        />
+                                        {{ currentCat.item_name }}
+                                    </a>
+                                </template>
                                 <div class="font-bold mt-4">Localisation&nbsp;:</div>
                                 <div class="flex gap-2 items-center mt-2" v-if="currentCat.map">
                                     {{ currentCat.map }}
@@ -472,7 +473,7 @@ const handleHideCheckedCatsAndNodes = () => {
                                     v-if="currentCat.guide"
                                     >Guide détaillé</a
                                 >
-                                <pre>{{ currentCat }}</pre>
+                                <!-- <pre>{{ currentCat }}</pre> -->
                             </div>
                             <form method="dialog" class="lbm-modal-backdrop">
                                 <button>close</button>

@@ -8,7 +8,7 @@
             "item_id": "24360",
             "item_name": "Pavé de viande de volaille",
             "item_rarity": "Fine",
-            "name": "Pavé de viande de volaille",
+            "name": "Chat de la Vallée de la Reine",
             "description": ""
         },
         {
@@ -19,7 +19,8 @@
             "item_id": "12209",
             "item_name": "Volaille grillée",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat de l'Arche du Lion (volaille)"
         },
         {
             "id": 3,
@@ -29,7 +30,8 @@
             "item_id": "12148",
             "item_name": "Bifteck épicé",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat de l'Arche du Lion (bifteck)"
         },
         {
             "id": 4,
@@ -39,7 +41,8 @@
             "item_id": "12429",
             "item_name": "Bavette très épicée",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat des Champs de ruine"
         },
         {
             "id": 5,
@@ -49,7 +52,8 @@
             "item_id": "12466",
             "item_name": "Assiette de bavette relevée",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat du Promontoire divin"
         },
         {
             "id": 6,
@@ -60,7 +64,8 @@
             "item_id": "66539",
             "item_name": "Bol de farce pour sorbet à la figue de barbarie",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat de la Cimesèche (figue)"
         },
         {
             "id": 7,
@@ -71,7 +76,8 @@
             "item_id": "38213",
             "item_name": "Bol de glace citron-gingembre",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat de la Cimesèche (citron-gingembre)"
         },
         {
             "id": 8,
@@ -82,7 +88,8 @@
             "item_id": "38210",
             "item_name": "Bol de glace mangue-safran",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat des Contrées sauvages d'Argent (mangue-safran)"
         },
         {
             "id": 9,
@@ -93,7 +100,8 @@
             "item_id": "38211",
             "item_name": "Bol de glace à la pêche et coulis de framboise",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat des Contrées sauvages d'Argent (pèche)"
         },
         {
             "id": 10,
@@ -103,7 +111,8 @@
             "item_id": "24360",
             "item_name": "Pavé de viande de volaille",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat du Bosquet (jour)"
         },
         {
             "id": 11,
@@ -113,7 +122,8 @@
             "item_id": "24360",
             "item_name": "Pavé de viande de volaille",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat du Bosque (nuit)"
         },
         {
             "id": 12,
@@ -123,7 +133,8 @@
             "item_id": "12213",
             "item_name": "Cheeseburger",
             "item_rarity": "Fine",
-            "icon": "https://lebusmagique.fr/medias/images/guerrier.png"
+            "icon": "https://lebusmagique.fr/medias/images/guerrier.png",
+            "name": "Chat du guerrier"
         },
         {
             "id": 13,
@@ -133,7 +144,8 @@
             "item_id": "20318",
             "item_name": "Tonique mystérieux",
             "item_rarity": "Basic",
-            "icon": "https://lebusmagique.fr/medias/images/envouteur.png"
+            "icon": "https://lebusmagique.fr/medias/images/envouteur.png",
+            "name": "Chat de l'envoûteur"
         },
         {
             "id": 14,
@@ -143,7 +155,8 @@
             "item_id": "8752",
             "item_name": "Cosse de graine curative",
             "item_rarity": "Basic",
-            "icon": "https://lebusmagique.fr/medias/images/rodeur.png"
+            "icon": "https://lebusmagique.fr/medias/images/rodeur.png",
+            "name": "Chat du rôdeur"
         },
         {
             "id": 15,
@@ -153,7 +166,9 @@
             "item_id": "72575",
             "item_name": "Bol de soupe de moules au curry",
             "item_rarity": "Rare",
-            "icon": "https://lebusmagique.fr/medias/images/gardien.png"
+            "icon": "https://lebusmagique.fr/medias/images/gardien.png",
+            "name": "Chat du gardien",
+            "image": "https://www.lebusmagique.fr/medias/images/guerrier-compressed.jpg"
         },
         {
             "id": 16,
@@ -163,7 +178,8 @@
             "item_id": "8517",
             "item_name": "Tranche de gâteau arc-en-ciel",
             "item_rarity": "Basic",
-            "icon": "https://lebusmagique.fr/medias/images/elementaliste.png"
+            "icon": "https://lebusmagique.fr/medias/images/elementaliste.png",
+            "name": "Chat de l'élémentaliste"
         },
         {
             "id": 17,
@@ -173,7 +189,8 @@
             "item_id": "67371",
             "item_name": "Flasque d'huile de citrouille",
             "item_rarity": "Masterwork",
-            "icon": "https://lebusmagique.fr/medias/images/ingenieur.png"
+            "icon": "https://lebusmagique.fr/medias/images/ingenieur.png",
+            "name": "Chat de l'ingénieur"
         },
         {
             "id": 18,
@@ -182,9 +199,10 @@
             "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-des-classes.html",
             "wp": "",
             "item_id": "12134",
-            "item_name": "39 Carottes",
+            "item_name": "39 × Carotte",
             "item_rarity": "Basic",
-            "icon": "https://lebusmagique.fr/medias/images/revenant-tango-icon-20px.png"
+            "icon": "https://lebusmagique.fr/medias/images/revenant-tango-icon-20px.png",
+            "name": "Chat du revenant"
         },
         {
             "id": 19,
@@ -194,7 +212,8 @@
             "item_id": "8764",
             "item_name": "Plumes de harpie",
             "item_rarity": "Basic",
-            "icon": "https://lebusmagique.fr/medias/images/voleur.png"
+            "icon": "https://lebusmagique.fr/medias/images/voleur.png",
+            "name": "Chat du voleur"
         },
         {
             "id": 20,
@@ -204,7 +223,8 @@
             "item_id": "8535",
             "item_name": "Gâteau grogneur",
             "item_rarity": "Basic",
-            "icon": "https://lebusmagique.fr/medias/images/necromant.png"
+            "icon": "https://lebusmagique.fr/medias/images/necromant.png",
+            "name": "Chat du nécromant"
         },
         {
             "id": 21,
@@ -215,7 +235,8 @@
             "item_id": "12466",
             "item_name": "Assiette de bavette relevée",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat de la Baie des Braises (bavette)"
         },
         {
             "id": 22,
@@ -224,9 +245,10 @@
             "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/les-chats-de-la-baie-des-braises.html",
             "wp": "[&BHgJAAA=]",
             "item_id": "12544",
-            "item_name": "3 Piment Bhut Jolokia",
+            "item_name": "3 × Piment Bhut Jolokia",
             "item_rarity": "Basic",
-            "icon": ""
+            "icon": "",
+            "name": "Chat de la Baie des Braises (piment)"
         },
         {
             "id": 23,
@@ -237,7 +259,8 @@
             "item_id": "23763",
             "item_name": "Grenouille en bocal",
             "item_rarity": "Masterwork",
-            "icon": ""
+            "icon": "",
+            "name": "Chat de la sorcière"
         },
         {
             "id": 24,
@@ -245,7 +268,9 @@
             "map_url": "/pages/gw2-hearth-of-thorns/fissure-dans-la-glace/",
             "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/leopard-des-neiges.html",
             "wp": "[&BH0JAAA=]",
-            "icon": ""
+            "icon": "https://www.lebusmagique.fr/medias/images/chat-miniature.png",
+            "name": "Chat des neiges",
+            "description": "Ce chat ne souhaite pas de nourriture, il faut simplement le libérer de la glace."
         },
         {
             "id": 25,
@@ -255,7 +280,8 @@
             "item_id": "12444",
             "item_name": "Bol de soupe poireau-volaille",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat givré de la Citadelle noire"
         },
         {
             "id": 26,
@@ -265,7 +291,8 @@
             "item_id": "12443",
             "item_name": "Bol de soupe volaille-légumes d'hiver",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat givré d'Hoelbrak"
         },
         {
             "id": 27,
@@ -275,7 +302,8 @@
             "item_id": "12481",
             "item_name": "Bol de soupe volaille-citronnelle",
             "item_rarity": "Fine",
-            "icon": ""
+            "icon": "",
+            "name": "Chat givré de Rata Sum"
         },
         {
             "id": 28,
@@ -285,7 +313,7 @@
             "item_id": "12480",
             "item_name": "Bol de soupe de volaille aux arômes de safran",
             "item_rarity": "Fine",
-            "icon": ""
+            "name": "Chat givré du Bosquet"
         },
         {
             "id": 29,
@@ -296,7 +324,7 @@
             "item_id": "68409",
             "item_name": "Bol de goulash à la pierre de sang",
             "item_rarity": "Masterwork",
-            "icon": ""
+            "name": "Dame Wisteria Moustachnom"
         },
         {
             "id": 32,
@@ -305,9 +333,10 @@
             "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chat-fantome-et-dame-wisteria-moustachnom.html",
             "wp": "[&BK8JAAA=]",
             "item_id": "36076",
-            "item_name": "Fantômes à la fraise",
+            "item_name": "Fantôme à la fraise",
             "item_rarity": "Fine",
-            "icon": ""
+            "name": "Chat fantôme",
+            "description": "Vous devez avoir plusieurs **fantômes à la fraise** sur vous&nbsp;!"
         },
         {
             "id": 33,
@@ -316,9 +345,22 @@
             "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-de-la-sab.html",
             "wp": "[&BBQEAAA=]",
             "item_id": "",
-            "item_name": "Piranha",
+            "item_name": "",
             "item_rarity": "",
-            "icon": ""
+            "icon": "https://www.lebusmagique.fr/medias/images/chat-miniature.png",
+            "name": "Chat de la Super Aventure"
+        },
+        {
+            "id": 34,
+            "map": "Rata Sum",
+            "map_url": "",
+            "guide": "/pages/guides/home/chats/chat-holographique-et-gadgets-felins.html",
+            "wp": "[&BLgEAAA=]",
+            "item_id": "",
+            "item_name": "",
+            "item_rarity": "",
+            "icon": "https://v2.lebusmagique.fr/img/api/items/84314.png",
+            "name": "Chaton holographique"
         },
         {
             "id": 35,
@@ -327,9 +369,33 @@
             "guide": "/pages/guides/home/chats/simon-le-chat-cosmique-de-l-observatoire-detruit.html",
             "wp": "[&BDAEAAA=]",
             "item_id": "",
-            "item_name": "Voir le guide pour plus de détails",
             "item_rarity": "",
-            "icon": ""
+            "icon": "https://v2.lebusmagique.fr/img/api/items/79230.png",
+            "name": "Simon, le chat cosmique"
+        },
+        {
+            "id": 36,
+            "map": "",
+            "map_url": "",
+            "guide": "/pages/guides/home/chats/chat-holographique-et-gadgets-felins.html",
+            "wp": "",
+            "item_id": "19678",
+            "item_name": "Don de combat",
+            "item_rarity": "Legendary",
+            "icon": "",
+            "name": "Chat-commandant bleu"
+        },
+        {
+            "id": 37,
+            "map": "",
+            "map_url": "",
+            "guide": "/pages/guides/home/chats/chat-holographique-et-gadgets-felins.html",
+            "wp": "",
+            "item_id": "78320",
+            "item_name": "Conserve de chili à la viande pimenté",
+            "item_rarity": "Fine",
+            "icon": "",
+            "name": "Chat-commandant jaune"
         }
     ],
     "nodes": [
