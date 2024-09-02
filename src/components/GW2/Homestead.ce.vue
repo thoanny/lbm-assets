@@ -459,13 +459,21 @@ const handleHideCheckedCatsAndNodes = () => {
                                         {{ currentCat.item_name }}
                                     </a>
                                 </template>
-                                <div class="font-bold mt-4">Localisation&nbsp;:</div>
-                                <div class="flex gap-2 items-center mt-2" v-if="currentCat.map">
-                                    {{ currentCat.map }}
-                                    <button class="lbm-btn lbm-btn-xs" v-if="currentCat.wp">
-                                        {{ currentCat.wp }}
-                                    </button>
-                                </div>
+                                <template v-if="currentCat.map">
+                                    <div class="font-bold mt-4">Localisation&nbsp;:</div>
+                                    <div class="flex gap-2 items-center mt-2" v-if="currentCat.map">
+                                        <a
+                                            v-if="currentCat.map_url"
+                                            :href="`https://lebusmagique.fr${currentCat.map_url}`"
+                                            target="_blank"
+                                            >{{ currentCat.map }}</a
+                                        >
+                                        <span v-else>{{ currentCat.map }}</span>
+                                        <button class="lbm-btn lbm-btn-xs" v-if="currentCat.wp">
+                                            {{ currentCat.wp }}
+                                        </button>
+                                    </div>
+                                </template>
                                 <a
                                     :href="`https://www.lebusmagique.fr${currentCat.guide}`"
                                     target="_blank"
