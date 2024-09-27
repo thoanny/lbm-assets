@@ -105,7 +105,7 @@
         },
         {
             "id": 10,
-            "map": "Le Bosquet (jour)",
+            "map": "Le Bosquet",
             "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
             "wp": "[&BLwEAAA=]",
             "item_id": "24360",
@@ -116,14 +116,14 @@
         },
         {
             "id": 11,
-            "map": "Le Bosquet (nuit)",
+            "map": "Le Bosquet",
             "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/des-chats-pour-votre-instance-personnelle.html",
             "wp": "[&BHgEAAA=]",
             "item_id": "24360",
             "item_name": "Pavé de viande de volaille",
             "item_rarity": "Fine",
             "icon": "",
-            "name": "Chat du Bosque (nuit)"
+            "name": "Chat du Bosquet (nuit)"
         },
         {
             "id": 12,
@@ -341,7 +341,7 @@
         {
             "id": 33,
             "map": "Super Adventure Box (monde 2 zone 2)",
-            "map_url": "http://www.lebusmagique.fr/sab",
+            "map_url": "/sab",
             "guide": "/pages/les-guides-du-passager/guide-lvl-80/chats/chats-de-la-sab.html",
             "wp": "[&BBQEAAA=]",
             "item_id": "",
@@ -403,102 +403,111 @@
             "id": "basic_ore_nodes",
             "item_id": "44884",
             "item_name": "Lot de zones de minerai de base",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%gemme%%",
             "tip": "",
-            "price": "800 %%gemme%%"
+            "price": "800 %%gemme%%",
+            "name": "Zones de minerai de base"
         },
         {
             "id": "basic_lumber_nodes",
             "item_id": "66769",
             "item_name": "Lot de zones de bois de base",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%gemme%%",
             "tip": "",
-            "price": "800 %%gemme%%"
+            "price": "800 %%gemme%%",
+            "name": "Zones de bois de base"
         },
         {
             "id": "basic_harvesting_nodes",
-            "item_id": "67290",
+            "item_id": 67290,
             "item_name": "Lot de zones de moisson de base",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%gemme%%",
             "tip": "",
-            "price": "800 %%gemme%%"
+            "price": "800 %%gemme%%",
+            "name": "Zones de moisson de base"
         },
         {
             "id": "basic_cloth_rack",
             "item_id": "67842",
             "item_name": "Râtelier à tissu basique",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%gemme%%",
             "tip": "",
-            "price": "800 %%gemme%%"
+            "price": "800 %%gemme%%",
+            "name": "Râtelier à tissu basique"
         },
         {
             "id": "advanced_cloth_rack",
             "item_id": "81853",
             "item_name": "Râtelier à tissu avancé",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%ccln%%",
-            "tip": "",
-            "price": "<span class=\"gw2ccln\" data-id=\"81853\">...</span>"
+            "price": 1,
+            "name": "Râtelier à tissu avancé"
         },
         {
             "id": "basic_leather_rack",
             "item_id": "78019",
             "item_name": "Râtelier à cuir basique",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%gemme%%",
             "tip": "",
-            "price": "800 %%gemme%%"
+            "price": "800 %%gemme%%",
+            "name": "Râtelier à cuir basique"
         },
         {
             "id": "advanced_leather_rack",
             "item_id": "81852",
             "item_name": "Râtelier à cuir avancé",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%ccln%%",
-            "tip": "",
-            "price": "<span class=\"gw2ccln\" data-id=\"81852\">...</span>"
+            "price": 1,
+            "name": "Râtelier à cuir avancé"
         },
         {
             "id": "hard_wood_node",
             "item_id": "79085",
             "item_name": "Zone de bois dur",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
-            "price": "<span class=\"gw2ccln\" data-id=\"79085\">...</span>"
+            "price": 1,
+            "name": "Bois dur"
         },
         {
             "id": "ancient_wood_node",
             "item_id": "68091",
             "item_name": "Zone de bois ancien",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
-            "price": "<span class=\"gw2ccln\" data-id=\"68091\">...</span>"
+            "price": 1,
+            "name": "Bois ancien"
         },
         {
             "id": "elder_wood_node",
             "item_id": "68090",
             "item_name": "Zone de bois ancestral",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
-            "price": "<span class=\"gw2ccln\" data-id=\"68090\">...</span>"
+            "price": 1,
+            "name": "Bois ancestral"
         },
         {
             "id": "iron_ore_node",
             "item_id": "79260",
-            "item_name": "Zone d\"extraction de minerai de fer",
-            "itm_clss": "rarity_exotic",
+            "item_name": "Zone d'extraction de minerai de fer",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
-            "price": "<span class=\"gw2ccln\" data-id=\"79260\">...</span>"
+            "price": 1,
+            "name": "Minerai de fer"
         },
         {
             "id": "platinum_ore_node",
             "item_id": "68097",
             "item_name": "Zone de minerai de platine",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
             "price": "<span class=\"gw2ccln\" data-id=\"68097\">...</span>"
         },
@@ -506,7 +515,7 @@
             "id": "mithril_ore_node",
             "item_id": "68098",
             "item_name": "Zone de minerai de mithril",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
             "price": "<span class=\"gw2ccln\" data-id=\"68098\">...</span>"
         },
@@ -514,7 +523,7 @@
             "id": "orichalcum_ore_node",
             "item_id": "68094",
             "item_name": "Zone de minerai d\"orichalque",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
             "price": "<span class=\"gw2ccln\" data-id=\"68094\">...</span>"
         },
@@ -522,7 +531,7 @@
             "id": "omnomberry_node",
             "item_id": "68089",
             "item_name": "Zone de moisson de baies d\"Omnom",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
             "price": "<span class=\"gw2ccln\" data-id=\"68089\">...</span>"
         },
@@ -530,7 +539,7 @@
             "id": "snow_truffle_node",
             "item_id": "68092",
             "item_name": "Zone de moisson de truffes des neiges",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
             "price": "<span class=\"gw2ccln\" data-id=\"68092\">...</span>"
         },
@@ -538,7 +547,7 @@
             "id": "lotus_node",
             "item_id": "68096",
             "item_name": "Zone de moisson de lotus",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
             "price": "<span class=\"gw2ccln\" data-id=\"68096\">...</span>"
         },
@@ -546,7 +555,7 @@
             "id": "orrian_truffle_node",
             "item_id": "68095",
             "item_name": "Zone de moisson de truffes orriennes",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
             "price": "<span class=\"gw2ccln\" data-id=\"68095\">...</span>"
         },
@@ -554,50 +563,67 @@
             "id": "flaxseed_node",
             "item_id": "79063",
             "item_name": "Zone de moisson de graines de lin",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
-            "price": "<span class=\"gw2ccln\" data-id=\"79063\">...</span>"
+            "price": 1,
+            "name": "Graines de lin"
         },
         {
             "id": "ghost_pepper_node",
             "item_id": "68093",
             "item_name": "Zone de moisson de piments Bhut Jolokia",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
-            "price": "<span class=\"gw2ccln\" data-id=\"68093\">...</span>"
+            "price": 1,
+            "name": "Piments Bhut Jolokia"
         },
         {
             "id": "aurilium_node",
             "item_id": "73798",
-            "item_name": "Zone d\"aurillium",
-            "itm_clss": "rarity_rare",
+            "item_name": "Zone d'aurillium",
+            "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
-            "tip": "Complétez le <a href=\"/pages/gw2-hearth-of-thorns/bassin-aurique/succes-bas-les-masques.html\" target=\"_blank\">Succès : Bas les masques</a>.",
-            "price": "Récompense du succès"
+            "name": "Aurilium",
+            "description": "Complétez le <a href=\"https://www.lebusmagique.fr/pages/gw2-hearth-of-thorns/bassin-aurique/succes-bas-les-masques.html\" target=\"_blank\">Succès : Bas les masques</a>."
         },
         {
             "id": "enchanted_treasure_chest",
             "item_id": "67234",
             "item_name": "Coffre au trésor enchanté",
-            "itm_clss": "rarity_rare",
-            "itm_src": "%%arenapoints%%",
-            "tip": "Complétez la <a href=\"/pages/succes/les-collections/collections-rares/collection-rare-chasseur-de-tresors.html\" target=\"_blank\">Collection rare : Chasseur de trésors</a>.",
-            "price": "Récompense du succès"
+            "item_rarity": "Rare",
+            "name": "Coffre au trésor enchanté",
+            "description": "Complétez la <a href=\"https://www.lebusmagique.fr/pages/succes/les-collections/collections-rares/collection-rare-chasseur-de-tresors.html\" target=\"_blank\">Collection rare : Chasseur de trésors</a>."
+        },
+        {
+            "id": "bound_hatched_chili_pepper_node",
+            "item_id": "92035",
+            "item_name": "Ressource liée de pousses de piment pour zone personnelle",
+            "item_rarity": "Rare",
+            "name": "Pousses de piment",
+            "price": 1,
+            "description": "Plusieurs manières de l'obtenir&nbsp;:\n- dans le coffre de récompense à la fin de la mission d'attaque du Col des Cimefroides&nbsp;;\n- achetée au Fournisseur du rassemblement, situé près de La Fosse à limons et au Fort sanglant inférieur (Vallée de Grothmar), pour 5&nbsp;000&nbsp;&times; Magie volatile et 60&nbsp;&times; Pièce d'or&nbsp;;\n- achetée au comptoir."
         },
         {
             "id": "candy_corn_node",
             "item_id": "48804",
             "item_name": "Don de bonbons",
-            "itm_clss": "rarity_rare",
-            "itm_src": "%%arenapoints%%",
-            "tip": "Halloween 2013, obtenu en récompense du succès <a href=\"/pages/mises-a-jour-passees/sang-et-demence/succes-sang-et-demence.html\" target=\"_blank\">Retourner dans la boîte</a>. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
-            "price": "25 %%laurier%% + 15 %%or%%"
+            "item_rarity": "Rare",
+            "name": "Don de bonbons",
+            "description": "À acheter aux marchands de lauriers, pour 25&nbsp;&times; Laurier et 15&nbsp;&times; Pièce d'or."
+        },
+        {
+            "id": "commemorative_dragon_pinata",
+            "item_id": "93686",
+            "item_name": "Piñata du Dragon commémorative",
+            "item_rarity": "Rare",
+            "name": "Piñata du Dragon",
+            "description": "À acheter à Agora pendant la Foire du Dragon pour 10&nbsp;&times; Jorcolat."
         },
         {
             "id": "king_sized_candy_corn",
             "item_id": "79646",
             "item_name": "Grand don de bonbons",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
             "tip": "Halloween 2016, contre l\"équivalent de 5&nbsp;000 &times; <a href=\"https://v2.lebusmagique.fr/fr/items/36041\" target=\"_blank\">Morceau de bonbons</a>.",
             "price": "5 &times; <a href=\"https://v2.lebusmagique.fr/fr/items/47909\" target=\"_blank\">Agglomérat de bonbons</a>"
@@ -606,7 +632,7 @@
             "id": "wintersday_tree",
             "item_id": "68367",
             "item_name": "Don de magnanimité",
-            "itm_clss": "rarity_exotic",
+            "item_rarity": "rarity_exotic",
             "itm_src": "%%arenapoints%%",
             "tip": "Durant l\"Hivernel, en complétant la collection <a href=\"/pages/succes/les-collections/collections-basiques/collection-basique-ce-n-est-que-pour-les-enfants.html\" target=\"_blank\">Ce n\"est que pour les enfants !</a>",
             "price": "Récompense du succès"
@@ -615,7 +641,7 @@
             "id": "quartz_node",
             "item_id": "43902",
             "item_name": "Don de quartz",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
             "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/bazar-des-quatres-vents/guide-des-succes.html\" target=\"_blank\">Ambassadeur du Bazar</a> de l\"épisode \"Le Bazar des 4 vents\" de la saison 1 de l\"Histoire vivante. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
             "price": "25 %%laurier%% + 15 %%or%%"
@@ -624,7 +650,7 @@
             "id": "sprocket_generator",
             "item_id": "49825",
             "item_name": "Don de pignons",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
             "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/les-origines-de-la-folie/succes-les-origines-de-la-folie.html\" target=\"_blank\">Les Origines de la Folie</a> de l\"épisode \"Les Origines de la Folie\" de la saison 1 de l\"Histoire vivante. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
             "price": "25 %%laurier%% + 15 %%or%%"
@@ -633,7 +659,7 @@
             "id": "krait_obelisk",
             "item_id": "48875",
             "item_name": "Eclat d\"obélisque krait",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
             "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/la-tour-des-cauchemars/succes-la-tour-des-cauchemars.html\" target=\"_blank\">Tour des Cauchemars</a> de l\"épisode \"La Tour des Cauchemars\" de la saison 1 de l\"Histoire vivante. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
             "price": "25 %%laurier%% + 15 %%or%%"
@@ -642,61 +668,64 @@
             "id": "bandit_chest",
             "item_id": "68495",
             "item_name": "Coffre de bandit personnel",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
-            "tip": "Terminez l\"épisode <a href=\"/pages/mises-a-jour-passees/chroniques/journal-d-histoire-le-point-de-non-retour.html\" target=\"_blank\">Le point de non-retour</a> de la saison 2 de l\"Histoire vivante.",
-            "price": "Récompense du succès"
+            "price": "Récompense du succès",
+            "name": "Coffre de bandit",
+            "description": "Terminez l'épisode <a href=\"https://www.lebusmagique.fr/pages/mises-a-jour-passees/chroniques/journal-d-histoire-le-point-de-non-retour.html\" target=\"_blank\">Le point de non-retour</a> de la saison 2 de l'Histoire vivante."
         },
         {
             "id": "bauble_gathering_system",
             "item_id": "87324",
             "item_name": "Système de récolte de babioles",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "&nbsp;",
-            "tip": "À acheter au Marchand de la Super Adventure Box à Rata Sum.",
-            "price": "20 <a href=\"https://v2.lebusmagique.fr/fr/items/41886\" target=\"_blank\">Bulles de babioles</a>"
+            "description": "À acheter au Marchand de la Super Adventure Box à Rata&nbsp;Sum pour 20&nbsp;&times; <a href=\"https://v2.lebusmagique.fr/fr/items/41886\" target=\"_blank\">Bulle de babioles</a>.",
+            "name": "Babioles"
         },
         {
             "id": "airship_cargo",
             "item_id": "78468",
-            "item_name": "Bon de cargaison d\"aéronef personnel",
-            "itm_clss": "rarity_rare",
+            "item_name": "Bon de cargaison d'aéronef personnel",
+            "item_rarity": "Rare",
             "itm_src": "%%hot%%",
-            "tip": "Vendu par le marchand de maîtrise Itzel [&BN4HAAA=]. <br /><strong>Nécessite la maîtrise Langage Itzel (niv. 2).</strong>",
-            "price": "250 %%aeronef%%"
+            "price": "250 %%aeronef%%",
+            "name": "Cargaison d'aéronef",
+            "description": "Vendu par le marchand de maîtrise Itzel [&BN4HAAA=]. \n**Nécessite la maîtrise Langage Itzel (niv. 2).**"
         },
         {
             "id": "exalted_chest",
             "item_id": "78582",
             "item_name": "Bon de coffre exalté personnel",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%hot%%",
             "tip": "Vendu par le marchand de maîtrise exalté [&BMYHAAA=]. <br /><strong>Nécessite la maîtrise Acceptance exaltée (niv. 2).</strong>",
-            "price": "250 %%aurilium%%"
+            "price": "250 %%aurilium%%",
+            "name": "Coffre exalté"
         },
         {
             "id": "crystallized_supply_cache",
             "item_id": "78549",
             "item_name": "Bon de planque de ravitaillement cristallisée personnel",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%hot%%",
             "tip": "Vendu par le marchand de maîtrise Nuhoch [&BA4IAAA=]. <br /><strong>Nécessite la maîtrise Langage Nuhoch (niv. 3).</strong>",
-            "price": "250 %%force%%"
+            "price": "250 %%force%%",
+            "name": "Planque de ravitaillement cristallisée"
         },
         {
             "id": "bloodstone_crystals",
             "item_id": "79217",
             "item_name": "Zone de cristaux de pierre de sang",
-            "itm_clss": "rarity_rare",
-            "itm_src": "%%hot%%",
-            "tip": "Auprès de Natto [Collecteur de magie déliée] dans le vaisseau du Pacte au Marai de la Pierre de Sang [&BEsJAAA=].",
-            "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
+            "item_rarity": "Rare",
+            "name": "Cristaux de pierre de sang",
+            "description": "S'achète à Natto [Collecteur de magie déliée] dans le vaisseau du Pacte au Marai de la Pierre de Sang [&BEsJAAA=] à 10&nbsp;000&nbsp;&times; Magie déliée et 50&nbsp;&times; Pièce d'or."
         },
         {
             "id": "petrified_stump",
             "item_id": "79898",
             "item_name": "Zone de bois pétrifié",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%hot%%",
             "tip": "Auprès de Erudite Surra [Collecteur de magie déliée] à côté du portail d\"arrivé de la Baie de Braise [&BF8JAAA=].",
             "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
@@ -705,7 +734,7 @@
             "id": "winterberry_bush",
             "item_id": "79903",
             "item_name": "Zone de buissons de houx",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%hot%%",
             "tip": "Auprès de Slooshoo [Collecteur de magie déliée] au Sanctuaire de l\"eclipse des lamentations des Confin de Givramer.",
             "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
@@ -714,7 +743,7 @@
             "id": "jade_fragment",
             "item_id": "80450",
             "item_name": "Zone de fragments de jade",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%hot%%",
             "tip": "Auprès du Quartier-maître Hitchens [collectionneuse de magie déliée] au nord du débarcadère de Doric.",
             "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
@@ -723,7 +752,7 @@
             "id": "primordial_orchid",
             "item_id": "81115",
             "item_name": "Zone d\"orchidées de feu",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%hot%%",
             "tip": "Auprès du Maître du ravitaillement Hanjo [collectionneur de magie déliée] à côté du point de passage du Débarcadère du marin [&BL0JAAA=].",
             "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
@@ -732,7 +761,7 @@
             "id": "orrian_oyster_node",
             "item_id": "81696",
             "item_name": "Zone d\"huitres orriennes",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%hot%%",
             "tip": "Auprès de la Fournisseuse Anlana [collectionneuse de magie déliée] au nord du Point de passage de Camp Reconquête [&BO8JAAA=].",
             "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
@@ -741,25 +770,23 @@
             "id": "brandstone_node",
             "item_id": "86297",
             "item_name": "Zone de pierres stigmatisées",
-            "itm_clss": "rarity_rare",
-            "itm_src": "%%pof%%",
-            "tip": "À acheter à Alaleh [collectionneuse de magie volatile] au sud du Point de passage des Quais de Chalon [&BAkLAAA=].",
-            "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%"
+            "item_rarity": "Rare",
+            "name": "Pierres stigmatisées",
+            "description": "À acheter à Alaleh [collectionneuse de magie volatile] au sud du Point de passage des Quais de Chalon [&BAkLAAA=] pour 10&nbsp;000&nbsp;&times; Magie volatile et 50&nbsp;&times; Pièce d'or."
         },
         {
             "id": "difluorite_crystal_cluster_node",
             "item_id": "87132",
-            "item_name": "Zone d\"amas de cristaux de difluorite",
-            "itm_clss": "rarity_rare",
-            "itm_src": "%%pof%%",
-            "tip": "Auprès de Ethall [collectionneur de magie volatile] juste à côté du Point de passage d\"Atholma [&BEMLAAA=].",
-            "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%"
+            "item_name": "Zone d'amas de cristaux de difluorite",
+            "item_rarity": "Rare",
+            "name": "Cristaux de difluorite",
+            "description": "À acheter à Ethall [collectionneur de magie volatile] juste à côté du Point de passage d'Atholma [&BEMLAAA=], pour 10&nbsp;000&nbsp;&times; Magie volatile et 50&nbsp;&times; Pièce d'or."
         },
         {
             "id": "kournan_supply_cache",
             "item_id": "",
             "item_name": "Cache de ravitaillement kournane",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%pof%%",
             "tip": "Auprès de Nalar [collectionneur de magie volatile] près du point de passage du Campement allié [&BFcLAAA=].",
             "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%"
@@ -768,7 +795,7 @@
             "id": "mistonium_node",
             "item_id": "88828",
             "item_name": "Zone de mistonium",
-            "itm_clss": "rarity_rare",
+            "item_rarity": "Rare",
             "itm_src": "%%pof%%",
             "tip": "Auprès de Hyacinth [collectionneuse de magie volatile] près du point de passage du village de Yatendi [&BH4LAAA=].",
             "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%"
@@ -777,38 +804,183 @@
             "id": "black_lion_hunters_board",
             "item_id": "88979",
             "item_name": "Contrat des chasseurs du Lion noir",
-            "itm_clss": "rarity_rare",
-            "itm_src": "%%gemme%%",
-            "tip": "Périodiquement disponible à la vente à la Boutique aux gemmes, section Améliorations.",
-            "price": "1&nbsp;200 %%gemme%%"
+            "item_rarity": "Rare",
+            "name": "Contrat des chasseurs",
+            "description": "Périodiquement disponible à la vente à la Boutique aux gemmes, section \"Améliorations\", à 1&nbsp;200 gemmes."
+        },
+        {
+            "id": "black_lion_industry_board",
+            "item_id": "92427",
+            "item_name": "Contrat industriel du Lion noir",
+            "item_rarity": "Rare",
+            "name": "Contrat industriel",
+            "description": "Périodiquement disponible à la vente à la Boutique aux gemmes, section \"Améliorations\", à 1&nbsp;000 gemmes."
         },
         {
             "id": "black_lion_expedition_board",
             "item_id": "81594",
-            "item_name": "Contrat d\"expédition du Lion noir",
-            "itm_clss": "rarity_rare",
-            "itm_src": "%%gemme%%",
-            "tip": "Périodiquement disponible à la vente à la Boutique aux gemmes, section Améliorations.",
-            "price": "1&nbsp;000 %%gemme%%"
+            "item_name": "Contrat d'expédition du Lion noir",
+            "item_rarity": "Rare",
+            "name": "Contrat d'expédition",
+            "description": "Périodiquement disponible à la vente à la Boutique aux gemmes, section \"Améliorations\", à 1&nbsp;000 gemmes."
+        },
+        {
+            "id": "black_lion_expedition_board_s4",
+            "item_id": "91060",
+            "item_name": "Contrat d'expédition de la saison 4",
+            "item_rarity": "Rare",
+            "name": "Contrat d'expédition S04",
+            "description": "Périodiquement disponible à la vente à la Boutique aux gemmes, section \"Améliorations\", à 1&nbsp;000 gemmes."
         },
         {
             "id": "garden_plot_01",
             "item_id": "86786",
             "item_name": "Acte de propriété de parcelle de jardin du Lion noir (1)",
-            "itm_clss": "rarity_rare",
-            "itm_src": "%%gemme%%",
-            "tip": "Périodiquement disponible à la vente à la Boutique aux gemmes, section Améliorations.",
-            "price": "1&nbsp;000 %%gemme%%"
+            "item_rarity": "Rare",
+            "name": "Parcelle de jardin (1)",
+            "description": "Périodiquement disponible à la vente à la Boutique aux gemmes, section \"Améliorations\", pour 1&nbsp;000 gemmes."
         },
         {
             "id": "garden_plot_02",
             "item_id": "86786",
             "item_name": "Acte de propriété de parcelle de jardin du Lion noir (2)",
-            "itm_clss": "rarity_rare",
-            "itm_src": "%%gemme%%",
-            "tip": "Périodiquement disponible à la vente à la Boutique aux gemmes, section Améliorations.",
-            "price": "1&nbsp;000 %%gemme%%"
+            "item_rarity": "Rare",
+            "name": "Parcelle de jardin (2)",
+            "description": "Périodiquement disponible à la vente à la Boutique aux gemmes, section \"Améliorations\", pour 1&nbsp;000 gemmes."
         }
     ],
-    "glyphs": {}
+    "glyphs": [
+        {
+            "id": "alchemy_harvesting",
+            "name": "Alchimie (plantes)"
+        },
+        {
+            "id": "alchemy_logging",
+            "name": "Alchimie (bois)"
+        },
+        {
+            "id": "alchemy_mining",
+            "name": "Alchimie (minerais)"
+        },
+        {
+            "id": "crucible_harvesting",
+            "name": "Creuset (plantes)"
+        },
+        {
+            "id": "crucible_logging",
+            "name": "Creuset (bois)"
+        },
+        {
+            "id": "crucible_mining",
+            "name": "Creuset (minerais)"
+        },
+        {
+            "id": "forester_harvesting",
+            "name": "Forestier (plantes)"
+        },
+        {
+            "id": "forester_logging",
+            "name": "Forestier (bois)"
+        },
+        {
+            "id": "forester_mining",
+            "name": "Forestier (minerais)"
+        },
+        {
+            "id": "herbalist_harvesting",
+            "name": "Herboriste (plantes)"
+        },
+        {
+            "id": "herbalist_logging",
+            "name": "Herboriste (bois)"
+        },
+        {
+            "id": "herbalist_mining",
+            "name": "Herboriste (minerais)"
+        },
+        {
+            "id": "leatherworker_harvesting",
+            "name": "Travailleur du cuir (plantes)"
+        },
+        {
+            "id": "leatherworker_logging",
+            "name": "Travailleur du cuir (bois)"
+        },
+        {
+            "id": "leatherworker_mining",
+            "name": "Travailleur du cuir (minerais)"
+        },
+        {
+            "id": "prospector_harvesting",
+            "name": "Prospecteur (plantes)"
+        },
+        {
+            "id": "prospector_logging",
+            "name": "Prospecteur (bois)"
+        },
+        {
+            "id": "prospector_mining",
+            "name": "Prospecteur (minerais)"
+        },
+        {
+            "id": "scavenger_harvesting",
+            "name": "Récupérateur (plantes)"
+        },
+        {
+            "id": "scavenger_logging",
+            "name": "Récupérateur (bois)"
+        },
+        {
+            "id": "scavenger_mining",
+            "name": "Récupérateur (minerais)"
+        },
+        {
+            "id": "tailor_harvesting",
+            "name": "Tailleur (plantes)"
+        },
+        {
+            "id": "tailor_logging",
+            "name": "Tailleur (bois)"
+        },
+        {
+            "id": "tailor_mining",
+            "name": "Tailleur (minerais)"
+        },
+        {
+            "id": "unbound_harvesting",
+            "name": "Déliement (plantes)"
+        },
+        {
+            "id": "unbound_logging",
+            "name": "Déliement (bois)"
+        },
+        {
+            "id": "unbound_mining",
+            "name": "Déliement (minerais)"
+        },
+        {
+            "id": "volatility_harvesting",
+            "name": "Volatilité (plantes)"
+        },
+        {
+            "id": "volatility_logging",
+            "name": "Volatilité (bois)"
+        },
+        {
+            "id": "volatility_mining",
+            "name": "Volatilité (minerais)"
+        },
+        {
+            "id": "watchknight_harvesting",
+            "name": "Factionnaire mécanique (plantes)"
+        },
+        {
+            "id": "watchknight_logging",
+            "name": "Factionnaire mécanique (bois)"
+        },
+        {
+            "id": "watchknight_mining",
+            "name": "Factionnaire mécanique (minerais)"
+        }
+    ]
 }

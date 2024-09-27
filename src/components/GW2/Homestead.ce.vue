@@ -1,87 +1,47 @@
 <script setup>
 // Icons : https://remixicon.com
-import { onMounted, onUnmounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
+import axios from 'axios';
 import MarkdownIt from 'markdown-it';
+import { useUserStore } from '@/stores/user';
+import { storeToRefs } from 'pinia';
+import authHeader from '@/services/authHeader';
+import {
+    cats as localCats,
+    nodes as localNodes,
+    glyphs as localGlyphs,
+} from '@/data/gw2-homestead.json';
 
-import { cats as localCats, nodes as localNodes } from '@/data/gw2-homestead.json';
+const user = useUserStore();
+const { currentToken } = storeToRefs(user);
 
 const GW2API = 'https://api.guildwars2.com/v2';
 
 const modalCat = ref();
 const modalNode = ref();
-const modalGlyph = ref();
-
 const cats = ref([]);
 const nodes = ref([]);
 const glyphs = ref([]);
 const decorations = ref([]);
 const categories = ref([]);
-
 const hideCheckedCatsAndNodes = ref(false);
 
-const userKey = ref('');
-const userInterval = ref();
+const LBMApp = ref();
 
-const loadCats = async () => {
-    return await fetch(`${GW2API}/home/cats?ids=all`)
-        .then((res) => res.json())
-        .then(
-            (data) =>
-                (cats.value = data.map((d) => ({
-                    ...d,
-                    ...localCats.find((lc) => lc.id === d.id),
-                }))),
-        )
-        .then(() => {
-            loadUserCats();
-        });
-};
+const markdown = new MarkdownIt({ html: true });
 
-const loadUserCats = async () => {
-    if (!userKey.value) return;
-    return await fetch(`${GW2API}/account/home/cats?access_token=${userKey.value}`)
-        .then((res) => res.json())
-        .then(
-            (data) =>
-                (cats.value = cats.value.map((cat) => ({
-                    ...cat,
-                    checked: data.findIndex((d) => d.id === cat.id) >= 0,
-                }))),
-        );
-};
+const currentDecoration = ref(null);
+const currentCat = ref(null);
+const currentNode = ref(null);
+const searchValue = ref('');
+const searchType = ref('');
 
-const loadNodes = async () => {
-    return await fetch(`${GW2API}/home/nodes?ids=all`)
-        .then((res) => res.json())
-        .then(
-            (data) =>
-                (nodes.value = data.map((d) => ({
-                    ...d,
-                    ...localNodes.find((ln) => ln.id === d.id),
-                }))),
-        )
-        .then(() => {
-            loadUserNodes();
-        });
-};
+const loadingCategories = ref(false);
+const loadingDecoration = ref(false);
 
-const loadUserNodes = async () => {
-    if (!userKey.value) return;
-    return await fetch(`${GW2API}/account/home/nodes?access_token=${userKey.value}`)
-        .then((res) => res.json())
-        .then(
-            (data) =>
-                (nodes.value = nodes.value.map((node) => ({
-                    ...node,
-                    checked: data.findIndex((d) => d === node.id) >= 0,
-                }))),
-        );
-};
-
-const loadCategories = async () => {
-    return await fetch(`${GW2API}/homestead/decorations/categories?ids=all`)
-        .then((res) => res.json())
-        .then((data) => (categories.value = data));
+const copyToClipboard = (content) => {
+    if (!content) return;
+    navigator.clipboard.writeText(content);
 };
 
 const chunk = (arr, size) => {
@@ -90,76 +50,131 @@ const chunk = (arr, size) => {
     );
 };
 
-const loadDecorations = async () => {
-    return await fetch(`${GW2API}/homestead/decorations`)
-        .then((res) => res.json())
-        .then((data) => {
-            chunk(data, 200).forEach(async (ids) => {
-                const _ids = ids.join(',');
-                await fetch(`${GW2API}/homestead/decorations?ids=${_ids}`)
-                    .then((res) => res.json())
-                    .then((data) => (decorations.value = decorations.value.concat(data)))
-                    .then(() => {
-                        decorations.value = decorations.value.sort((a, b) =>
-                            a.name.localeCompare(b.name),
-                        );
-                    });
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+const getCats = () => {
+    return axios.get(`${GW2API}/home/cats?ids=all`);
+};
+
+const getNodes = () => {
+    return axios.get(`${GW2API}/home/nodes?ids=all`);
+};
+
+const getGlyphs = () => {
+    return axios.get(`${GW2API}/homestead/glyphs?ids=all`);
+};
+
+const getCategories = () => {
+    return axios.get(`${GW2API}/homestead/decorations/categories?ids=all`);
+};
+
+const getDecorations = () => {
+    return axios.get(`${GW2API}/homestead/decorations`);
+};
+
+const getDecorationsByIds = (ids) => {
+    const $ids = ids.join(',');
+    return axios.get(`${GW2API}/homestead/decorations?ids=${$ids}`);
+};
+
+const loadData = async () => {
+    return await Promise.all([
+        getCats(),
+        getNodes(),
+        getGlyphs(),
+        getCategories(),
+        getDecorations(),
+    ]).then((res) => {
+        const [$cats, $nodes, $glyphs, $categories, $decorations] = res;
+
+        cats.value = $cats.data.map((d) => ({
+            ...d,
+            ...localCats.find((lc) => lc.id === d.id),
+        }));
+
+        nodes.value = $nodes.data.map((d) => ({
+            ...d,
+            ...localNodes.find((ln) => ln.id === d.id),
+        }));
+
+        glyphs.value = $glyphs.data.map((g) => ({
+            ...g,
+            ...localGlyphs.find((lg) => lg.id === g.id),
+        }));
+        categories.value = $categories.data;
+
+        decorations.value = [];
+        let req = [];
+
+        chunk($decorations.data, 200).forEach((ids) => {
+            req.push(getDecorationsByIds(ids));
+        });
+
+        Promise.all(req)
+            .then((res) => {
+                res.forEach((r) => {
+                    decorations.value = decorations.value.concat(r.data);
+                });
+            })
+            .then(() => {
+                decorations.value = decorations.value.sort((a, b) => a.name.localeCompare(b.name));
             });
-        })
-        .then(() => {
-            loadUserDecorations();
-            // [ ] ajouter un interval pour chaque data de user
-        });
+    });
 };
 
-const loadUserDecorations = async () => {
-    if (!userKey.value) return;
-    return await fetch(`${GW2API}/account/homestead/decorations?access_token=${userKey.value}`)
-        .then((res) => res.json())
-        .then(
-            (data) =>
-                (decorations.value = decorations.value.map((decoration) => ({
-                    ...decoration,
-                    ...data.find((d) => d.id === decoration.id),
-                }))),
-        );
+const getUserCats = () => {
+    return axios.get(`${GW2API}/account/home/cats`, {
+        withCredentials: true,
+        headers: authHeader(),
+    });
 };
 
-const loadGlyphs = async () => {
-    return await fetch(`${GW2API}/homestead/glyphs?ids=all`)
-        .then((res) => res.json())
-        .then((data) => (glyphs.value = data))
-        .then(() => {
-            loadUserGlyphs();
-        });
+const getUserNodes = () => {
+    return axios.get(`${GW2API}/account/home/nodes?access_token=${currentToken.value}`);
 };
 
-const loadUserGlyphs = async () => {
-    if (!userKey.value) return;
-    return await fetch(`${GW2API}/account/homestead/glyphs?access_token=${userKey.value}`)
-        .then((res) => res.json())
-        .then(
-            (data) =>
-                (glyphs.value = glyphs.value.map((glyph) => ({
-                    ...glyph,
-                    checked: data.findIndex((d) => d === glyph.id) >= 0,
-                }))),
-        );
+const getUserGlyphs = async () => {
+    return axios.get(`${GW2API}/account/homestead/glyphs?access_token=${currentToken.value}`);
 };
 
-const LBMApp = ref();
+const getUserDecorations = () => {
+    return axios.get(`${GW2API}/account/homestead/decorations?access_token=${currentToken.value}`);
+};
 
-const markdown = new MarkdownIt();
+const loadUserData = async () => {
+    if (!currentToken.value) return;
 
-const currentDecoration = ref(null);
-const currentCat = ref(null);
-const currentNode = ref(null);
-const currentGlyph = ref(null);
-const searchValue = ref('');
-const searchType = ref('');
+    return await Promise.all([
+        getUserCats(),
+        getUserNodes(),
+        getUserGlyphs(),
+        getUserDecorations(),
+    ]).then((res) => {
+        const [$cats, $nodes, $glyphs, $decorations] = res;
 
-const loadingCategories = ref(false);
-const loadingDecoration = ref(false);
+        cats.value = cats.value.map((cat) => ({
+            ...cat,
+            checked: $cats.data.findIndex((d) => d.id === cat.id) >= 0,
+        }));
+
+        nodes.value = nodes.value.map((node) => ({
+            ...node,
+            checked: $nodes.data.findIndex((d) => d === node.id) >= 0,
+        }));
+
+        glyphs.value = glyphs.value.map((glyph) => ({
+            ...glyph,
+            checked: $glyphs.data.findIndex((d) => d === glyph.id) >= 0,
+        }));
+
+        decorations.value = decorations.value.map((decoration) => ({
+            ...decoration,
+            ...$decorations.data.find((d) => d.id === decoration.id),
+        }));
+    });
+};
 
 const getDecoration = (decoration_id) => {
     LBMApp.value.scrollIntoView({ behaviour: 'smooth' });
@@ -168,22 +183,9 @@ const getDecoration = (decoration_id) => {
     );
 };
 
-const loadData = () => {
-    loadCats();
-    loadNodes();
-    loadCategories();
-    loadDecorations();
-    loadGlyphs();
-};
-
 onMounted(() => {
     initUserSettings();
-    loadData();
-});
-
-onUnmounted(() => {
-    if (userInterval.value) clearInterval(userInterval.value);
-    userInterval.value = null;
+    loadData().then(() => loadUserData());
 });
 
 const filteredDecorations = computed(() => {
@@ -228,36 +230,23 @@ const handleModalNode = (node_id) => {
 };
 
 const initUserSettings = () => {
-    const localUserKey = localStorage.getItem('gw2-api-key');
-    if (localUserKey) {
-        userKey.value = localUserKey;
-    }
     const localHideCheckedCatsAndNodes = localStorage.getItem('gw2-homestead-hide-cats-nodes');
-    console.log(typeof localHideCheckedCatsAndNodes);
     if (!!localHideCheckedCatsAndNodes) {
         hideCheckedCatsAndNodes.value = localHideCheckedCatsAndNodes == 'true';
     }
 };
 
-const loadUserData = () => {
-    loadUserCats();
-    loadUserNodes();
-    loadUserGlyphs();
-    loadUserDecorations();
-};
-
-const handleUserKey = () => {
-    console.log('handleUserKey');
-    localStorage.setItem('gw2-api-key', userKey.value);
-    loadUserData();
-};
-
 const handleHideCheckedCatsAndNodes = () => {
     localStorage.setItem('gw2-homestead-hide-cats-nodes', hideCheckedCatsAndNodes.value);
 };
+
+watch(currentToken, () => {
+    loadData().then(() => loadUserData());
+});
 </script>
 
 <template>
+    <pre>{{ currentToken }}</pre>
     <!-- <pre>{{ decorations }}</pre> -->
     <div class="lbm-app" ref="LBMApp">
         <div class="lbm-app__header">
@@ -273,18 +262,12 @@ const handleHideCheckedCatsAndNodes = () => {
                 </div>
             </div>
             <div class="lbm-app__sidebar">
+                <gw2-user-auth></gw2-user-auth>
                 <input
                     type="checkbox"
                     class="lbm-toggle lbm-toggle-primary"
                     v-model="hideCheckedCatsAndNodes"
                     @change="handleHideCheckedCatsAndNodes"
-                />
-                <input
-                    type="text"
-                    placeholder="Clé API GW2"
-                    class="lbm-input lbm-input-bordered"
-                    v-model="userKey"
-                    @input="handleUserKey"
                 />
 
                 <button class="lbm-btn lbm-btn-primary lbm-btn-square" v-if="false">
@@ -440,6 +423,7 @@ const handleHideCheckedCatsAndNodes = () => {
                                 <div
                                     v-if="currentCat.description"
                                     v-html="markdown.render(currentCat.description)"
+                                    class="text-white"
                                 ></div>
                                 <template v-if="currentCat.item_name && currentCat.item_id">
                                     <div class="font-bold mt-4">Nourriture&nbsp;:</div>
@@ -469,7 +453,26 @@ const handleHideCheckedCatsAndNodes = () => {
                                             >{{ currentCat.map }}</a
                                         >
                                         <span v-else>{{ currentCat.map }}</span>
-                                        <button class="lbm-btn lbm-btn-xs" v-if="currentCat.wp">
+                                        <button
+                                            class="lbm-btn lbm-btn-sm lbm-btn-secondary"
+                                            v-if="currentCat.wp"
+                                            @click="
+                                                copyToClipboard(
+                                                    `${currentCat.name ?? currentCat.hint} - ${currentCat.wp}`,
+                                                )
+                                            "
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                fill="currentColor"
+                                                class="h-4 w-6"
+                                            >
+                                                <path
+                                                    d="M6 4V8H18V4H20.0066C20.5552 4 21 4.44495 21 4.9934V21.0066C21 21.5552 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.5551 3 21.0066V4.9934C3 4.44476 3.44495 4 3.9934 4H6ZM8 2H16V6H8V2Z"
+                                                ></path>
+                                            </svg>
+
                                             {{ currentCat.wp }}
                                         </button>
                                     </div>
@@ -510,7 +513,7 @@ const handleHideCheckedCatsAndNodes = () => {
                                         class="rounded h-6 w-6"
                                         v-if="cat.icon || cat.item_id"
                                     />
-                                    <span class="line-clamp-2">
+                                    <span>
                                         {{ cat.name ?? cat.item_name ?? cat.hint }}
                                     </span>
                                 </div>
@@ -544,13 +547,30 @@ const handleHideCheckedCatsAndNodes = () => {
                                     </button>
                                 </form>
                                 <h3 class="text-lg font-bold text-white">
-                                    Zone de récolte&nbsp;: {{ currentNode.name ?? currentNode.id }}
+                                    {{ currentNode.name ?? currentNode.id }}
                                 </h3>
-                                <!-- <div
-                                    v-if="currentCat.description"
-                                    v-html="markdown.render(currentCat.description)"
+                                <div
+                                    v-if="currentNode.description"
+                                    v-html="markdown.render(currentNode.description)"
+                                    class="text-white"
                                 ></div>
-                                <div class="font-bold mt-4">Nourriture&nbsp;:</div>
+                                <a
+                                    class="inline-flex gap-2 items-center mt-2"
+                                    :class="[`text-gw2-rarity-${currentNode.item_rarity}`]"
+                                    :href="`https://v2.lebusmagique.fr/fr/items/${currentNode.item_id}`"
+                                    target="_blank"
+                                    v-if="currentNode.item_name && currentNode.item_id"
+                                >
+                                    <img
+                                        :src="`https://v2.lebusmagique.fr/img/api/items/${currentNode.item_id}.png`"
+                                        alt=""
+                                        v-if="currentNode.item_id"
+                                        class="h-8 w-8 rounded border-2"
+                                        :class="[`border-gw2-rarity-${currentNode.item_rarity}`]"
+                                    />
+                                    {{ currentNode.item_name }}
+                                </a>
+                                <!-- <div class="font-bold mt-4">Nourriture&nbsp;:</div>
                                 <a
                                     class="inline-flex gap-2 items-center mt-2"
                                     :class="[`text-gw2-rarity-${currentCat.item_rarity}`]"
@@ -607,7 +627,7 @@ const handleHideCheckedCatsAndNodes = () => {
                                         class="rounded h-6 w-6"
                                         v-if="node.item_id"
                                     />
-                                    <span class="line-clamp-2">
+                                    <span>
                                         {{ node.name ?? node.item_name ?? node.id }}
                                     </span>
                                 </div>
@@ -633,7 +653,12 @@ const handleHideCheckedCatsAndNodes = () => {
                         <div
                             class="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 text-sm"
                         >
-                            <button v-for="glyph in glyphs" class="lbm-btn">
+                            <a
+                                :href="`https://v2.lebusmagique.fr/fr/items/${glyph.item_id}`"
+                                target="_blank"
+                                v-for="glyph in glyphs"
+                                class="lbm-btn"
+                            >
                                 <div class="inline-flex flex-1 gap-2 items-center text-left">
                                     <img
                                         :src="`https://v2.lebusmagique.fr/img/api/items/${glyph.item_id}.png`"
@@ -641,7 +666,7 @@ const handleHideCheckedCatsAndNodes = () => {
                                         class="rounded h-6 w-6"
                                         v-if="glyph.item_id"
                                     />
-                                    <span class="line-clamp-2">
+                                    <span>
                                         {{ glyph.name ?? glyph.id }}
                                     </span>
                                 </div>
@@ -659,7 +684,7 @@ const handleHideCheckedCatsAndNodes = () => {
                                         d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11.0026 16L18.0737 8.92893L16.6595 7.51472L11.0026 13.1716L8.17421 10.3431L6.75999 11.7574L11.0026 16Z"
                                     ></path>
                                 </svg>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
