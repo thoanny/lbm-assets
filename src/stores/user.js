@@ -36,12 +36,16 @@ export const useUserStore = defineStore('user', () => {
             client_id: clientId,
             state: state,
             scope: 'gw2:account gw2:progression gw2:unlocks',
-            redirect_uri: 'https://f739-87-121-210-231.ngrok-free.app',
+            redirect_uri: window?.location.href.split('?')[0],
             prompt: 'consent',
         };
 
         // console.log(`https://gw2auth.com/oauth2/authorize?${encodeDataToURL(params)}`, params);
         return (window.location.href = `https://gw2auth.com/oauth2/authorize?${encodeDataToURL(params)}`);
+    };
+
+    const refresh = () => {
+        console.log('refreshing', currentToken.value, isLoggedIn.value);
     };
 
     const initLogin = async () => {
@@ -56,6 +60,7 @@ export const useUserStore = defineStore('user', () => {
                 method: 'POST',
                 body: JSON.stringify({
                     code: code,
+                    redirect: window?.location.href.split('?')[0],
                 }),
             })
                 .then((res) => {
@@ -168,6 +173,7 @@ export const useUserStore = defineStore('user', () => {
 
     return {
         login,
+        refresh,
         logout,
         accounts,
         currentToken,

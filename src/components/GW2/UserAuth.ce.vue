@@ -36,7 +36,7 @@ const modal = ref();
                     ✕
                 </button>
             </form>
-            <h3 class="text-lg font-bold mb-4 -mt-2">Connexion au compte GW2</h3>
+            <h3 class="text-lg font-bold mb-4 -mt-2">Connexion au(x) compte(s) GW2</h3>
             <div class="flex w-full flex-col border-opacity-50">
                 <div class="flex flex-col gap-2">
                     <button

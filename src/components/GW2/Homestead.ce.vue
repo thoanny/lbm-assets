@@ -1,21 +1,20 @@
 <script setup>
 // Icons : https://remixicon.com
 import { onMounted, ref, computed, watch } from 'vue';
-import axios from 'axios';
 import MarkdownIt from 'markdown-it';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
-import authHeader from '@/services/authHeader';
+import Gw2ApiService from '@/services/gw2ApiService';
 import {
     cats as localCats,
     nodes as localNodes,
     glyphs as localGlyphs,
 } from '@/data/gw2-homestead.json';
 
+const gw2 = Gw2ApiService;
+
 const user = useUserStore();
 const { currentToken } = storeToRefs(user);
-
-const GW2API = 'https://api.guildwars2.com/v2';
 
 const modalCat = ref();
 const modalNode = ref();
@@ -54,38 +53,13 @@ const chunk = (arr, size) => {
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-const getCats = () => {
-    return axios.get(`${GW2API}/home/cats?ids=all`);
-};
-
-const getNodes = () => {
-    return axios.get(`${GW2API}/home/nodes?ids=all`);
-};
-
-const getGlyphs = () => {
-    return axios.get(`${GW2API}/homestead/glyphs?ids=all`);
-};
-
-const getCategories = () => {
-    return axios.get(`${GW2API}/homestead/decorations/categories?ids=all`);
-};
-
-const getDecorations = () => {
-    return axios.get(`${GW2API}/homestead/decorations`);
-};
-
-const getDecorationsByIds = (ids) => {
-    const $ids = ids.join(',');
-    return axios.get(`${GW2API}/homestead/decorations?ids=${$ids}`);
-};
-
 const loadData = async () => {
     return await Promise.all([
-        getCats(),
-        getNodes(),
-        getGlyphs(),
-        getCategories(),
-        getDecorations(),
+        gw2.getCats(),
+        gw2.getNodes(),
+        gw2.getGlyphs(),
+        gw2.getCategories(),
+        gw2.getDecorations(),
     ]).then((res) => {
         const [$cats, $nodes, $glyphs, $categories, $decorations] = res;
 
@@ -103,13 +77,13 @@ const loadData = async () => {
             ...g,
             ...localGlyphs.find((lg) => lg.id === g.id),
         }));
-        categories.value = $categories.data;
+        categories.value = $categories.data.sort((a, b) => a.name.localeCompare(b.name));
 
         decorations.value = [];
         let req = [];
 
         chunk($decorations.data, 200).forEach((ids) => {
-            req.push(getDecorationsByIds(ids));
+            req.push(Gw2ApiService.getDecorationsByIds(ids));
         });
 
         Promise.all(req)
@@ -124,33 +98,14 @@ const loadData = async () => {
     });
 };
 
-const getUserCats = () => {
-    return axios.get(`${GW2API}/account/home/cats`, {
-        withCredentials: true,
-        headers: authHeader(),
-    });
-};
-
-const getUserNodes = () => {
-    return axios.get(`${GW2API}/account/home/nodes?access_token=${currentToken.value}`);
-};
-
-const getUserGlyphs = async () => {
-    return axios.get(`${GW2API}/account/homestead/glyphs?access_token=${currentToken.value}`);
-};
-
-const getUserDecorations = () => {
-    return axios.get(`${GW2API}/account/homestead/decorations?access_token=${currentToken.value}`);
-};
-
 const loadUserData = async () => {
     if (!currentToken.value) return;
 
     return await Promise.all([
-        getUserCats(),
-        getUserNodes(),
-        getUserGlyphs(),
-        getUserDecorations(),
+        gw2.getUserCats(currentToken.value),
+        gw2.getUserNodes(currentToken.value),
+        gw2.getUserGlyphs(currentToken.value),
+        gw2.getUserDecorations(currentToken.value),
     ]).then((res) => {
         const [$cats, $nodes, $glyphs, $decorations] = res;
 
@@ -184,6 +139,7 @@ const getDecoration = (decoration_id) => {
 };
 
 onMounted(() => {
+    console.log('currentLoc:', window?.location.href.split('?')[0]);
     initUserSettings();
     loadData().then(() => loadUserData());
 });
@@ -246,7 +202,7 @@ watch(currentToken, () => {
 </script>
 
 <template>
-    <pre>{{ currentToken }}</pre>
+    <!-- <pre>{{ currentToken }}</pre> -->
     <!-- <pre>{{ decorations }}</pre> -->
     <div class="lbm-app" ref="LBMApp">
         <div class="lbm-app__header">
@@ -353,7 +309,7 @@ watch(currentToken, () => {
                 </div>
                 <div class="flex items-start gap-4" v-else-if="currentDecoration">
                     <div class="w-full">
-                        <pre>{{ currentDecoration }}</pre>
+                        <!-- <pre>{{ currentDecoration }}</pre> -->
                         <div class="">
                             <div class="flex gap-4 items-center relative z-20">
                                 <img
@@ -391,7 +347,7 @@ watch(currentToken, () => {
                                 </button>
                             </div>
                         </div>
-                        <div v-if="currentDecoration.description">
+                        <div v-if="false">
                             <p v-html="currentDecoration.description"></p>
                         </div>
                         <div class="mt-4">
