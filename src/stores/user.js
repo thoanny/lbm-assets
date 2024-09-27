@@ -56,7 +56,7 @@ export const useUserStore = defineStore('user', () => {
 
         if (state && code) {
             isLoading.value = true;
-            await fetch('http://127.0.0.1:8000/api/gw2/auth', {
+            await fetch('https://api.lebusmagique.fr/api/gw2/auth', {
                 method: 'POST',
                 body: JSON.stringify({
                     code: code,
