@@ -100,3 +100,13 @@ Afficher une recette sous la forme d'une liste :
 ```html
 <gw2-recipe id="7283" display="list"></gw2-recipe>
 ```
+
+### Décorations du pavillon
+
+Afficher l'outil de décorations du pavillon.
+
+⚠️ **L'URL de la page doit être ajoutée à GW2Auth !**
+
+```html
+<gw2-homestead></gw2-homestead>
+```

@@ -323,7 +323,7 @@ watch(currentToken, () => {
                         </div>
                         <div class="mt-4">
                             <img
-                                :src="`https://outils.lebusmmagique.fr/homestead/${currentDecoration.id}.jpg`"
+                                :src="`https://outils.lebusmagique.fr/homestead/${currentDecoration.id}.jpg`"
                                 class="w-full h-full object-cover"
                                 onerror="this.src='https://lebusmagique.netlify.app/assets/img/guilds/decorations/thumbs/defaut.jpg';"
                                 alt=""
