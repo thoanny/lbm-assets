@@ -44,18 +44,70 @@ export const useUserStore = defineStore('user', () => {
         return (window.location.href = `https://gw2auth.com/oauth2/authorize?${encodeDataToURL(params)}`);
     };
 
-    const refresh = () => {
-        console.log('refreshing', currentToken.value, isLoggedIn.value);
+    const refresh = async () => {
+        if (isLoggedIn.value !== 'gw2-auth' || !localStorage.getItem('gw2-auth-refresh')) return;
+
+        isLoading.value = true;
+
+        await fetch('https://api.lebusmagique.fr/api/gw2/auth', {
+            method: 'POST',
+            body: JSON.stringify({
+                code: localStorage.getItem('gw2-auth-refresh'),
+                redirect: window?.location.href.split('?')[0],
+                refresh: true,
+            }),
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Error');
+                }
+
+                return res.json();
+            })
+            .then((data) => {
+                localStorage.setItem('gw2-auth-token', data.access_token);
+                localStorage.setItem('gw2-auth-refresh', data.refresh_token);
+                loadLocalToken();
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                isLoading.value = false;
+            });
+    };
+
+    const logout = () => {
+        accounts.value = null;
+        currentToken.value = null;
+        accountName.value = null;
+        accountId.value = null;
+        apiKey.value = null;
+        isLoggedIn.value = false;
+
+        localStorage.removeItem('gw2-auth-refresh');
+        localStorage.removeItem('gw2-auth-state');
+        localStorage.removeItem('gw2-auth-token');
+        localStorage.removeItem('gw2-auth-id');
+        localStorage.removeItem('gw2-api-key');
+        localStorage.removeItem('gw2-account-name');
     };
 
     const initLogin = async () => {
-        console.log('initLogin');
         var url = new URL(window.location.href);
         var state = url.searchParams.get('state');
         var code = url.searchParams.get('code');
 
         if (state && code) {
             isLoading.value = true;
+
+            if (state !== localStorage.getItem('gw2-auth-state')) {
+                isLoading.value = false;
+                logout();
+                window.history.replaceState({}, document.title, window.location.href.split('?')[0]);
+                return;
+            }
+
             await fetch('https://api.lebusmagique.fr/api/gw2/auth', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -71,7 +123,6 @@ export const useUserStore = defineStore('user', () => {
                     return res.json();
                 })
                 .then((data) => {
-                    console.log(data);
                     localStorage.setItem('gw2-auth-token', data.access_token);
                     localStorage.setItem('gw2-auth-refresh', data.refresh_token);
                     loadLocalToken();
@@ -81,7 +132,6 @@ export const useUserStore = defineStore('user', () => {
                 })
                 .finally(() => {
                     isLoading.value = false;
-                    console.log(window.location.href.split('?')[0]);
                     window.history.replaceState(
                         {},
                         document.title,
@@ -137,24 +187,7 @@ export const useUserStore = defineStore('user', () => {
         accountName.value = accounts.value[accountId.value]?.name;
     };
 
-    const logout = () => {
-        accounts.value = null;
-        currentToken.value = null;
-        accountName.value = null;
-        accountId.value = null;
-        apiKey.value = null;
-        isLoggedIn.value = false;
-
-        localStorage.removeItem('gw2-auth-refresh');
-        localStorage.removeItem('gw2-auth-state');
-        localStorage.removeItem('gw2-auth-token');
-        localStorage.removeItem('gw2-auth-id');
-        localStorage.removeItem('gw2-api-key');
-        localStorage.removeItem('gw2-account-name');
-    };
-
     const handleApiKey = async () => {
-        console.log('handleApiKey');
         isLoading.value = true;
 
         await fetch(`https://api.guildwars2.com/v2/account?access_token=${apiKey.value}`)

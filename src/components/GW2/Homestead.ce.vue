@@ -139,7 +139,6 @@ const getDecoration = (decoration_id) => {
 };
 
 onMounted(() => {
-    console.log('currentLoc:', window?.location.href.split('?')[0]);
     initUserSettings();
     loadData().then(() => loadUserData());
 });
