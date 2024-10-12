@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
+import { getCleanedCurrentUrl } from '@/services/utils';
 
 export const useUserStore = defineStore('user', () => {
     const accounts = ref(null);
@@ -37,7 +38,7 @@ export const useUserStore = defineStore('user', () => {
             client_id: clientId,
             state: state,
             scope: 'gw2:account gw2:progression gw2:unlocks',
-            redirect_uri: window?.location.href.split('?')[0],
+            redirect_uri: getCleanedCurrentUrl(),
             prompt: 'consent',
         };
 
@@ -53,7 +54,7 @@ export const useUserStore = defineStore('user', () => {
         await axios
             .post('https://api.lebusmagique.fr/api/gw2/auth', {
                 code: localStorage.getItem('gw2-auth-refresh'),
-                redirect: window?.location.href.split('?')[0],
+                redirect: getCleanedCurrentUrl(),
                 refresh: true,
             })
             .then((res) => {
@@ -104,7 +105,7 @@ export const useUserStore = defineStore('user', () => {
             await axios
                 .post('https://api.lebusmagique.fr/api/gw2/auth', {
                     code: code,
-                    redirect: window?.location.href.split('?')[0],
+                    redirect: getCleanedCurrentUrl(),
                 })
                 .then((res) => {
                     const { data } = res;

@@ -142,8 +142,6 @@ const getDecoration = (decoration_id) => {
 onMounted(() => {
     initUserSettings();
     loadData().then(() => loadUserData());
-    console.log('currentUrl:', getCleanedCurrentUrl());
-    console.log('pad:', pad(1));
 });
 
 const filteredDecorations = computed(() => {
