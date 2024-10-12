@@ -23,35 +23,35 @@ api.interceptors.response.use(
 
 class Gw2ApiService {
     getCats() {
-        return api.get('/home/cats?ids=all');
+        return api.get('/home/cats', { params: { ids: 'all' } });
     }
     getNodes() {
-        return api.get('/home/nodes?ids=all');
+        return api.get('/home/nodes', { params: { ids: 'all' } });
     }
     getGlyphs() {
-        return api.get('/homestead/glyphs?ids=all');
+        return api.get('/homestead/glyphs', { params: { ids: 'all' } });
     }
     getCategories() {
-        return api.get('/homestead/decorations/categories?ids=all');
+        return api.get('/homestead/decorations/categories', { params: { ids: 'all' } });
     }
     getDecorations() {
         return api.get('/homestead/decorations');
     }
     getDecorationsByIds(ids) {
         const $ids = ids.join(',');
-        return api.get(`/homestead/decorations?ids=${$ids}`);
+        return api.get('/homestead/decorations', { params: { ids: $ids } });
     }
     getUserCats(token) {
-        return api.get(`/account/home/cats?access_token=${token}`);
+        return api.get('/account/home/cats', { params: { access_token: token } });
     }
     getUserNodes(token) {
-        return api.get(`/account/home/nodes?access_token=${token}`);
+        return api.get('/account/home/nodes', { params: { access_token: token } });
     }
     getUserGlyphs(token) {
-        return api.get(`/account/homestead/glyphs?access_token=${token}`);
+        return api.get('/account/homestead/glyphs', { params: { access_token: token } });
     }
     getUserDecorations(token) {
-        return api.get(`/account/homestead/decorations?access_token=${token}`);
+        return api.get('/account/homestead/decorations', { params: { access_token: token } });
     }
 }
 
