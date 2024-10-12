@@ -2,7 +2,7 @@
 // Icons : https://remixicon.com
 import { onMounted, ref, computed } from 'vue';
 import MarkdownIt from 'markdown-it';
-import pad from '@/utils/pad.js';
+import { pad } from '@/services/utils';
 import RecipeNested from '@/components/GW2/RecipeNested.vue';
 
 const LBMApp = ref();

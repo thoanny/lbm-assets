@@ -5,6 +5,7 @@ import MarkdownIt from 'markdown-it';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import Gw2ApiService from '@/services/gw2ApiService';
+import { getCleanedCurrentUrl, pad } from '@/services/utils';
 import {
     cats as localCats,
     nodes as localNodes,
@@ -138,29 +139,12 @@ const getDecoration = (decoration_id) => {
     );
 };
 
-const getCleanedUrl = () => {
-    const { host, hostname, href, origin, pathname, port, protocol, search } = window.location;
-    console.table([
-        'getCleanedUrl',
-        host,
-        hostname,
-        href,
-        origin,
-        pathname,
-        port,
-        protocol,
-        search,
-    ]);
-};
-
 onMounted(() => {
     initUserSettings();
     loadData().then(() => loadUserData());
-
-    getCleanedUrl();
+    console.log('currentUrl:', getCleanedCurrentUrl());
+    console.log('pad:', pad(1));
 });
-
-getCleanedUrl();
 
 const filteredDecorations = computed(() => {
     const s = searchValue.value
