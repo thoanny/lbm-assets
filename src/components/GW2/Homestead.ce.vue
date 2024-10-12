@@ -138,10 +138,29 @@ const getDecoration = (decoration_id) => {
     );
 };
 
+const getCleanedUrl = () => {
+    const { host, hostname, href, origin, pathname, port, protocol, search } = window.location;
+    console.table([
+        'getCleanedUrl',
+        host,
+        hostname,
+        href,
+        origin,
+        pathname,
+        port,
+        protocol,
+        search,
+    ]);
+};
+
 onMounted(() => {
     initUserSettings();
     loadData().then(() => loadUserData());
+
+    getCleanedUrl();
 });
+
+getCleanedUrl();
 
 const filteredDecorations = computed(() => {
     const s = searchValue.value
