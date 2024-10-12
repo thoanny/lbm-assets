@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
 export const useUserStore = defineStore('user', () => {
     const accounts = ref(null);
@@ -49,22 +50,14 @@ export const useUserStore = defineStore('user', () => {
 
         isLoading.value = true;
 
-        await fetch('https://api.lebusmagique.fr/api/gw2/auth', {
-            method: 'POST',
-            body: JSON.stringify({
+        await axios
+            .post('https://api.lebusmagique.fr/api/gw2/auth', {
                 code: localStorage.getItem('gw2-auth-refresh'),
                 redirect: window?.location.href.split('?')[0],
                 refresh: true,
-            }),
-        })
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Error');
-                }
-
-                return res.json();
             })
-            .then((data) => {
+            .then((res) => {
+                const { data } = res;
                 localStorage.setItem('gw2-auth-token', data.access_token);
                 localStorage.setItem('gw2-auth-refresh', data.refresh_token);
                 loadLocalToken();
@@ -108,21 +101,13 @@ export const useUserStore = defineStore('user', () => {
                 return;
             }
 
-            await fetch('https://api.lebusmagique.fr/api/gw2/auth', {
-                method: 'POST',
-                body: JSON.stringify({
+            await axios
+                .post('https://api.lebusmagique.fr/api/gw2/auth', {
                     code: code,
                     redirect: window?.location.href.split('?')[0],
-                }),
-            })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error('Errorrrr');
-                    }
-
-                    return res.json();
                 })
-                .then((data) => {
+                .then((res) => {
+                    const { data } = res;
                     localStorage.setItem('gw2-auth-token', data.access_token);
                     localStorage.setItem('gw2-auth-refresh', data.refresh_token);
                     loadLocalToken();
@@ -190,11 +175,12 @@ export const useUserStore = defineStore('user', () => {
     const handleApiKey = async () => {
         isLoading.value = true;
 
-        await fetch(`https://api.guildwars2.com/v2/account?access_token=${apiKey.value}`)
-            .then((res) => {
-                return res.json();
+        await axios
+            .get(`https://api.guildwars2.com/v2/account`, {
+                params: { access_token: apiKey.value },
             })
-            .then((data) => {
+            .then((res) => {
+                const { data } = res;
                 isLoading.value = false;
                 isLoggedIn.value = 'api-key';
                 currentToken.value = apiKey.value;
