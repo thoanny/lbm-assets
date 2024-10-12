@@ -5,7 +5,6 @@ import MarkdownIt from 'markdown-it';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import Gw2ApiService from '@/services/gw2ApiService';
-import { getCleanedCurrentUrl, pad } from '@/services/utils';
 import {
     cats as localCats,
     nodes as localNodes,
