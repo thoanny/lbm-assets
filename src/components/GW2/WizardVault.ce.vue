@@ -2,12 +2,15 @@
 import { ref, watch } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
+import Gw2ApiService from '@/services/gw2ApiService';
 
 import MarkdownIt from 'markdown-it';
 const markdown = new MarkdownIt();
 
 const GW2_API = 'https://api.guildwars2.com/v2';
 const LBM_API = 'https://api.lebusmagique.fr/api';
+
+const gw2 = Gw2ApiService;
 
 const user = useUserStore();
 const { currentToken } = storeToRefs(user);
@@ -19,8 +22,6 @@ const rewards = ref([]);
 const accountRewards = ref([]);
 const lbmApiObjectives = ref([]);
 const isLoading = ref(true);
-
-const now = new Date().toISOString();
 
 const itemsIds = ref([]);
 const itemsData = ref([]);
@@ -39,45 +40,6 @@ function switchTab(t) {
     }
 }
 
-const getWizardsVaultListing = async () => {
-    const res = await fetch(`${GW2_API}/wizardsvault/listings?ids=all`);
-    return await res.json();
-};
-
-const getItemsData = async () => {
-    const ids = itemsIds.value.join(',');
-    const res = await fetch(`${GW2_API}/items?ids=${ids}`);
-    return await res.json();
-};
-
-const getAccountDaily = async () => {
-    const res = await fetch(
-        `${GW2_API}/account/wizardsvault/daily?access_token=${currentToken.value}&v=${now}`,
-    );
-    objectives.value.daily = await res.json();
-};
-
-const getAccountWeekly = async () => {
-    const res = await fetch(
-        `${GW2_API}/account/wizardsvault/weekly?access_token=${currentToken.value}&v=${now}`,
-    );
-    objectives.value.weekly = await res.json();
-};
-
-const getAccountSpecial = async () => {
-    const res = await fetch(
-        `${GW2_API}/account/wizardsvault/special?access_token=${currentToken.value}&v=${now}`,
-    );
-    objectives.value.special = await res.json();
-};
-
-const getAccountRewards = async () => {
-    const res = await fetch(
-        `${GW2_API}/account/wizardsvault/listings?access_token=${currentToken.value}`,
-    );
-    return await res.json();
-};
-
 const getLbmApiObjectives = async (ids) => {
     const res = await fetch(`${LBM_API}/gw2/wizard-vault/objectives`, {
         method: 'POST',
@@ -92,8 +54,9 @@ const getLbmApiObjectives = async (ids) => {
 
 const loadWizardsVault = async () => {
     isLoading.value = true;
-    getWizardsVaultListing()
-        .then((data) => {
+    gw2.getWizardsVaultListing()
+        .then((res) => {
+            const { data } = res;
             data.forEach((d) => {
                 if (itemsIds.value.indexOf(d.item_id) < 0) {
                     itemsIds.value.push(d.item_id);
@@ -102,15 +65,30 @@ const loadWizardsVault = async () => {
             rewards.value = data;
         })
         .then(() => {
-            getItemsData().then((data) => {
+            gw2.getItemsByIds(itemsIds.value).then((res) => {
+                const { data } = res;
                 itemsData.value = data;
             });
         });
 
     if (currentToken.value) {
-        accountRewards.value = await getAccountRewards();
+        gw2.getUserWizardVaultListing(currentToken.value).then((res) => {
+            const { data } = res;
+            accountRewards.value = data;
+        });
 
-        Promise.all([getAccountDaily(), getAccountWeekly(), getAccountSpecial()]).then(async () => {
+        await Promise.all([
+            gw2.getUserWizardVaultDaily(currentToken.value),
+            gw2.getUserWizardVaultWeekly(currentToken.value),
+            gw2.getUserWizardVaultSpecial(currentToken.value),
+        ]).then(async (res) => {
+            const [$daily, $weekly, $special] = res;
+            objectives.value = {
+                daily: $daily.data,
+                weekly: $weekly.data,
+                special: $special.data,
+            };
+
             const objectivesIds = [
                 ...objectives.value.daily.objectives.map((objective) => objective.id),
                 ...objectives.value.weekly.objectives.map((objective) => objective.id),

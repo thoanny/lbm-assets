@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useUserStore } from '@/stores/user';
 
 const API_URL = 'https://api.guildwars2.com/v2';
+const LOCALE = 'fr';
 
 const api = axios.create({
     baseURL: API_URL,
@@ -52,6 +53,42 @@ class Gw2ApiService {
     }
     getUserDecorations(token) {
         return api.get('/account/homestead/decorations', { params: { access_token: token } });
+    }
+    getWizardsVaultListing() {
+        return api.get('/wizardsvault/listings', { params: { ids: 'all' } });
+    }
+    getItemsByIds(ids) {
+        const $ids = ids.join(',');
+        return api.get('/items', { params: { ids: $ids, lang: LOCALE } });
+    }
+    getUserWizardVaultListing(token) {
+        return api.get('/account/wizardsvault/listings', {
+            params: { access_token: token },
+        });
+    }
+    getUserWizardVaultDaily(token) {
+        return api.get('/account/wizardsvault/daily', {
+            params: {
+                access_token: token,
+                v: new Date().toISOString(),
+            },
+        });
+    }
+    getUserWizardVaultWeekly(token) {
+        return api.get('/account/wizardsvault/weekly', {
+            params: {
+                access_token: token,
+                v: new Date().toISOString(),
+            },
+        });
+    }
+    getUserWizardVaultSpecial(token) {
+        return api.get('/account/wizardsvault/special', {
+            params: {
+                access_token: token,
+                v: new Date().toISOString(),
+            },
+        });
     }
 }
 
