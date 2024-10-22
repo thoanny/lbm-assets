@@ -90,6 +90,9 @@ class Gw2ApiService {
             },
         });
     }
+    getUser(token) {
+        return api.get('/account', { params: { access_token: token } });
+    }
 }
 
 export default new Gw2ApiService();

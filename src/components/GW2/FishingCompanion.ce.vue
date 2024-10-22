@@ -10,12 +10,14 @@ import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { pad, objectSort } from '@/services/utils';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
+import Gw2ApiService from '@/services/gw2ApiService';
 
 const refreshFishesInterval = ref(null);
 const refreshClocksInterval = ref(null);
 
+const gw2 = Gw2ApiService;
 const user = useUserStore();
-const { currentToken } = storeToRefs(user);
+const { currentToken, isLoggedIn } = storeToRefs(user);
 
 const hideCompleted = ref(false);
 const hideOutClock = ref(false);
@@ -65,6 +67,9 @@ const CLOCKS = {
 
 const getFishes = async () => {
     isLoading.value = true;
+    if (currentToken.value) {
+        gw2.getUser(currentToken.value);
+    }
     const res = await fetch(API_URL + (currentToken.value ? '?token=' + currentToken.value : ''));
     return await res.json();
 };
