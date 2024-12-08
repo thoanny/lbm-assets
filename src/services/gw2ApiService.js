@@ -93,6 +93,10 @@ class Gw2ApiService {
     getUser(token) {
         return api.get('/account', { params: { access_token: token } });
     }
+    getCommercePrices(ids) {
+        const $ids = ids.join(',');
+        return api.get('/commerce/prices', { params: { ids: $ids } });
+    }
 }
 
 export default new Gw2ApiService();

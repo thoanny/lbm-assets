@@ -2,6 +2,7 @@
 // Icons : https://remixicon.com
 import { onMounted, ref, computed, watch } from 'vue';
 import MarkdownIt from 'markdown-it';
+import { chunk, copyToClipboard, formatIntToGold } from '@/services/utils';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import Gw2ApiService from '@/services/gw2ApiService';
@@ -23,6 +24,7 @@ const nodes = ref([]);
 const glyphs = ref([]);
 const decorations = ref([]);
 const categories = ref([]);
+const prices = ref([]);
 const hideCheckedCatsAndNodes = ref(false);
 const isLoading = ref(false);
 
@@ -35,17 +37,6 @@ const currentCat = ref(null);
 const currentNode = ref(null);
 const searchValue = ref('');
 const searchType = ref('');
-
-const copyToClipboard = (content) => {
-    if (!content) return;
-    navigator.clipboard.writeText(content);
-};
-
-const chunk = (arr, size) => {
-    return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-        arr.slice(i * size, i * size + size),
-    );
-};
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +97,7 @@ const loadUserData = async () => {
         gw2.getUserNodes(currentToken.value),
         gw2.getUserGlyphs(currentToken.value),
         gw2.getUserDecorations(currentToken.value),
-    ]).then((res) => {
+    ]).then(async (res) => {
         const [$cats, $nodes, $glyphs, $decorations] = res;
 
         cats.value = cats.value.map((cat) => ({
@@ -128,6 +119,10 @@ const loadUserData = async () => {
             ...decoration,
             ...$decorations.data.find((d) => d.id === decoration.id),
         }));
+
+        const pricesIds = localNodes.filter((node) => node.price > 0).map((node) => node.item_id);
+        prices.value = await gw2.getCommercePrices(pricesIds).then((res) => res.data);
+        console.log('pricesIds', pricesIds, prices.value);
     });
 };
 
@@ -136,6 +131,12 @@ const getDecoration = (decoration_id) => {
     currentDecoration.value = decorations.value.find(
         (decoration) => decoration.id === decoration_id,
     );
+};
+
+const getPriceById = (id) => {
+    const price = prices.value.find((p) => p.id == id);
+    console.log('getPriceById', prices.value, price);
+    return price?.sells.unit_price ?? 0;
 };
 
 onMounted(() => {
@@ -198,6 +199,21 @@ const handleHideCheckedCatsAndNodes = () => {
 watch(currentToken, () => {
     loadData().then(() => loadUserData());
 });
+
+// Structure :
+// - id : identifiant de l'api gw2
+// - map : nom de la carte
+// - map_url : url à mettre sur 'map'
+// - guide : url pour créer un bouton
+// - wp : shortcode du point de passage
+// - item_id
+// - item_name
+// - item_rarity
+// - icon
+// - image : descriptive
+// - name
+// - description
+// - price : si supérieur à 1, prix du comptoir récupéré via api
 </script>
 
 <template>
@@ -497,6 +513,20 @@ watch(currentToken, () => {
                                     />
                                     {{ currentNode.item_name }}
                                 </a>
+                                <template v-if="currentNode.price > 0">
+                                    <div class="font-bold mt-4">Prix au comptoir&nbsp;:</div>
+                                    <div>
+                                        ±
+                                        <span
+                                            v-html="
+                                                formatIntToGold(
+                                                    getPriceById(currentNode.item_id) *
+                                                        currentNode.price,
+                                                )
+                                            "
+                                        ></span>
+                                    </div>
+                                </template>
                                 <!-- <div class="font-bold mt-4">Nourriture&nbsp;:</div>
                                 <a
                                     class="inline-flex gap-2 items-center mt-2"

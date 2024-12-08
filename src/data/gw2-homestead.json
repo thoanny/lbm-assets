@@ -421,7 +421,7 @@
         },
         {
             "id": "basic_harvesting_nodes",
-            "item_id": 67290,
+            "item_id": "67290",
             "item_name": "Lot de zones de moisson de base",
             "item_rarity": "Rare",
             "itm_src": "%%gemme%%",
@@ -446,7 +446,8 @@
             "item_rarity": "Rare",
             "itm_src": "%%ccln%%",
             "price": 1,
-            "name": "Râtelier à tissu avancé"
+            "name": "Râtelier à tissu avancé",
+            "description": "Ce râtelier peut être obtenu occasionellement dans les coffres du Lion Noir, en l'achetant avec des statuettes du Lion noir, ou en l'achetant au comptoir."
         },
         {
             "id": "basic_leather_rack",
@@ -751,11 +752,10 @@
         {
             "id": "primordial_orchid",
             "item_id": "81115",
-            "item_name": "Zone d\"orchidées de feu",
+            "item_name": "Orchidées de feu",
             "item_rarity": "Rare",
-            "itm_src": "%%hot%%",
-            "tip": "Auprès du Maître du ravitaillement Hanjo [collectionneur de magie déliée] à côté du point de passage du Débarcadère du marin [&BL0JAAA=].",
-            "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
+            "description": "S'achète auprès du Maître du ravitaillement Hanjo [collectionneur de magie déliée], à côté du point de passage du Débarcadère du marin, pour 10 000 &times; Magie déliée et 50 pièces d'or.",
+            "wp": "[&BL0JAAA=]"
         },
         {
             "id": "orrian_oyster_node",
