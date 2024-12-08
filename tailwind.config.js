@@ -1,7 +1,7 @@
 /*eslint-env node*/
 /** @type {import('tailwindcss').Config} */
 import daisyui from 'daisyui';
-module.exports = {
+export default {
   content: ['./index.html', './src/**/*.{vue,js}'],
   corePlugins: {
     preflight: false,
