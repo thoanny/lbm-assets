@@ -97,6 +97,15 @@ class Gw2ApiService {
         const $ids = ids.join(',');
         return api.get('/commerce/prices', { params: { ids: $ids } });
     }
+    getCharacters(token) {
+        return api.get('/characters', { params: { access_token: token } });
+    }
+    getCharacterByNameSuperAdventureBox(token, name) {
+        return api.get(`/characters/${name}/sab`, {
+            params: { access_token: token },
+            character: name,
+        });
+    }
 }
 
 export default new Gw2ApiService();

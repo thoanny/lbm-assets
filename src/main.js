@@ -18,6 +18,7 @@ import GW2_Homestead from './components/GW2/Homestead.ce.vue';
 import GW2_ApiItemRecipe from './components/GW2/ApiItemRecipe.ce.vue';
 import GW2_UserAuth from './components/GW2/UserAuth.ce.vue';
 import ResponsiveBreakpoints from './components/ResponsiveBreakpoints.ce.vue';
+import GW2_SuperAdventureBox from './components/GW2/SuperAdventureBox.ce.vue';
 
 setActivePinia(createPinia());
 
@@ -38,3 +39,4 @@ customElements.define('gw2-homestead', defineCustomElement(GW2_Homestead));
 customElements.define('gw2-recipe', defineCustomElement(GW2_ApiItemRecipe));
 customElements.define('responsive-breakpoints', defineCustomElement(ResponsiveBreakpoints));
 customElements.define('gw2-user-auth', defineCustomElement(GW2_UserAuth));
+customElements.define('gw2-sab', defineCustomElement(GW2_SuperAdventureBox));

@@ -2,6 +2,12 @@
 
 Outils et ressources pour le site du Bus Magique.
 
+## TODO
+
+-   Remplacer Spritesmith par autre chose sur Vite (et surtout retirer Gulp), exemple :
+    -   https://www.npmjs.com/package/@open-xchange/vite-plugin-icon-sprite
+    -   https://github.com/evont/vite-plugin-spritesmith
+
 ## Project Setup
 
 ```sh
