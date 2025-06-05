@@ -508,7 +508,7 @@ watch(currentToken, () => {
                                         :src="`https://v2.lebusmagique.fr/img/api/items/${currentNode.item_id}.png`"
                                         alt=""
                                         v-if="currentNode.item_id"
-                                        class="h-8 w-8 rounded border-2"
+                                        class="h-12 w-12 rounded border-2"
                                         :class="[`border-gw2-rarity-${currentNode.item_rarity}`]"
                                     />
                                     {{ currentNode.item_name }}
@@ -558,7 +558,7 @@ watch(currentToken, () => {
                                     v-if="currentCat.guide"
                                     >Guide détaillé</a
                                 > -->
-                                <pre>{{ currentNode }}</pre>
+                                <!-- <pre>{{ currentNode }}</pre> -->
                             </div>
                             <form method="dialog" class="lbm-modal-backdrop">
                                 <button>close</button>

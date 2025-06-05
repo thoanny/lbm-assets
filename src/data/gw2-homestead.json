@@ -437,7 +437,8 @@
             "itm_src": "%%gemme%%",
             "tip": "",
             "price": "800 %%gemme%%",
-            "name": "Râtelier à tissu basique"
+            "name": "Râtelier à tissu basique",
+            "description": "Ce râtelier peut être obtenu occasionellement dans les coffres du Lion Noir, en l'achetant avec des statuettes du Lion noir, ou en l'achetant au comptoir."
         },
         {
             "id": "advanced_cloth_rack",
@@ -457,7 +458,8 @@
             "itm_src": "%%gemme%%",
             "tip": "",
             "price": "800 %%gemme%%",
-            "name": "Râtelier à cuir basique"
+            "name": "Râtelier à cuir basique",
+            "description": "Ce râtelier peut être obtenu occasionellement dans les coffres du Lion Noir, en l'achetant avec des statuettes du Lion noir, ou en l'achetant au comptoir."
         },
         {
             "id": "advanced_leather_rack",
@@ -466,7 +468,8 @@
             "item_rarity": "Rare",
             "itm_src": "%%ccln%%",
             "price": 1,
-            "name": "Râtelier à cuir avancé"
+            "name": "Râtelier à cuir avancé",
+            "description": "Ce râtelier peut être obtenu occasionellement dans les coffres du Lion Noir, en l'achetant avec des statuettes du Lion noir, ou en l'achetant au comptoir."
         },
         {
             "id": "hard_wood_node",
@@ -523,7 +526,7 @@
         {
             "id": "orichalcum_ore_node",
             "item_id": "68094",
-            "item_name": "Zone de minerai d\"orichalque",
+            "item_name": "Zone de minerai d'orichalque",
             "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
             "price": "<span class=\"gw2ccln\" data-id=\"68094\">...</span>"
@@ -531,7 +534,7 @@
         {
             "id": "omnomberry_node",
             "item_id": "68089",
-            "item_name": "Zone de moisson de baies d\"Omnom",
+            "item_name": "Zone de moisson de baies d'Omnom",
             "item_rarity": "rarity_exotic",
             "itm_src": "%%ccln%%",
             "price": "<span class=\"gw2ccln\" data-id=\"68089\">...</span>"
@@ -626,7 +629,7 @@
             "item_name": "Grand don de bonbons",
             "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
-            "tip": "Halloween 2016, contre l\"équivalent de 5&nbsp;000 &times; <a href=\"https://v2.lebusmagique.fr/fr/items/36041\" target=\"_blank\">Morceau de bonbons</a>.",
+            "tip": "Halloween 2016, contre l'équivalent de 5&nbsp;000 &times; <a href=\"https://v2.lebusmagique.fr/fr/items/36041\" target=\"_blank\">Morceau de bonbons</a>.",
             "price": "5 &times; <a href=\"https://v2.lebusmagique.fr/fr/items/47909\" target=\"_blank\">Agglomérat de bonbons</a>"
         },
         {
@@ -635,7 +638,7 @@
             "item_name": "Don de magnanimité",
             "item_rarity": "rarity_exotic",
             "itm_src": "%%arenapoints%%",
-            "tip": "Durant l\"Hivernel, en complétant la collection <a href=\"/pages/succes/les-collections/collections-basiques/collection-basique-ce-n-est-que-pour-les-enfants.html\" target=\"_blank\">Ce n\"est que pour les enfants !</a>",
+            "tip": "Durant l'Hivernel, en complétant la collection <a href=\"/pages/succes/les-collections/collections-basiques/collection-basique-ce-n-est-que-pour-les-enfants.html\" target=\"_blank\">Ce n\"est que pour les enfants !</a>",
             "price": "Récompense du succès"
         },
         {
@@ -644,7 +647,7 @@
             "item_name": "Don de quartz",
             "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
-            "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/bazar-des-quatres-vents/guide-des-succes.html\" target=\"_blank\">Ambassadeur du Bazar</a> de l\"épisode \"Le Bazar des 4 vents\" de la saison 1 de l\"Histoire vivante. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
+            "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/bazar-des-quatres-vents/guide-des-succes.html\" target=\"_blank\">Ambassadeur du Bazar</a> de l'épisode \"Le Bazar des 4 vents\" de la saison 1 de l'Histoire vivante. <br /><strong>Aujourd'hui, à acheter aux marchands de lauriers.</strong>",
             "price": "25 %%laurier%% + 15 %%or%%"
         },
         {
@@ -653,16 +656,16 @@
             "item_name": "Don de pignons",
             "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
-            "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/les-origines-de-la-folie/succes-les-origines-de-la-folie.html\" target=\"_blank\">Les Origines de la Folie</a> de l\"épisode \"Les Origines de la Folie\" de la saison 1 de l\"Histoire vivante. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
+            "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/les-origines-de-la-folie/succes-les-origines-de-la-folie.html\" target=\"_blank\">Les Origines de la Folie</a> de l'épisode \"Les Origines de la Folie\" de la saison 1 de l'Histoire vivante. <br /><strong>Aujourd'hui, à acheter aux marchands de lauriers.</strong>",
             "price": "25 %%laurier%% + 15 %%or%%"
         },
         {
             "id": "krait_obelisk",
             "item_id": "48875",
-            "item_name": "Eclat d\"obélisque krait",
+            "item_name": "Eclat d'obélisque krait",
             "item_rarity": "Rare",
             "itm_src": "%%arenapoints%%",
-            "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/la-tour-des-cauchemars/succes-la-tour-des-cauchemars.html\" target=\"_blank\">Tour des Cauchemars</a> de l\"épisode \"La Tour des Cauchemars\" de la saison 1 de l\"Histoire vivante. <br /><strong>Aujourd\"hui, à acheter aux marchands de lauriers.</strong>",
+            "tip": "Avant, en complétant le méta-événement <a href=\"/pages/mises-a-jour-passees/la-tour-des-cauchemars/succes-la-tour-des-cauchemars.html\" target=\"_blank\">Tour des Cauchemars</a> de l'épisode \"La Tour des Cauchemars\" de la saison 1 de l'Histoire vivante. <br /><strong>Aujourd'hui, à acheter aux marchands de lauriers.</strong>",
             "price": "25 %%laurier%% + 15 %%or%%"
         },
         {
@@ -728,7 +731,7 @@
             "item_name": "Zone de bois pétrifié",
             "item_rarity": "Rare",
             "itm_src": "%%hot%%",
-            "tip": "Auprès de Erudite Surra [Collecteur de magie déliée] à côté du portail d\"arrivé de la Baie de Braise [&BF8JAAA=].",
+            "tip": "Auprès de Erudite Surra [Collecteur de magie déliée] à côté du portail d'arrivé de la Baie de Braise [&BF8JAAA=].",
             "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
         },
         {
@@ -737,7 +740,7 @@
             "item_name": "Zone de buissons de houx",
             "item_rarity": "Rare",
             "itm_src": "%%hot%%",
-            "tip": "Auprès de Slooshoo [Collecteur de magie déliée] au Sanctuaire de l\"eclipse des lamentations des Confin de Givramer.",
+            "tip": "Auprès de Slooshoo [Collecteur de magie déliée] au Sanctuaire de l'eclipse des lamentations des Confin de Givramer.",
             "price": "10&nbsp;000 %%magie%% + 50 %%or%%"
         },
         {
@@ -760,7 +763,7 @@
         {
             "id": "orrian_oyster_node",
             "item_id": "81696",
-            "item_name": "Zone d\"huitres orriennes",
+            "item_name": "Zone d'huitres orriennes",
             "item_rarity": "Rare",
             "itm_src": "%%hot%%",
             "tip": "Auprès de la Fournisseuse Anlana [collectionneuse de magie déliée] au nord du Point de passage de Camp Reconquête [&BO8JAAA=].",
@@ -784,12 +787,14 @@
         },
         {
             "id": "kournan_supply_cache",
-            "item_id": "",
+            "item_id": "87889",
             "item_name": "Cache de ravitaillement kournane",
             "item_rarity": "Rare",
             "itm_src": "%%pof%%",
             "tip": "Auprès de Nalar [collectionneur de magie volatile] près du point de passage du Campement allié [&BFcLAAA=].",
-            "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%"
+            "price": "10&nbsp;000 %%magievolatile%% + 50 %%or%%",
+            "name": "Cache de ravitaillement",
+            "description": "S'achète auprès de Nalar [collectionneur de magie volatile] près du point de passage du Campement allié [&BFcLAAA=], pour 10 000 magie volatile et 50 pièces d'or."
         },
         {
             "id": "mistonium_node",
@@ -847,6 +852,54 @@
             "item_rarity": "Rare",
             "name": "Parcelle de jardin (2)",
             "description": "Périodiquement disponible à la vente à la Boutique aux gemmes, section \"Améliorations\", pour 1&nbsp;000 gemmes."
+        },
+        {
+            "id": "garden_plot_03",
+            "item_id": "91777",
+            "item_name": "Acte de propriété de parcelle de potager",
+            "item_rarity": "Rare",
+            "name": "Parcelle de jardin (3)",
+            "description": "Compléter la partie sylvari du succès <a href=\"https://www.lebusmagique.fr/pages/succes/general/marchand/maitre-gourmet.html\" target=\"_blank\">Maître gourmet</a>."
+        },
+        {
+            "id": "dragon_crystal",
+            "item_id": "89786",
+            "item_name": "Zone de cristaux du dragon pour zone personnelle",
+            "item_rarity": "Rare",
+            "name": "Cristaux du dragon",
+            "description": "S'achète à Kynon [Collectionneur de magie volatile] près du point de passage du Pont d'observation [&BLkLAAA=], pour 10&nbsp;000 magie volatile et 50 pièces d'or."
+        },
+        {
+            "id": "eternal_ice_shard_node",
+            "item_id": "92361",
+            "item_name": "Ressource d'éclats de glace éternelle pour zone personnelle",
+            "item_rarity": "Rare",
+            "name": "Éclats de glace éternelle",
+            "description": "S'achète à Anette Eymundrdottir, près du point de passage du Fort de Jora [&BCcMAAA=] (Frontière de Bjora), pour 24&nbsp;5000 karma et 50 pièces d'or."
+        },
+        {
+            "id": "mistborn_mote",
+            "item_id": "90773",
+            "item_name": "Ressource de particules de la Brumaille pour zone personnelle",
+            "item_rarity": "Rare",
+            "name": "Particules de la Brumaille",
+            "description": "Coûte 10 000 magie volatile et 50 pièces d'or au Quartier-maître de la Fleur de cristal [Collectionneuse de magie volatile] près de la Porte des braises [&BOoLAAA=]."
+        },
+        {
+            "id": "prismaticite_node",
+            "item_id": "94286",
+            "item_name": "Ressource de prismaticite pour zone personnelle",
+            "item_rarity": "Rare",
+            "name": "Prismaticite",
+            "description": "Coûte 245&nbsp;000 karma et 50 pièces d'or au Tacticien Erlandson au Panthéon des Hauts Faits de l'Œil du Nord [&BAkMAAA=]."
+        },
+        {
+            "id": "salvage_pile",
+            "item_id": "93503",
+            "item_name": "Tas de matériaux de récupération de zone personnelle",
+            "item_rarity": "Rare",
+            "name": "Matériaux de récupération",
+            "description": "S'obtient auprès d'Annona Frappelierre à la Grotte obscure, sur la Côte de Bruinebois [&BGQMAAA=], contre 245&nbsp;000 karma et 50 pièces d'or."
         }
     ],
     "glyphs": [
