@@ -54,13 +54,13 @@ ${{spritesheet_info.strings.name}}-map: (
 
 {{#content "sprite-functions"}}
 @function {{spritesheet_info.name}}-getwidth($sprite, $rate: 1) {
-  $real-sprite:  map-get(${{spritesheet_info.strings.name}}-map, $sprite);
-  @return nth($real-sprite, 5) * $rate;
+  $real-sprite:  map.get(${{spritesheet_info.strings.name}}-map, $sprite);
+  @return list.nth($real-sprite, 5) * $rate;
 }
 
 @function {{spritesheet_info.name}}-getheight($sprite, $rate: 1) {
-  $real-sprite:  map-get(${{spritesheet_info.strings.name}}-map, $sprite);
-  @return nth($real-sprite, 6) * $rate;
+  $real-sprite:  map.get(${{spritesheet_info.strings.name}}-map, $sprite);
+  @return list.nth($real-sprite, 6) * $rate;
 }
 
 @mixin {{spritesheet_info.name}}-sprite-width($sprite, $rate: 1, $size: null) {
@@ -81,9 +81,9 @@ ${{spritesheet_info.strings.name}}-map: (
   @if ($rate == 1 and $size != null){
     $rate: $size / {{spritesheet_info.name}}-getwidth($sprite);
   }
-  $real-sprite: map-get(${{spritesheet_info.strings.name}}-map, $sprite);
-  $sprite-offset-x: nth($real-sprite, 3);
-  $sprite-offset-y: nth($real-sprite, 4);
+  $real-sprite: map.get(${{spritesheet_info.strings.name}}-map, $sprite);
+  $sprite-offset-x: list.nth($real-sprite, 3);
+  $sprite-offset-y: list.nth($real-sprite, 4);
   background-position: $sprite-offset-x * $rate $sprite-offset-y * $rate;
 }
 
@@ -100,7 +100,7 @@ ${{spritesheet_info.strings.name}}-map: (
 
 @mixin {{spritesheet_info.name}}-sprite($sprite, $rate: 1, $size: null) {
   {{!-- @debug $sprite;
-  $real-sprite: map-get(${{spritesheet_info.strings.name}}-map, $sprite);
+  $real-sprite: map.get(${{spritesheet_info.strings.name}}-map, $sprite);
   @debug $real-sprite; --}}
   @include {{spritesheet_info.name}}-sprite-image();
   @include {{spritesheet_info.name}}-sprite-position($sprite, $rate, $size);
@@ -112,7 +112,7 @@ ${{spritesheet_info.strings.name}}-map: (
 {{#content "spritesheet-functions"}}
 @mixin sprites($sprites) {
   @each $sprite in $sprites {
-    $sprite-name: nth($sprite, 10);
+    $sprite-name: list.nth($sprite, 10);
     &.#{$sprite-name} {
       @include {{spritesheet_info.name}}-sprite($sprite-name);
     }

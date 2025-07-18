@@ -37,10 +37,7 @@ const currentAchievement = ref('');
 const currentHole = ref('');
 const currentBait = ref('');
 
-const currentClocks = ref({
-    tyria: null,
-    cantha: null,
-});
+const currentClocks = ref({ tyria: null, cantha: null });
 
 const isLoading = ref(false);
 
@@ -49,20 +46,8 @@ const API_URL = 'https://api.lebusmagique.fr/api/gw2/fishes';
 const TIMER_INTERVAL = 5 * 60 * 1000;
 
 const CLOCKS = {
-    tyria: {
-        0: 'n',
-        25: 'dd',
-        30: 'd',
-        140: 'dd',
-        145: 'n',
-    },
-    cantha: {
-        0: 'n',
-        35: 'dd',
-        40: 'd',
-        135: 'dd',
-        140: 'n',
-    },
+    tyria: { 0: 'n', 25: 'dd', 30: 'd', 140: 'dd', 145: 'n' },
+    cantha: { 0: 'n', 35: 'dd', 40: 'd', 135: 'dd', 140: 'n' },
 };
 
 const getFishes = async () => {
@@ -778,7 +763,7 @@ watch(searchValue, async () => {
 </template>
 
 <style lang="scss" scoped>
-@import '../../assets/main.scss';
+@use '../../assets/main.scss';
 
 #fishes {
     max-height: calc(100dvh - 17rem);

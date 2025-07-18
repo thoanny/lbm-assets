@@ -43,9 +43,7 @@ function switchTab(t) {
 const getLbmApiObjectives = async (ids) => {
     const res = await fetch(`${LBM_API}/gw2/wizard-vault/objectives`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids }),
     });
     isLoading.value = false;
@@ -83,11 +81,7 @@ const loadWizardsVault = async () => {
             gw2.getUserWizardVaultSpecial(currentToken.value),
         ]).then(async (res) => {
             const [$daily, $weekly, $special] = res;
-            objectives.value = {
-                daily: $daily.data,
-                weekly: $weekly.data,
-                special: $special.data,
-            };
+            objectives.value = { daily: $daily.data, weekly: $weekly.data, special: $special.data };
 
             const objectivesIds = [
                 ...objectives.value.daily.objectives.map((objective) => objective.id),
@@ -425,7 +419,7 @@ function formatGold(total) {
 </template>
 
 <style lang="scss" scoped>
-@import '../../assets/main.scss';
+@use '../../assets/main.scss';
 
 .gw2-wizard-vault {
     h4 {

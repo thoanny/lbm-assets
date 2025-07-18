@@ -106,5 +106,5 @@ const modal = ref();
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/main.scss';
+@use '@/assets/main.scss';
 </style>

@@ -1,3 +1,5 @@
+@use 'sass:map';
+@use 'sass:list';
 // SCSS variables are information about icon's compiled state, stored under its original file name
 //
 // .icon-home {
@@ -20,7 +22,7 @@ $spritesheet-boss-height: 24px;
 $spritesheet-boss-total-width: 144px;
 $spritesheet-boss-total-height: 144px;
 $spritesheet-boss-image: 'sprite.png';
-$spritesheet-boss: (0px, 0px, 0px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'boss', );
+$spritesheet-boss: (0px, 0px, 0px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'boss');
 
 $bus: 'bus';
 $spritesheet-bus-name: 'bus';
@@ -33,7 +35,7 @@ $spritesheet-bus-height: 24px;
 $spritesheet-bus-total-width: 144px;
 $spritesheet-bus-total-height: 144px;
 $spritesheet-bus-image: 'sprite.png';
-$spritesheet-bus: (24px, 0px, -24px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'bus', );
+$spritesheet-bus: (24px, 0px, -24px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'bus');
 
 $chambre-forte-sorcier: 'chambre-forte-sorcier';
 $spritesheet-chambre-forte-sorcier-name: 'chambre-forte-sorcier';
@@ -46,7 +48,18 @@ $spritesheet-chambre-forte-sorcier-height: 24px;
 $spritesheet-chambre-forte-sorcier-total-width: 144px;
 $spritesheet-chambre-forte-sorcier-total-height: 144px;
 $spritesheet-chambre-forte-sorcier-image: 'sprite.png';
-$spritesheet-chambre-forte-sorcier: (0px, 24px, 0px, -24px, 24px, 24px, 144px, 144px, 'sprite.png', 'chambre-forte-sorcier', );
+$spritesheet-chambre-forte-sorcier: (
+    0px,
+    24px,
+    0px,
+    -24px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'chambre-forte-sorcier'
+);
 
 $coeur-plein: 'coeur-plein';
 $spritesheet-coeur-plein-name: 'coeur-plein';
@@ -59,7 +72,18 @@ $spritesheet-coeur-plein-height: 24px;
 $spritesheet-coeur-plein-total-width: 144px;
 $spritesheet-coeur-plein-total-height: 144px;
 $spritesheet-coeur-plein-image: 'sprite.png';
-$spritesheet-coeur-plein: (24px, 24px, -24px, -24px, 24px, 24px, 144px, 144px, 'sprite.png', 'coeur-plein', );
+$spritesheet-coeur-plein: (
+    24px,
+    24px,
+    -24px,
+    -24px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'coeur-plein'
+);
 
 $collections: 'collections';
 $spritesheet-collections-name: 'collections';
@@ -72,7 +96,18 @@ $spritesheet-collections-height: 24px;
 $spritesheet-collections-total-width: 144px;
 $spritesheet-collections-total-height: 144px;
 $spritesheet-collections-image: 'sprite.png';
-$spritesheet-collections: (48px, 0px, -48px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'collections', );
+$spritesheet-collections: (
+    48px,
+    0px,
+    -48px,
+    0px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'collections'
+);
 
 $commandant-rouge: 'commandant-rouge';
 $spritesheet-commandant-rouge-name: 'commandant-rouge';
@@ -85,7 +120,18 @@ $spritesheet-commandant-rouge-height: 24px;
 $spritesheet-commandant-rouge-total-width: 144px;
 $spritesheet-commandant-rouge-total-height: 144px;
 $spritesheet-commandant-rouge-image: 'sprite.png';
-$spritesheet-commandant-rouge: (48px, 24px, -48px, -24px, 24px, 24px, 144px, 144px, 'sprite.png', 'commandant-rouge', );
+$spritesheet-commandant-rouge: (
+    48px,
+    24px,
+    -48px,
+    -24px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'commandant-rouge'
+);
 
 $coup-de-pied: 'coup-de-pied';
 $spritesheet-coup-de-pied-name: 'coup-de-pied';
@@ -98,7 +144,18 @@ $spritesheet-coup-de-pied-height: 24px;
 $spritesheet-coup-de-pied-total-width: 144px;
 $spritesheet-coup-de-pied-total-height: 144px;
 $spritesheet-coup-de-pied-image: 'sprite.png';
-$spritesheet-coup-de-pied: (0px, 48px, 0px, -48px, 24px, 24px, 144px, 144px, 'sprite.png', 'coup-de-pied', );
+$spritesheet-coup-de-pied: (
+    0px,
+    48px,
+    0px,
+    -48px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'coup-de-pied'
+);
 
 $eclaireur: 'eclaireur';
 $spritesheet-eclaireur-name: 'eclaireur';
@@ -111,7 +168,18 @@ $spritesheet-eclaireur-height: 24px;
 $spritesheet-eclaireur-total-width: 144px;
 $spritesheet-eclaireur-total-height: 144px;
 $spritesheet-eclaireur-image: 'sprite.png';
-$spritesheet-eclaireur: (24px, 48px, -24px, -48px, 24px, 24px, 144px, 144px, 'sprite.png', 'eclaireur', );
+$spritesheet-eclaireur: (
+    24px,
+    48px,
+    -24px,
+    -48px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'eclaireur'
+);
 
 $ecrire: 'ecrire';
 $spritesheet-ecrire-name: 'ecrire';
@@ -124,7 +192,7 @@ $spritesheet-ecrire-height: 24px;
 $spritesheet-ecrire-total-width: 144px;
 $spritesheet-ecrire-total-height: 144px;
 $spritesheet-ecrire-image: 'sprite.png';
-$spritesheet-ecrire: (48px, 48px, -48px, -48px, 24px, 24px, 144px, 144px, 'sprite.png', 'ecrire', );
+$spritesheet-ecrire: (48px, 48px, -48px, -48px, 24px, 24px, 144px, 144px, 'sprite.png', 'ecrire');
 
 $eod: 'eod';
 $spritesheet-eod-name: 'eod';
@@ -137,7 +205,7 @@ $spritesheet-eod-height: 24px;
 $spritesheet-eod-total-width: 144px;
 $spritesheet-eod-total-height: 144px;
 $spritesheet-eod-image: 'sprite.png';
-$spritesheet-eod: (72px, 0px, -72px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'eod', );
+$spritesheet-eod: (72px, 0px, -72px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'eod');
 
 $etoile-histoire-vivante: 'etoile-histoire-vivante';
 $spritesheet-etoile-histoire-vivante-name: 'etoile-histoire-vivante';
@@ -150,7 +218,18 @@ $spritesheet-etoile-histoire-vivante-height: 24px;
 $spritesheet-etoile-histoire-vivante-total-width: 144px;
 $spritesheet-etoile-histoire-vivante-total-height: 144px;
 $spritesheet-etoile-histoire-vivante-image: 'sprite.png';
-$spritesheet-etoile-histoire-vivante: (72px, 24px, -72px, -24px, 24px, 24px, 144px, 144px, 'sprite.png', 'etoile-histoire-vivante', );
+$spritesheet-etoile-histoire-vivante: (
+    72px,
+    24px,
+    -72px,
+    -24px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'etoile-histoire-vivante'
+);
 
 $etoile-viollette: 'etoile-viollette';
 $spritesheet-etoile-viollette-name: 'etoile-viollette';
@@ -163,7 +242,18 @@ $spritesheet-etoile-viollette-height: 24px;
 $spritesheet-etoile-viollette-total-width: 144px;
 $spritesheet-etoile-viollette-total-height: 144px;
 $spritesheet-etoile-viollette-image: 'sprite.png';
-$spritesheet-etoile-viollette: (72px, 48px, -72px, -48px, 24px, 24px, 144px, 144px, 'sprite.png', 'etoile-viollette', );
+$spritesheet-etoile-viollette: (
+    72px,
+    48px,
+    -72px,
+    -48px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'etoile-viollette'
+);
 
 $evenements-actuels: 'evenements-actuels';
 $spritesheet-evenements-actuels-name: 'evenements-actuels';
@@ -176,7 +266,18 @@ $spritesheet-evenements-actuels-height: 24px;
 $spritesheet-evenements-actuels-total-width: 144px;
 $spritesheet-evenements-actuels-total-height: 144px;
 $spritesheet-evenements-actuels-image: 'sprite.png';
-$spritesheet-evenements-actuels: (0px, 72px, 0px, -72px, 24px, 24px, 144px, 144px, 'sprite.png', 'evenements-actuels', );
+$spritesheet-evenements-actuels: (
+    0px,
+    72px,
+    0px,
+    -72px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'evenements-actuels'
+);
 
 $evenements-bonus: 'evenements-bonus';
 $spritesheet-evenements-bonus-name: 'evenements-bonus';
@@ -189,7 +290,18 @@ $spritesheet-evenements-bonus-height: 24px;
 $spritesheet-evenements-bonus-total-width: 144px;
 $spritesheet-evenements-bonus-total-height: 144px;
 $spritesheet-evenements-bonus-image: 'sprite.png';
-$spritesheet-evenements-bonus: (24px, 72px, -24px, -72px, 24px, 24px, 144px, 144px, 'sprite.png', 'evenements-bonus', );
+$spritesheet-evenements-bonus: (
+    24px,
+    72px,
+    -24px,
+    -72px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'evenements-bonus'
+);
 
 $festivites: 'festivites';
 $spritesheet-festivites-name: 'festivites';
@@ -202,7 +314,18 @@ $spritesheet-festivites-height: 24px;
 $spritesheet-festivites-total-width: 144px;
 $spritesheet-festivites-total-height: 144px;
 $spritesheet-festivites-image: 'sprite.png';
-$spritesheet-festivites: (48px, 72px, -48px, -72px, 24px, 24px, 144px, 144px, 'sprite.png', 'festivites', );
+$spritesheet-festivites: (
+    48px,
+    72px,
+    -48px,
+    -72px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'festivites'
+);
 
 $fishing: 'fishing';
 $spritesheet-fishing-name: 'fishing';
@@ -215,7 +338,7 @@ $spritesheet-fishing-height: 24px;
 $spritesheet-fishing-total-width: 144px;
 $spritesheet-fishing-total-height: 144px;
 $spritesheet-fishing-image: 'sprite.png';
-$spritesheet-fishing: (72px, 72px, -72px, -72px, 24px, 24px, 144px, 144px, 'sprite.png', 'fishing', );
+$spritesheet-fishing: (72px, 72px, -72px, -72px, 24px, 24px, 144px, 144px, 'sprite.png', 'fishing');
 
 $fractales: 'fractales';
 $spritesheet-fractales-name: 'fractales';
@@ -228,7 +351,18 @@ $spritesheet-fractales-height: 24px;
 $spritesheet-fractales-total-width: 144px;
 $spritesheet-fractales-total-height: 144px;
 $spritesheet-fractales-image: 'sprite.png';
-$spritesheet-fractales: (96px, 0px, -96px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'fractales', );
+$spritesheet-fractales: (
+    96px,
+    0px,
+    -96px,
+    0px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'fractales'
+);
 
 $guide-aventure: 'guide-aventure';
 $spritesheet-guide-aventure-name: 'guide-aventure';
@@ -241,7 +375,18 @@ $spritesheet-guide-aventure-height: 24px;
 $spritesheet-guide-aventure-total-width: 144px;
 $spritesheet-guide-aventure-total-height: 144px;
 $spritesheet-guide-aventure-image: 'sprite.png';
-$spritesheet-guide-aventure: (96px, 24px, -96px, -24px, 24px, 24px, 144px, 144px, 'sprite.png', 'guide-aventure', );
+$spritesheet-guide-aventure: (
+    96px,
+    24px,
+    -96px,
+    -24px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'guide-aventure'
+);
 
 $hot: 'hot';
 $spritesheet-hot-name: 'hot';
@@ -254,7 +399,7 @@ $spritesheet-hot-height: 24px;
 $spritesheet-hot-total-width: 144px;
 $spritesheet-hot-total-height: 144px;
 $spritesheet-hot-image: 'sprite.png';
-$spritesheet-hot: (96px, 48px, -96px, -48px, 24px, 24px, 144px, 144px, 'sprite.png', 'hot', );
+$spritesheet-hot: (96px, 48px, -96px, -48px, 24px, 24px, 144px, 144px, 'sprite.png', 'hot');
 
 $hotnews: 'hotnews';
 $spritesheet-hotnews-name: 'hotnews';
@@ -267,7 +412,7 @@ $spritesheet-hotnews-height: 24px;
 $spritesheet-hotnews-total-width: 144px;
 $spritesheet-hotnews-total-height: 144px;
 $spritesheet-hotnews-image: 'sprite.png';
-$spritesheet-hotnews: (96px, 72px, -96px, -72px, 24px, 24px, 144px, 144px, 'sprite.png', 'hotnews', );
+$spritesheet-hotnews: (96px, 72px, -96px, -72px, 24px, 24px, 144px, 144px, 'sprite.png', 'hotnews');
 
 $jcj: 'jcj';
 $spritesheet-jcj-name: 'jcj';
@@ -280,7 +425,7 @@ $spritesheet-jcj-height: 24px;
 $spritesheet-jcj-total-width: 144px;
 $spritesheet-jcj-total-height: 144px;
 $spritesheet-jcj-image: 'sprite.png';
-$spritesheet-jcj: (0px, 96px, 0px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'jcj', );
+$spritesheet-jcj: (0px, 96px, 0px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'jcj');
 
 $mcm: 'mcm';
 $spritesheet-mcm-name: 'mcm';
@@ -293,7 +438,7 @@ $spritesheet-mcm-height: 24px;
 $spritesheet-mcm-total-width: 144px;
 $spritesheet-mcm-total-height: 144px;
 $spritesheet-mcm-image: 'sprite.png';
-$spritesheet-mcm: (24px, 96px, -24px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'mcm', );
+$spritesheet-mcm: (24px, 96px, -24px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'mcm');
 
 $metas: 'metas';
 $spritesheet-metas-name: 'metas';
@@ -306,7 +451,7 @@ $spritesheet-metas-height: 24px;
 $spritesheet-metas-total-width: 144px;
 $spritesheet-metas-total-height: 144px;
 $spritesheet-metas-image: 'sprite.png';
-$spritesheet-metas: (48px, 96px, -48px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'metas', );
+$spritesheet-metas: (48px, 96px, -48px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'metas');
 
 $mission-attaque: 'mission-attaque';
 $spritesheet-mission-attaque-name: 'mission-attaque';
@@ -319,7 +464,18 @@ $spritesheet-mission-attaque-height: 24px;
 $spritesheet-mission-attaque-total-width: 144px;
 $spritesheet-mission-attaque-total-height: 144px;
 $spritesheet-mission-attaque-image: 'sprite.png';
-$spritesheet-mission-attaque: (72px, 96px, -72px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'mission-attaque', );
+$spritesheet-mission-attaque: (
+    72px,
+    96px,
+    -72px,
+    -96px,
+    24px,
+    24px,
+    144px,
+    144px,
+    'sprite.png',
+    'mission-attaque'
+);
 
 $outils: 'outils';
 $spritesheet-outils-name: 'outils';
@@ -332,7 +488,7 @@ $spritesheet-outils-height: 24px;
 $spritesheet-outils-total-width: 144px;
 $spritesheet-outils-total-height: 144px;
 $spritesheet-outils-image: 'sprite.png';
-$spritesheet-outils: (96px, 96px, -96px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'outils', );
+$spritesheet-outils: (96px, 96px, -96px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'outils');
 
 $pof: 'pof';
 $spritesheet-pof-name: 'pof';
@@ -345,7 +501,7 @@ $spritesheet-pof-height: 24px;
 $spritesheet-pof-total-width: 144px;
 $spritesheet-pof-total-height: 144px;
 $spritesheet-pof-image: 'sprite.png';
-$spritesheet-pof: (120px, 0px, -120px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'pof', );
+$spritesheet-pof: (120px, 0px, -120px, 0px, 24px, 24px, 144px, 144px, 'sprite.png', 'pof');
 
 $raids: 'raids';
 $spritesheet-raids-name: 'raids';
@@ -358,7 +514,7 @@ $spritesheet-raids-height: 24px;
 $spritesheet-raids-total-width: 144px;
 $spritesheet-raids-total-height: 144px;
 $spritesheet-raids-image: 'sprite.png';
-$spritesheet-raids: (120px, 24px, -120px, -24px, 24px, 24px, 144px, 144px, 'sprite.png', 'raids', );
+$spritesheet-raids: (120px, 24px, -120px, -24px, 24px, 24px, 144px, 144px, 'sprite.png', 'raids');
 
 $skritt: 'skritt';
 $spritesheet-skritt-name: 'skritt';
@@ -371,7 +527,7 @@ $spritesheet-skritt-height: 24px;
 $spritesheet-skritt-total-width: 144px;
 $spritesheet-skritt-total-height: 144px;
 $spritesheet-skritt-image: 'sprite.png';
-$spritesheet-skritt: (120px, 48px, -120px, -48px, 24px, 24px, 144px, 144px, 'sprite.png', 'skritt', );
+$spritesheet-skritt: (120px, 48px, -120px, -48px, 24px, 24px, 144px, 144px, 'sprite.png', 'skritt');
 
 $soto: 'soto';
 $spritesheet-soto-name: 'soto';
@@ -384,7 +540,7 @@ $spritesheet-soto-height: 24px;
 $spritesheet-soto-total-width: 144px;
 $spritesheet-soto-total-height: 144px;
 $spritesheet-soto-image: 'sprite.png';
-$spritesheet-soto: (120px, 72px, -120px, -72px, 24px, 24px, 144px, 144px, 'sprite.png', 'soto', );
+$spritesheet-soto: (120px, 72px, -120px, -72px, 24px, 24px, 144px, 144px, 'sprite.png', 'soto');
 
 $succes: 'succes';
 $spritesheet-succes-name: 'succes';
@@ -397,7 +553,7 @@ $spritesheet-succes-height: 24px;
 $spritesheet-succes-total-width: 144px;
 $spritesheet-succes-total-height: 144px;
 $spritesheet-succes-image: 'sprite.png';
-$spritesheet-succes: (120px, 96px, -120px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'succes', );
+$spritesheet-succes: (120px, 96px, -120px, -96px, 24px, 24px, 144px, 144px, 'sprite.png', 'succes');
 
 $tp: 'tp';
 $spritesheet-tp-name: 'tp';
@@ -410,14 +566,46 @@ $spritesheet-tp-height: 24px;
 $spritesheet-tp-total-width: 144px;
 $spritesheet-tp-total-height: 144px;
 $spritesheet-tp-image: 'sprite.png';
-$spritesheet-tp: (0px, 120px, 0px, -120px, 24px, 24px, 144px, 144px, 'sprite.png', 'tp', );
+$spritesheet-tp: (0px, 120px, 0px, -120px, 24px, 24px, 144px, 144px, 'sprite.png', 'tp');
 
 $spritesheet-width: 144px;
 $spritesheet-height: 144px;
 $spritesheet-image: 'sprite.png';
-$spritesheet-sprites: ($spritesheet-boss, $spritesheet-bus, $spritesheet-chambre-forte-sorcier, $spritesheet-coeur-plein, $spritesheet-collections, $spritesheet-commandant-rouge, $spritesheet-coup-de-pied, $spritesheet-eclaireur, $spritesheet-ecrire, $spritesheet-eod, $spritesheet-etoile-histoire-vivante, $spritesheet-etoile-viollette, $spritesheet-evenements-actuels, $spritesheet-evenements-bonus, $spritesheet-festivites, $spritesheet-fishing, $spritesheet-fractales, $spritesheet-guide-aventure, $spritesheet-hot, $spritesheet-hotnews, $spritesheet-jcj, $spritesheet-mcm, $spritesheet-metas, $spritesheet-mission-attaque, $spritesheet-outils, $spritesheet-pof, $spritesheet-raids, $spritesheet-skritt, $spritesheet-soto, $spritesheet-succes, $spritesheet-tp, );
+$spritesheet-sprites: (
+    $spritesheet-boss,
+    $spritesheet-bus,
+    $spritesheet-chambre-forte-sorcier,
+    $spritesheet-coeur-plein,
+    $spritesheet-collections,
+    $spritesheet-commandant-rouge,
+    $spritesheet-coup-de-pied,
+    $spritesheet-eclaireur,
+    $spritesheet-ecrire,
+    $spritesheet-eod,
+    $spritesheet-etoile-histoire-vivante,
+    $spritesheet-etoile-viollette,
+    $spritesheet-evenements-actuels,
+    $spritesheet-evenements-bonus,
+    $spritesheet-festivites,
+    $spritesheet-fishing,
+    $spritesheet-fractales,
+    $spritesheet-guide-aventure,
+    $spritesheet-hot,
+    $spritesheet-hotnews,
+    $spritesheet-jcj,
+    $spritesheet-mcm,
+    $spritesheet-metas,
+    $spritesheet-mission-attaque,
+    $spritesheet-outils,
+    $spritesheet-pof,
+    $spritesheet-raids,
+    $spritesheet-skritt,
+    $spritesheet-soto,
+    $spritesheet-succes,
+    $spritesheet-tp
+);
 
-$spritesheet: (144px, 144px, 'sprite.png', $spritesheet-sprites, );
+$spritesheet: (144px, 144px, 'sprite.png', $spritesheet-sprites);
 
 $spritesheet-map: (
     boss: $spritesheet-boss,
@@ -478,56 +666,56 @@ $spritesheet-map: (
 // // HTML
 // <i class="icon icon-home"></i>
 @function spritesheet-getwidth($sprite, $rate: 1) {
-  $real-sprite:  map-get($spritesheet-map, $sprite);
-  @return nth($real-sprite, 5) * $rate;
+    $real-sprite: map.get($spritesheet-map, $sprite);
+    @return list.nth($real-sprite, 5) * $rate;
 }
 
 @function spritesheet-getheight($sprite, $rate: 1) {
-  $real-sprite:  map-get($spritesheet-map, $sprite);
-  @return nth($real-sprite, 6) * $rate;
+    $real-sprite: map.get($spritesheet-map, $sprite);
+    @return list.nth($real-sprite, 6) * $rate;
 }
 
 @mixin spritesheet-sprite-width($sprite, $rate: 1, $size: null) {
-  @if ($size == null){
-    $size: spritesheet-getwidth($sprite, $rate);
-  }
-  width: $size;
+    @if ($size == null) {
+        $size: spritesheet-getwidth($sprite, $rate);
+    }
+    width: $size;
 }
 
 @mixin spritesheet-sprite-height($sprite, $rate: 1, $size: null) {
-  @if ($size == null){
-    $size: spritesheet-getheight($sprite, $rate);
-  }
-  height: $size;
+    @if ($size == null) {
+        $size: spritesheet-getheight($sprite, $rate);
+    }
+    height: $size;
 }
 
 @mixin spritesheet-sprite-position($sprite, $rate: 1, $size: null) {
-  @if ($rate == 1 and $size != null){
-    $rate: $size / spritesheet-getwidth($sprite);
-  }
-  $real-sprite: map-get($spritesheet-map, $sprite);
-  $sprite-offset-x: nth($real-sprite, 3);
-  $sprite-offset-y: nth($real-sprite, 4);
-  background-position: $sprite-offset-x * $rate $sprite-offset-y * $rate;
+    @if ($rate == 1 and $size != null) {
+        $rate: $size / spritesheet-getwidth($sprite);
+    }
+    $real-sprite: map.get($spritesheet-map, $sprite);
+    $sprite-offset-x: list.nth($real-sprite, 3);
+    $sprite-offset-y: list.nth($real-sprite, 4);
+    background-position: $sprite-offset-x * $rate $sprite-offset-y * $rate;
 }
 
 @mixin spritesheet-sprite-image() {
-  background-image: url(sprite.png);
+    background-image: url(sprite.png);
 }
 
 @mixin spritesheet-sprite-size($sprite, $rate: 1, $size: null) {
-  @if ($rate == 1 and $size != null){
-    $rate: $size / spritesheet-getwidth($sprite);
-  }
-  background-size: $spritesheet-width * $rate $spritesheet-height * $rate;
+    @if ($rate == 1 and $size != null) {
+        $rate: $size / spritesheet-getwidth($sprite);
+    }
+    background-size: $spritesheet-width * $rate $spritesheet-height * $rate;
 }
 
 @mixin spritesheet-sprite($sprite, $rate: 1, $size: null) {
-  @include spritesheet-sprite-image();
-  @include spritesheet-sprite-position($sprite, $rate, $size);
-  @include spritesheet-sprite-width($sprite, $rate, $size);
-  @include spritesheet-sprite-height($sprite, $rate, $size);
-  @include spritesheet-sprite-size($sprite, $rate, $size);
+    @include spritesheet-sprite-image();
+    @include spritesheet-sprite-position($sprite, $rate, $size);
+    @include spritesheet-sprite-width($sprite, $rate, $size);
+    @include spritesheet-sprite-height($sprite, $rate, $size);
+    @include spritesheet-sprite-size($sprite, $rate, $size);
 }
 
 // The `sprites` mixin generates identical output to the CSS template
@@ -535,10 +723,10 @@ $spritesheet-map: (
 //
 // @include sprites($spritesheet-sprites);
 @mixin sprites($sprites) {
-  @each $sprite in $sprites {
-    $sprite-name: nth($sprite, 10);
-    &.#{$sprite-name} {
-      @include spritesheet-sprite($sprite-name);
+    @each $sprite in $sprites {
+        $sprite-name: list.nth($sprite, 10);
+        &.#{$sprite-name} {
+            @include spritesheet-sprite($sprite-name);
+        }
     }
-  }
 }

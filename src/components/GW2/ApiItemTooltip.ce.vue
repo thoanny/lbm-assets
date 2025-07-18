@@ -1,14 +1,7 @@
 <script>
 import { Tippy, TippyDirective } from 'tippy.vue';
 
-export default {
-    components: {
-        Tippy,
-    },
-    directives: {
-        tippy: TippyDirective,
-    },
-};
+export default { components: { Tippy }, directives: { tippy: TippyDirective } };
 </script>
 
 <script setup>
@@ -95,5 +88,5 @@ function showItemTooltip() {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/main.scss';
+@use '@/assets/main.scss';
 </style>

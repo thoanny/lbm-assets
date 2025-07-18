@@ -46,114 +46,24 @@ const loadSuperAdventureBoxData = () => {
                         item.data.zones.length + item.data.unlocks.length + item.data.songs.length;
 
                     const zones = [
-                        {
-                            id: 13,
-                            mode: 'infantile',
-                            world: 1,
-                            zone: 1,
-                        },
-                        {
-                            id: 14,
-                            mode: 'infantile',
-                            world: 1,
-                            zone: 2,
-                        },
-                        {
-                            id: 15,
-                            mode: 'infantile',
-                            world: 1,
-                            zone: 3,
-                        },
-                        {
-                            id: 16,
-                            mode: 'infantile',
-                            world: 2,
-                            zone: 1,
-                        },
-                        {
-                            id: 17,
-                            mode: 'infantile',
-                            world: 2,
-                            zone: 2,
-                        },
-                        {
-                            id: 18,
-                            mode: 'infantile',
-                            world: 2,
-                            zone: 3,
-                        },
-                        {
-                            id: 1,
-                            mode: 'normal',
-                            world: 1,
-                            zone: 1,
-                        },
-                        {
-                            id: 2,
-                            mode: 'normal',
-                            world: 1,
-                            zone: 2,
-                        },
-                        {
-                            id: 3,
-                            mode: 'normal',
-                            world: 1,
-                            zone: 3,
-                        },
-                        {
-                            id: 4,
-                            mode: 'normal',
-                            world: 2,
-                            zone: 1,
-                        },
-                        {
-                            id: 5,
-                            mode: 'normal',
-                            world: 2,
-                            zone: 2,
-                        },
-                        {
-                            id: 6,
-                            mode: 'normal',
-                            world: 2,
-                            zone: 3,
-                        },
-                        {
-                            id: 25,
-                            mode: 'tribulation',
-                            world: 1,
-                            zone: 1,
-                        },
-                        {
-                            id: 26,
-                            mode: 'tribulation',
-                            world: 1,
-                            zone: 2,
-                        },
-                        {
-                            id: 27,
-                            mode: 'tribulation',
-                            world: 1,
-                            zone: 3,
-                        },
-                        {
-                            id: 28,
-                            mode: 'tribulation',
-                            world: 2,
-                            zone: 1,
-                        },
-                        {
-                            id: 29,
-                            mode: 'tribulation',
-                            world: 2,
-                            zone: 2,
-                        },
-                        {
-                            id: 30,
-                            mode: 'tribulation',
-                            world: 2,
-                            zone: 3,
-                        },
+                        { id: 13, mode: 'infantile', world: 1, zone: 1 },
+                        { id: 14, mode: 'infantile', world: 1, zone: 2 },
+                        { id: 15, mode: 'infantile', world: 1, zone: 3 },
+                        { id: 16, mode: 'infantile', world: 2, zone: 1 },
+                        { id: 17, mode: 'infantile', world: 2, zone: 2 },
+                        { id: 18, mode: 'infantile', world: 2, zone: 3 },
+                        { id: 1, mode: 'normal', world: 1, zone: 1 },
+                        { id: 2, mode: 'normal', world: 1, zone: 2 },
+                        { id: 3, mode: 'normal', world: 1, zone: 3 },
+                        { id: 4, mode: 'normal', world: 2, zone: 1 },
+                        { id: 5, mode: 'normal', world: 2, zone: 2 },
+                        { id: 6, mode: 'normal', world: 2, zone: 3 },
+                        { id: 25, mode: 'tribulation', world: 1, zone: 1 },
+                        { id: 26, mode: 'tribulation', world: 1, zone: 2 },
+                        { id: 27, mode: 'tribulation', world: 1, zone: 3 },
+                        { id: 28, mode: 'tribulation', world: 2, zone: 1 },
+                        { id: 29, mode: 'tribulation', world: 2, zone: 2 },
+                        { id: 30, mode: 'tribulation', world: 2, zone: 3 },
                     ].map((zone) => {
                         const idx = item.data.zones.findIndex((z) => z.id === zone.id);
                         zone.done = idx >= 0 ? true : false;
@@ -167,83 +77,26 @@ const loadSuperAdventureBoxData = () => {
                     };
 
                     const unlocks = [
-                        {
-                            id: 1,
-                            name: 'chain_stick',
-                        },
-                        {
-                            id: 3,
-                            name: 'slingshot',
-                        },
-                        {
-                            id: 4,
-                        },
-                        {
-                            id: 6,
-                            name: 'whip',
-                        },
-                        {
-                            id: 9,
-                            name: 'mini_bomb',
-                        },
-                        {
-                            id: 10,
-                        },
-                        {
-                            id: 12,
-                            name: 'candle',
-                        },
-                        {
-                            id: 13,
-                            name: 'torch',
-                        },
-                        {
-                            id: 15,
-                            name: 'wooden_whistle',
-                        },
-                        {
-                            id: 18,
-                            name: 'digger',
-                        },
-                        {
-                            id: 19,
-                            name: 'nice_scoop',
-                        },
-                        {
-                            id: 21,
-                            name: 'glove_of_wisdom',
-                        },
-                        {
-                            id: 24,
-                            name: 'bauble_purse',
-                        },
-                        {
-                            id: 25,
-                            name: 'bauble_tote_bag',
-                        },
-                        {
-                            id: 26,
-                        },
-                        {
-                            id: 27,
-                            name: 'moto_breath',
-                        },
-                        {
-                            id: 28,
-                            name: 'moto_finger',
-                        },
-                        {
-                            id: 31,
-                            name: 'health_vessel_1',
-                        },
-                        {
-                            id: 32,
-                            name: 'health_vessel_2',
-                        },
-                        {
-                            id: 34,
-                            name: 'medium_health_potion',
-                        },
+                        { id: 1, name: 'chain_stick' },
+                        { id: 3, name: 'slingshot' },
+                        { id: 4 },
+                        { id: 6, name: 'whip' },
+                        { id: 9, name: 'mini_bomb' },
+                        { id: 10 },
+                        { id: 12, name: 'candle' },
+                        { id: 13, name: 'torch' },
+                        { id: 15, name: 'wooden_whistle' },
+                        { id: 18, name: 'digger' },
+                        { id: 19, name: 'nice_scoop' },
+                        { id: 21, name: 'glove_of_wisdom' },
+                        { id: 24, name: 'bauble_purse' },
+                        { id: 25, name: 'bauble_tote_bag' },
+                        { id: 26 },
+                        { id: 27, name: 'moto_breath' },
+                        { id: 28, name: 'moto_finger' },
+                        { id: 31, name: 'health_vessel_1' },
+                        { id: 32, name: 'health_vessel_2' },
+                        { id: 34, name: 'medium_health_potion' },
                     ].map((unlock) => {
                         const idx = item.data.unlocks.findIndex((u) => u.id === unlock.id);
                         unlock.done = idx >= 0 ? true : false;
@@ -251,18 +104,9 @@ const loadSuperAdventureBoxData = () => {
                     });
 
                     const songs = [
-                        {
-                            id: 1,
-                            name: 'secret_song',
-                        },
-                        {
-                            id: 2,
-                            name: 'gatekeeper_lullaby',
-                        },
-                        {
-                            id: 3,
-                            name: 'shatter_serenade',
-                        },
+                        { id: 1, name: 'secret_song' },
+                        { id: 2, name: 'gatekeeper_lullaby' },
+                        { id: 3, name: 'shatter_serenade' },
                     ].map((song) => {
                         const idx = item.data.songs.findIndex((s) => s.id === song.id);
                         song.done = idx >= 0 ? true : false;
@@ -449,7 +293,7 @@ watch(currentToken, async () => {
 </template>
 
 <style lang="scss" scoped>
-@import '../../assets/main.scss';
+@use '../../assets/main.scss';
 .lbm-avatar.lbm-offline::before {
     background-color: oklch(var(--er) / 1);
 }

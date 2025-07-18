@@ -53,10 +53,7 @@ const loadData = async () => {
     ]).then((res) => {
         const [$cats, $nodes, $glyphs, $categories, $decorations] = res;
 
-        cats.value = $cats.data.map((d) => ({
-            ...d,
-            ...localCats.find((lc) => lc.id === d.id),
-        }));
+        cats.value = $cats.data.map((d) => ({ ...d, ...localCats.find((lc) => lc.id === d.id) }));
 
         nodes.value = $nodes.data.map((d) => ({
             ...d,
@@ -655,7 +652,7 @@ watch(currentToken, () => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/main.scss';
+@use '@/assets/main.scss';
 
 h4.lbm-menu-title {
     @apply p-0 uppercase w-full justify-between flex items-center;

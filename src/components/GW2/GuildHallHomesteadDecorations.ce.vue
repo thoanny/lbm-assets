@@ -457,7 +457,7 @@ const categories = computed(() => {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/main.scss';
+@use '@/assets/main.scss';
 
 h4.lbm-menu-title {
     @apply p-0 uppercase w-full justify-between flex items-center;
