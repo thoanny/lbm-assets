@@ -1,5 +1,5 @@
 <template>
-    <div class="grid xl:grid-cols-5 gap-4" style="max-width: 920px">
+    <div class="grid xl:grid-cols-5 gap-4">
         <a
             v-for="page in pages"
             :key="page.id"
