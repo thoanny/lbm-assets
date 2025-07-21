@@ -4,7 +4,6 @@
             v-for="page in pages"
             :key="page.id"
             :href="page.link"
-            target="_blank"
             class="relative rounded-lg overflow-hidden h-full w-full group"
             :class="{
                 'xl:col-span-3 aspect-video': [0, 2, 4, 5, 6, 8].indexOf(page.id) >= 0,
