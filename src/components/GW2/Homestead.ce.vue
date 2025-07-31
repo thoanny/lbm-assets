@@ -1,18 +1,31 @@
 <script setup>
+const VERSION = 'homestead-0.9.0';
 // Icons : https://remixicon.com
 import { onMounted, ref, computed, watch } from 'vue';
-import MarkdownIt from 'markdown-it';
 import { chunk, copyToClipboard, formatIntToGold } from '@/services/utils';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import Gw2ApiService from '@/services/gw2ApiService';
-import {
-    cats as localCats,
-    nodes as localNodes,
-    glyphs as localGlyphs,
-} from '@/data/gw2-homestead.json';
+import localGlyphs from '@/data/gw2-homestead-glyphs.json';
+import { markdown } from '../../services/markdown';
+
+import localCats from '@/data/gw2-homestead-cats.json';
+import localNodes from '@/data/gw2-homestead-nodes.json';
+
+import IconHomeUp from '../icons/IconHomeUp.vue';
+import IconArmchair2 from '../icons/IconArmchair2.vue';
+import IconBuildingCastle from '../icons/IconBuildingCastle.vue';
+import IconCards from '../icons/IconCards.vue';
+import IconCat from '../icons/IconCat.vue';
+import IconSeedling from '../icons/IconSeedling.vue';
+import IconCopy from '../icons/IconCopy.vue';
+import IconBook from '../icons/IconBook.vue';
+import IconInfoSquareRoundedFilled from '../icons/IconInfoSquareRoundedFilled.vue';
+import IconCircleCheckFilled from '../icons/IconCircleCheckFilled.vue';
 
 const gw2 = Gw2ApiService;
+
+const props = defineProps(['panel', 'tab']);
 
 const user = useUserStore();
 const { currentToken } = storeToRefs(user);
@@ -25,12 +38,9 @@ const glyphs = ref([]);
 const decorations = ref([]);
 const categories = ref([]);
 const prices = ref([]);
-const hideCheckedCatsAndNodes = ref(false);
 const isLoading = ref(false);
 
 const LBMApp = ref();
-
-const markdown = new MarkdownIt({ html: true });
 
 const currentDecoration = ref(null);
 const currentCat = ref(null);
@@ -50,15 +60,55 @@ const loadData = async () => {
         gw2.getGlyphs(),
         gw2.getCategories(),
         gw2.getDecorations(),
-    ]).then((res) => {
+    ]).then(async (res) => {
         const [$cats, $nodes, $glyphs, $categories, $decorations] = res;
 
-        cats.value = $cats.data.map((d) => ({ ...d, ...localCats.find((lc) => lc.id === d.id) }));
+        cats.value = $cats.data.map((d) => ({
+            ...d,
+            local: localCats.find((lc) => lc.fields.api_id === d.id) || null,
+        }));
+
+        // Ajouter les chats du Bus qui ne sont pas dans l'API
+        cats.value = cats.value.concat(
+            localCats
+                .filter((cat) => {
+                    return cats.value.map((c) => c.id).indexOf(cat.fields.api_id) < 0;
+                })
+                .map((cat) => {
+                    cat.fields.description = [
+                        cat.fields.description,
+                        "⚠️ **Ce chat n'est pas disponible dans l'API officielle de Guild Wars 2.**",
+                    ].join('<br>');
+                    return {
+                        hint: `__cat_${cat.fields.api_id}__`,
+                        id: cat.fields.api_id,
+                        local: cat,
+                    };
+                }),
+        );
 
         nodes.value = $nodes.data.map((d) => ({
             ...d,
-            ...localNodes.find((ln) => ln.id === d.id),
+            local: localNodes.find((ln) => ln.fields.api_id === d.id) || null,
         }));
+
+        // Ajouter les zones du Bus qui ne sont pas dans l'API
+        nodes.value = nodes.value.concat(
+            localNodes
+                .filter((node) => {
+                    return nodes.value.map((n) => n.id).indexOf(node.fields.api_id) < 0;
+                })
+                .map((node) => {
+                    node.fields.description = [
+                        node.fields.description,
+                        "⚠️ **Cette zone de récoltes n'est pas disponible dans l'API officielle de Guild Wars 2.**",
+                    ].join('<br>');
+                    return {
+                        id: node.fields.api_id,
+                        local: node,
+                    };
+                }),
+        );
 
         glyphs.value = $glyphs.data.map((g) => ({
             ...g,
@@ -83,6 +133,14 @@ const loadData = async () => {
                 decorations.value = decorations.value.sort((a, b) => a.name.localeCompare(b.name));
                 isLoading.value = false;
             });
+
+        const nodesPricesIds = localNodes
+            .map((node) => node.fields.item?.id)
+            .filter((node) => node);
+        const catsFoodPricesIds = localCats.map((cat) => cat.fields.food?.id).filter((cat) => cat);
+        const pricesIds = [...new Set([...nodesPricesIds, ...catsFoodPricesIds])];
+        prices.value = await gw2.getCommercePrices(pricesIds).then((res) => res.data);
+        console.log('nodesPricesIds', nodesPricesIds);
     });
 };
 
@@ -116,10 +174,6 @@ const loadUserData = async () => {
             ...decoration,
             ...$decorations.data.find((d) => d.id === decoration.id),
         }));
-
-        const pricesIds = localNodes.filter((node) => node.price > 0).map((node) => node.item_id);
-        prices.value = await gw2.getCommercePrices(pricesIds).then((res) => res.data);
-        console.log('pricesIds', pricesIds, prices.value);
     });
 };
 
@@ -137,7 +191,12 @@ const getPriceById = (id) => {
 };
 
 onMounted(() => {
-    initUserSettings();
+    if (panels.indexOf(props.panel) >= 0) {
+        panel.value = props.panel;
+    }
+    if (tabs.indexOf(props.tab) >= 0) {
+        tab.value = props.tab;
+    }
     loadData().then(() => loadUserData());
 });
 
@@ -173,24 +232,15 @@ const filteredDecorations = computed(() => {
 });
 
 const handleModalCat = (cat_id) => {
+    currentCat.value = null;
     currentCat.value = cats.value.find((cat) => cat.id === cat_id);
     modalCat.value.showModal();
 };
 
 const handleModalNode = (node_id) => {
+    currentNode.value = null;
     currentNode.value = nodes.value.find((node) => node.id === node_id);
     modalNode.value.showModal();
-};
-
-const initUserSettings = () => {
-    const localHideCheckedCatsAndNodes = localStorage.getItem('gw2-homestead-hide-cats-nodes');
-    if (!!localHideCheckedCatsAndNodes) {
-        hideCheckedCatsAndNodes.value = localHideCheckedCatsAndNodes == 'true';
-    }
-};
-
-const handleHideCheckedCatsAndNodes = () => {
-    localStorage.setItem('gw2-homestead-hide-cats-nodes', hideCheckedCatsAndNodes.value);
 };
 
 watch(currentToken, () => {
@@ -211,6 +261,23 @@ watch(currentToken, () => {
 // - name
 // - description
 // - price : si supérieur à 1, prix du comptoir récupéré via api
+
+const panels = ['upgrades', 'homestead', 'guildhall'];
+const panel = ref('upgrades');
+const tabs = ['cats', 'nodes', 'glyphs'];
+const tab = ref('cats'); // TODO
+
+function switchPanel(p) {
+    if (p !== panel.value) {
+        panel.value = p;
+    }
+}
+
+function switchTab(t) {
+    if (t !== tab.value) {
+        tab.value = t;
+    }
+}
 </script>
 
 <template>
@@ -221,133 +288,102 @@ watch(currentToken, () => {
             <div class="lbm-app__brand">
                 <img src="" alt="" class="lbm-app__logo bg-primary" v-if="false" />
                 <div class="lbm-app__title">
-                    Décorations du pavillon
+                    Décorations du pavillon et du hall de guilde
                     <div class="lbm-app__subtitle">
-                        {{ decorations.length }} décorations, {{ cats.length }} chats et
-                        {{ nodes.length }} zones de récolte
-                        <!-- Version α (alpha) -->
+                        <template v-if="panel === 'upgrades'"> Améliorations du pavillon </template>
+                        <template v-if="panel === 'homestead'"> Décorations du pavillon </template>
+                        <template v-if="panel === 'guildhall'">
+                            Décorations du hall de guilde
+                        </template>
                     </div>
                 </div>
             </div>
             <div class="lbm-app__sidebar">
                 <gw2-user-auth></gw2-user-auth>
-                <input
-                    type="checkbox"
-                    class="lbm-toggle lbm-toggle-primary"
-                    v-model="hideCheckedCatsAndNodes"
-                    @change="handleHideCheckedCatsAndNodes"
-                />
             </div>
         </div>
 
-        <div
-            class="lbm-app__main flex flex-col-reverse sm:flex-row gap-4 items-start"
-            v-if="isLoading"
-        >
+        <div class="lbm-app__main flex gap-4 items-center sm:items-start" v-if="isLoading">
             <span class="lbm-loading"></span>Chargement en cours
         </div>
-        <div class="lbm-app__main flex flex-col-reverse sm:flex-row gap-4 items-start" v-else>
-            <div class="w-full sm:max-w-xs bg-base-200 rounded-box p-2 sm:sticky top-4">
-                <div class="flex flex-col gap-2 mb-2">
-                    <select
-                        class="lbm-select lbm-select-bordered lbm-select-sm w-full"
-                        v-model="searchType"
-                    >
-                        <option value="">Toutes</option>
-                        <option
-                            v-for="category in categories"
-                            :value="category.id"
-                            :key="category.id"
-                        >
-                            {{ category.name }}
-                        </option>
-                    </select>
-                    <input
-                        type="text"
-                        class="lbm-input lbm-input-bordered lbm-input-sm w-full"
-                        placeholder="Chercher une décoration"
-                        v-model="searchValue"
-                    />
-                </div>
-
-                <div
-                    class="overflow-y-auto lbm-scrollbar min-h-96 pr-2"
-                    style="max-height: calc(100dvh - 15rem)"
+        <div class="lbm-app__main flex flex-col md:flex-row gap-4 items-start" v-else>
+            <div class="flex gap-2 flex-row md:flex-col">
+                <button
+                    @click="switchPanel('upgrades')"
+                    :class="{
+                        'lbm-btn-primary': panel === 'upgrades',
+                        'lbm-btn-neutral': panel !== 'upgrades',
+                    }"
+                    class="lbm-btn lbm-btn-square"
                 >
-                    <ul class="lbm-menu w-full p-0">
-                        <li v-for="decoration in filteredDecorations">
-                            <a
-                                @click.prevent="getDecoration(decoration.id)"
-                                :class="{
-                                    'active lbm-active': currentDecoration?.id === decoration.id,
-                                }"
-                                class="px-2"
-                            >
-                                <img :src="decoration.icon" alt="" class="h-5 w-5 rounded" />
-                                <span class="truncate">{{ decoration.name }}</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                    <IconHomeUp />
+                </button>
+                <button
+                    @click="switchPanel('homestead')"
+                    :class="{
+                        'lbm-btn-primary': panel == 'homestead',
+                        'lbm-btn-neutral': panel !== 'homestead',
+                    }"
+                    class="lbm-btn lbm-btn-square"
+                >
+                    <IconArmchair2 />
+                </button>
+                <button
+                    @click="switchPanel('guildhall')"
+                    :class="{
+                        'lbm-btn-primary': panel == 'guildhall',
+                        'lbm-btn-neutral': panel !== 'guildhall',
+                    }"
+                    class="lbm-btn lbm-btn-square"
+                >
+                    <IconBuildingCastle />
+                </button>
             </div>
-            <div class="flex-1">
-                <div class="flex items-start gap-4" v-if="currentDecoration">
-                    <div class="w-full">
-                        <!-- <pre>{{ currentDecoration }}</pre> -->
-                        <div class="">
-                            <div class="flex gap-4 items-center relative z-20">
-                                <img
-                                    :src="currentDecoration.icon"
-                                    alt=""
-                                    class="w-16 h-16 bg-red-500 rounded border-2"
-                                />
-                                <div class="flex flex-col flex-1">
-                                    <h2 class="text-xl font-semibold text-white">
-                                        {{ currentDecoration.name }}
-                                    </h2>
-                                    <div>
-                                        <strong>{{ currentDecoration.count ?? '0' }}</strong
-                                        >/{{ currentDecoration.max_count }}
-                                    </div>
-                                </div>
-                                <button
-                                    class="lbm-btn lbm-btn-circle"
-                                    @click="currentDecoration = null"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div v-if="false">
-                            <p v-html="currentDecoration.description"></p>
-                        </div>
-                        <div class="mt-4">
-                            <img
-                                :src="`https://outils.lebusmagique.fr/homestead/${currentDecoration.id}.jpg`"
-                                class="w-full h-full object-cover"
-                                onerror="this.src='https://lebusmagique.netlify.app/assets/img/guilds/decorations/thumbs/defaut.jpg';"
-                                alt=""
-                            />
-                        </div>
-                        <div class="text-xs mt-4">Décoration&nbsp;: {{ currentDecoration.id }}</div>
-                    </div>
+
+            <div v-if="panel === 'upgrades'" class="w-full">
+                <div class="flex gap-2 flex-col sm:flex-row mb-4">
+                    <button
+                        @click="switchTab('cats')"
+                        class="lbm-btn"
+                        :class="{
+                            'lbm-btn-primary': tab === 'cats',
+                            'lbm-btn-neutral': tab !== 'cats',
+                        }"
+                    >
+                        <IconCat />
+                        Chats
+                    </button>
+                    <button
+                        @click="switchTab('nodes')"
+                        class="lbm-btn"
+                        :class="{
+                            'lbm-btn-primary': tab === 'nodes',
+                            'lbm-btn-neutral': tab !== 'nodes',
+                        }"
+                    >
+                        <IconSeedling />
+                        Zones de récoltes
+                    </button>
+                    <button
+                        @click="switchTab('glyphs')"
+                        class="lbm-btn"
+                        :class="{
+                            'lbm-btn-primary': tab === 'glyphs',
+                            'lbm-btn-neutral': tab !== 'glyphs',
+                        }"
+                    >
+                        <IconCards />
+                        Glyphes
+                    </button>
                 </div>
-                <div class="flex flex-col gap-4" v-else>
+                <div v-if="tab === 'cats'">
+                    <!-- Cats List -->
                     <div class="w-full">
-                        <h3 class="text-xl">Chats</h3>
+                        <p class="flex gap-2 items-center text-sm">
+                            <IconInfoSquareRoundedFilled class="size-5" />
+                            Cliquez sur le nom d'un chat pour obtenir plus d'informations.
+                        </p>
+                        <!-- <pre>{{ cats }}</pre> -->
                         <dialog ref="modalCat" class="lbm-modal">
                             <div class="lbm-modal-box" v-if="currentCat">
                                 <form method="dialog">
@@ -358,72 +394,96 @@ watch(currentToken, () => {
                                     </button>
                                 </form>
                                 <h3 class="text-lg font-bold text-white">
-                                    {{ currentCat.name ?? currentCat.hint }}
+                                    {{
+                                        currentCat.local?.fields.name ??
+                                        currentCat.local?.fields.food?.name ??
+                                        currentCat.hint
+                                    }}
                                 </h3>
                                 <div
-                                    v-if="currentCat.description"
-                                    v-html="markdown.render(currentCat.description)"
-                                    class="text-white"
+                                    v-if="currentCat.local?.fields.description"
+                                    v-html="markdown.render(currentCat.local.fields.description)"
+                                    class="text-white description"
                                 ></div>
-                                <template v-if="currentCat.item_name && currentCat.item_id">
-                                    <div class="font-bold mt-4">Nourriture&nbsp;:</div>
+                                <!-- Cat: Food -->
+                                <div
+                                    class="inline-flex flex-wrap gap-2 items-center mt-4 w-full"
+                                    v-if="currentCat.local?.fields.food"
+                                >
+                                    <strong>Nourriture&nbsp;:</strong>
                                     <a
-                                        class="inline-flex gap-2 items-center mt-2"
-                                        :class="[`text-gw2-rarity-${currentCat.item_rarity}`]"
-                                        :href="`https://v2.lebusmagique.fr/fr/items/${currentCat.item_id}`"
+                                        class="inline-flex flex-wrap gap-2 items-center underline-offset-2 no-underline hover:underline"
+                                        :class="[
+                                            `text-gw2-rarity-${currentCat.local.fields.food.rarity}`,
+                                        ]"
+                                        :href="`https://v2.lebusmagique.fr/fr/items/${currentCat.local.fields.food.id}`"
                                         target="_blank"
                                     >
                                         <img
-                                            :src="`https://v2.lebusmagique.fr/img/api/items/${currentCat.item_id}.png`"
+                                            :src="currentCat.local.fields.food.icon"
                                             alt=""
-                                            v-if="currentCat.item_id"
-                                            class="h-8 w-8 rounded border-2"
-                                            :class="[`border-gw2-rarity-${currentCat.item_rarity}`]"
+                                            class="h-6 w-6 rounded border-2"
+                                            :class="[
+                                                `border-gw2-rarity-${currentCat.local.fields.food.rarity}`,
+                                            ]"
                                         />
-                                        {{ currentCat.item_name }}
+                                        {{ currentCat.local.fields.food.name }}
                                     </a>
-                                </template>
-                                <template v-if="currentCat.map">
-                                    <div class="font-bold mt-4">Localisation&nbsp;:</div>
-                                    <div class="flex gap-2 items-center mt-2" v-if="currentCat.map">
-                                        <a
-                                            v-if="currentCat.map_url"
-                                            :href="`https://lebusmagique.fr${currentCat.map_url}`"
-                                            target="_blank"
-                                            >{{ currentCat.map }}</a
-                                        >
-                                        <span v-else>{{ currentCat.map }}</span>
+                                </div>
+                                <div
+                                    v-if="
+                                        currentCat.local.fields.food &&
+                                        getPriceById(currentCat.local.fields.food.id)
+                                    "
+                                    class="flex gap-2 mt-4"
+                                >
+                                    <strong>Prix unitaire au comptoir&nbsp;:</strong>
+                                    <span>
+                                        ~
+                                        <span
+                                            v-html="
+                                                formatIntToGold(
+                                                    getPriceById(currentCat.local.fields.food.id),
+                                                )
+                                            "
+                                        ></span>
+                                    </span>
+                                </div>
+                                <!-- Cat: Location -->
+                                <template v-if="currentCat.local?.fields.map_name">
+                                    <div
+                                        class="inline-flex flex-wrap gap-2 items-center mt-4 w-full"
+                                    >
+                                        <strong>Localisation&nbsp;:</strong>
                                         <button
                                             class="lbm-btn lbm-btn-sm lbm-btn-secondary"
-                                            v-if="currentCat.wp"
+                                            v-if="currentCat.local.fields.waypoint"
                                             @click="
                                                 copyToClipboard(
-                                                    `${currentCat.name ?? currentCat.hint} - ${currentCat.wp}`,
+                                                    `${
+                                                        currentCat.local?.fields.name ??
+                                                        currentCat.local?.fields.food?.name ??
+                                                        currentCat.hint
+                                                    } - ${currentCat.local.fields.waypoint}`,
                                                 )
                                             "
                                         >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 24 24"
-                                                fill="currentColor"
-                                                class="h-4 w-6"
-                                            >
-                                                <path
-                                                    d="M6 4V8H18V4H20.0066C20.5552 4 21 4.44495 21 4.9934V21.0066C21 21.5552 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.5551 3 21.0066V4.9934C3 4.44476 3.44495 4 3.9934 4H6ZM8 2H16V6H8V2Z"
-                                                ></path>
-                                            </svg>
-
-                                            {{ currentCat.wp }}
+                                            <IconCopy class="size-5" />
+                                            {{ currentCat.local.fields.map_name }}
                                         </button>
+                                        <span v-else>{{ currentCat.local.fields.map_name }}</span>
                                     </div>
                                 </template>
+                                <!-- Cat: Guide -->
                                 <a
-                                    :href="`https://www.lebusmagique.fr${currentCat.guide}`"
+                                    :href="currentCat.local.fields.guide"
                                     target="_blank"
                                     class="lbm-btn lbm-btn-block lbm-btn-primary mt-4"
-                                    v-if="currentCat.guide"
-                                    >Guide détaillé</a
+                                    v-if="currentCat.local?.fields.guide"
                                 >
+                                    <IconBook />
+                                    Guide détaillé
+                                </a>
                                 <!-- <pre>{{ currentCat }}</pre> -->
                             </div>
                             <form method="dialog" class="lbm-modal-backdrop">
@@ -435,47 +495,50 @@ watch(currentToken, () => {
                         >
                             <button
                                 v-for="cat in cats"
-                                class="lbm-btn"
+                                class="lbm-btn no-animation"
                                 @click="handleModalCat(cat.id)"
-                                v-show="
-                                    !hideCheckedCatsAndNodes ||
-                                    (hideCheckedCatsAndNodes && !cat.checked)
-                                "
                             >
                                 <div class="inline-flex flex-1 gap-2 items-center text-left">
                                     <img
-                                        :src="
-                                            cat.icon
-                                                ? cat.icon
-                                                : `https://v2.lebusmagique.fr/img/api/items/${cat.item_id}.png`
-                                        "
+                                        :src="cat.local.fields.icon"
                                         alt=""
                                         class="rounded h-6 w-6"
-                                        v-if="cat.icon || cat.item_id"
+                                        v-if="cat.local?.fields.icon"
+                                    />
+                                    <img
+                                        :src="cat.local.fields.food.icon"
+                                        alt=""
+                                        class="rounded h-6 w-6"
+                                        v-else-if="cat.local?.fields.food?.icon"
                                     />
                                     <span>
-                                        {{ cat.name ?? cat.item_name ?? cat.hint }}
+                                        {{
+                                            cat.local?.fields.name ??
+                                            cat.local?.fields.food?.name ??
+                                            cat.hint
+                                        }}
                                     </span>
                                 </div>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    class="w-4 h-4"
+                                <IconCircleCheckFilled
+                                    class="size-4"
                                     :class="{
                                         'text-red-500': cat.checked === false,
                                         'text-green-500': cat.checked === true,
                                     }"
-                                >
-                                    <path
-                                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11.0026 16L18.0737 8.92893L16.6595 7.51472L11.0026 13.1716L8.17421 10.3431L6.75999 11.7574L11.0026 16Z"
-                                    ></path>
-                                </svg>
+                                    v-show="cat.hint.slice(0, 2) !== '__'"
+                                />
                             </button>
                         </div>
                     </div>
+                    <!-- Cats List -->
+                </div>
+                <div v-else-if="tab === 'nodes'">
                     <div class="w-full">
-                        <h3 class="text-xl">Zones de récolte</h3>
+                        <p class="flex gap-2 items-center text-sm">
+                            <IconInfoSquareRoundedFilled class="size-5" />
+                            Cliquez sur le nom d'une zone de récolte pour obtenir plus
+                            d'informations.
+                        </p>
                         <!-- <pre>{{ nodes }}</pre> -->
                         <dialog ref="modalNode" class="lbm-modal">
                             <div class="lbm-modal-box" v-if="currentNode">
@@ -487,75 +550,105 @@ watch(currentToken, () => {
                                     </button>
                                 </form>
                                 <h3 class="text-lg font-bold text-white">
-                                    {{ currentNode.name ?? currentNode.id }}
+                                    {{
+                                        currentNode.local?.fields.name ??
+                                        currentNode.local?.fields.items?.name ??
+                                        currentNode.id
+                                    }}
                                 </h3>
                                 <div
-                                    v-if="currentNode.description"
-                                    v-html="markdown.render(currentNode.description)"
+                                    v-if="currentNode.local?.fields.description"
+                                    v-html="markdown.render(currentNode.local.fields.description)"
                                     class="text-white"
                                 ></div>
                                 <a
                                     class="inline-flex gap-2 items-center mt-2"
-                                    :class="[`text-gw2-rarity-${currentNode.item_rarity}`]"
-                                    :href="`https://v2.lebusmagique.fr/fr/items/${currentNode.item_id}`"
+                                    :class="[
+                                        `text-gw2-rarity-${currentNode.local.fields.item.rarity}`,
+                                    ]"
+                                    :href="`https://v2.lebusmagique.fr/fr/items/${currentNode.local.fields.item.id}`"
                                     target="_blank"
-                                    v-if="currentNode.item_name && currentNode.item_id"
+                                    v-if="currentNode.local?.fields.item"
                                 >
                                     <img
-                                        :src="`https://v2.lebusmagique.fr/img/api/items/${currentNode.item_id}.png`"
+                                        :src="currentNode.local.fields.item.icon"
                                         alt=""
-                                        v-if="currentNode.item_id"
                                         class="h-12 w-12 rounded border-2"
-                                        :class="[`border-gw2-rarity-${currentNode.item_rarity}`]"
+                                        :class="[
+                                            `border-gw2-rarity-${currentNode.local.fields.item.rarity}`,
+                                        ]"
                                     />
-                                    {{ currentNode.item_name }}
+                                    {{ currentNode.local.fields.item.name }}
                                 </a>
-                                <template v-if="currentNode.price > 0">
-                                    <div class="font-bold mt-4">Prix au comptoir&nbsp;:</div>
-                                    <div>
-                                        ±
+                                <div
+                                    class="flex flex-col gap-1 mt-4"
+                                    v-if="currentNode.local?.fields.costs.length > 0"
+                                >
+                                    <div class="font-bold">Prix&nbsp;:</div>
+                                    <div
+                                        class="flex gap-1 items-center"
+                                        v-for="cost in currentNode.local?.fields.costs"
+                                    >
+                                        <template v-if="cost.currency?.api_id === 1">
+                                            <span v-html="formatIntToGold(cost.amount)"></span>
+                                        </template>
+                                        <template v-else>
+                                            {{ cost.amount }}
+                                            &times;
+                                            <img
+                                                :src="cost.currency.icon"
+                                                alt=""
+                                                class="h-6 w-6 object-fit"
+                                                v-if="cost.currency?.icon"
+                                            />
+                                            {{ cost.currency?.name }}
+                                        </template>
+                                    </div>
+                                </div>
+                                <div
+                                    v-if="
+                                        currentNode.local.fields.item &&
+                                        getPriceById(currentNode.local.fields.item.id)
+                                    "
+                                    class="flex gap-2 mt-4"
+                                >
+                                    <strong>Prix au comptoir&nbsp;:</strong>
+                                    <span>
+                                        ~
                                         <span
                                             v-html="
                                                 formatIntToGold(
-                                                    getPriceById(currentNode.item_id) *
-                                                        currentNode.price,
+                                                    getPriceById(currentNode.local.fields.item.id),
                                                 )
                                             "
                                         ></span>
-                                    </div>
-                                </template>
-                                <!-- <div class="font-bold mt-4">Nourriture&nbsp;:</div>
-                                <a
-                                    class="inline-flex gap-2 items-center mt-2"
-                                    :class="[`text-gw2-rarity-${currentCat.item_rarity}`]"
-                                    :href="`https://v2.lebusmagique.fr/fr/items/${currentCat.item_id}`"
-                                    target="_blank"
-                                    v-if="currentCat.item_name && currentCat.item_id"
-                                >
-                                    <img
-                                        :src="`https://v2.lebusmagique.fr/img/api/items/${currentCat.item_id}.png`"
-                                        alt=""
-                                        v-if="currentCat.item_id"
-                                        class="h-8 w-8 rounded border-2"
-                                        :class="[`border-gw2-rarity-${currentCat.item_rarity}`]"
-                                    />
-                                    {{ currentCat.item_name }}
-                                </a>
-                                <div class="font-bold mt-4">Localisation&nbsp;:</div>
-                                <div class="flex gap-2 items-center mt-2" v-if="currentCat.map">
-                                    {{ currentCat.map }}
-                                    <button class="lbm-btn lbm-btn-xs" v-if="currentCat.wp">
-                                        {{ currentCat.wp }}
-                                    </button>
+                                    </span>
                                 </div>
-                                <a
-                                    :href="`https://www.lebusmagique.fr${currentCat.guide}`"
-                                    target="_blank"
-                                    class="lbm-btn lbm-btn-block lbm-btn-primary mt-4"
-                                    v-if="currentCat.guide"
-                                    >Guide détaillé</a
-                                > -->
-                                <!-- <pre>{{ currentNode }}</pre> -->
+                                <div
+                                    class="flex flex-col gap-1 mt-4"
+                                    v-if="currentNode.local?.fields.sources.length > 0"
+                                >
+                                    <div class="font-bold">
+                                        {{
+                                            currentNode.local.fields.sources.length > 1
+                                                ? 'Sources'
+                                                : 'Source'
+                                        }}
+                                        :
+                                    </div>
+                                    <div
+                                        class="flex gap-1 items-center"
+                                        v-for="source in currentNode.local.fields.sources"
+                                    >
+                                        <img
+                                            :src="source.source.icon"
+                                            alt=""
+                                            class="h-6 w-6 object-fit"
+                                            v-if="source.source?.icon"
+                                        />
+                                        {{ source.source?.name }}
+                                    </div>
+                                </div>
                             </div>
                             <form method="dialog" class="lbm-modal-backdrop">
                                 <button>close</button>
@@ -566,46 +659,41 @@ watch(currentToken, () => {
                         >
                             <button
                                 v-for="node in nodes"
-                                class="lbm-btn"
+                                class="lbm-btn no-animation"
                                 @click="handleModalNode(node.id)"
                                 :key="node.id"
-                                v-show="
-                                    !hideCheckedCatsAndNodes ||
-                                    (hideCheckedCatsAndNodes && !node.checked)
-                                "
                             >
                                 <div class="inline-flex flex-1 gap-2 items-center text-left">
                                     <img
-                                        :src="`https://v2.lebusmagique.fr/img/api/items/${node.item_id}.png`"
+                                        :src="node.local.fields.item.icon"
                                         alt=""
                                         class="rounded h-6 w-6"
-                                        v-if="node.item_id"
+                                        v-if="node.local?.fields.item?.icon"
                                     />
                                     <span>
-                                        {{ node.name ?? node.item_name ?? node.id }}
+                                        {{
+                                            node.local?.fields.name ??
+                                            node.local?.fields.item?.name ??
+                                            node.id
+                                        }}
                                     </span>
                                 </div>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    class="w-4 h-4"
+                                <IconCircleCheckFilled
+                                    class="size-4"
                                     :class="{
                                         'text-red-500': node.checked === false,
                                         'text-green-500': node.checked === true,
                                     }"
-                                >
-                                    <path
-                                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11.0026 16L18.0737 8.92893L16.6595 7.51472L11.0026 13.1716L8.17421 10.3431L6.75999 11.7574L11.0026 16Z"
-                                    ></path>
-                                </svg>
+                                    v-show="node.id.slice(0, 2) !== '__'"
+                                />
                             </button>
                         </div>
                     </div>
+                </div>
+                <div v-else-if="tab === 'glyphs'">
                     <div class="w-full">
-                        <h3 class="text-xl">Glyphes</h3>
                         <div
-                            class="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 text-sm"
+                            class="grid grid-cols-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-2 text-sm"
                         >
                             <a
                                 :href="`https://v2.lebusmagique.fr/fr/items/${glyph.item_id}`"
@@ -624,29 +712,135 @@ watch(currentToken, () => {
                                         {{ glyph.name ?? glyph.id }}
                                     </span>
                                 </div>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    class="w-4 h-4"
+                                <IconCircleCheckFilled
+                                    class="size-4"
                                     :class="{
                                         'text-red-500': glyph.checked === false,
                                         'text-green-500': glyph.checked === true,
                                     }"
-                                >
-                                    <path
-                                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11.0026 16L18.0737 8.92893L16.6595 7.51472L11.0026 13.1716L8.17421 10.3431L6.75999 11.7574L11.0026 16Z"
-                                    ></path>
-                                </svg>
+                                />
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+            <div v-else-if="panel === 'homestead'" class="flex flex-col-reverse sm:flex-row gap-4">
+                <!-- Homestead -->
+                <div
+                    class="w-full sm:max-w-xs bg-base-200 rounded-box p-2 sm:sticky top-4 shrink-0"
+                >
+                    <div class="flex flex-col gap-2 mb-2">
+                        <select
+                            class="lbm-select lbm-select-bordered lbm-select-sm w-full"
+                            v-model="searchType"
+                        >
+                            <option value="">Toutes</option>
+                            <option
+                                v-for="category in categories"
+                                :value="category.id"
+                                :key="category.id"
+                            >
+                                {{ category.name }}
+                            </option>
+                        </select>
+                        <input
+                            type="text"
+                            class="lbm-input lbm-input-bordered lbm-input-sm w-full"
+                            placeholder="Chercher une décoration"
+                            v-model="searchValue"
+                        />
+                    </div>
+
+                    <div
+                        class="overflow-y-auto lbm-scrollbar min-h-96 pr-2"
+                        style="max-height: calc(100dvh - 15rem)"
+                    >
+                        <ul class="lbm-menu w-full p-0">
+                            <li v-for="decoration in filteredDecorations">
+                                <a
+                                    @click.prevent="getDecoration(decoration.id)"
+                                    :class="{
+                                        'active lbm-active':
+                                            currentDecoration?.id === decoration.id,
+                                    }"
+                                    class="px-2"
+                                >
+                                    <img :src="decoration.icon" alt="" class="h-5 w-5 rounded" />
+                                    <span class="truncate">{{ decoration.name }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-start gap-4" v-if="currentDecoration">
+                        <div class="w-full">
+                            <!-- <pre>{{ currentDecoration }}</pre> -->
+                            <div class="">
+                                <div class="flex gap-4 items-center relative z-20">
+                                    <img
+                                        :src="currentDecoration.icon"
+                                        alt=""
+                                        class="w-16 h-16 bg-red-500 rounded border-2"
+                                    />
+                                    <div class="flex flex-col flex-1">
+                                        <h2 class="text-xl font-semibold text-white">
+                                            {{ currentDecoration.name }}
+                                        </h2>
+                                        <div>
+                                            <strong>{{ currentDecoration.count ?? '0' }}</strong
+                                            >/{{ currentDecoration.max_count }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="false">
+                                <p v-html="currentDecoration.description"></p>
+                            </div>
+                            <div class="mt-4">
+                                <img
+                                    :src="`https://outils.lebusmagique.fr/homestead/${currentDecoration.id}.jpg`"
+                                    class="w-full h-full object-cover"
+                                    onerror="this.src='https://lebusmagique.netlify.app/assets/img/guilds/decorations/thumbs/defaut.jpg';"
+                                    alt=""
+                                />
+                            </div>
+                            <div class="text-xs mt-4">
+                                Identifiant de la décoration&nbsp;: {{ currentDecoration.id }}
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <p>
+                            Il y a actuellement {{ decorations.length }} décorations disponibles
+                            dans l'API officielle d'ArenaNet/Guild Wars 2.
+                        </p>
+                        <p>
+                            Si vous souhaitez partager avec nous des idées d'améliorations, de
+                            fonctionnalités, n'hésitez pas à nous contacter&nbsp;!
+                        </p>
+                        <p>
+                            Pour le moment, il n'est pas possible de vous offrir un outil une
+                            calculatrice de prix pour ces décorations, puisque les recettes
+                            n'existent pas dans l'API, mais nous réfléchissons à un moyen de les
+                            ajouter manuellement. Merci de votre patience.
+                        </p>
+                        <p class="font-bold text-white">
+                            <span class="hidden sm:inline">&larr;</span
+                            ><span class="sm:hidden">&darr;</span> Cliquez sur une décoration pour
+                            avoir quelques détails.
+                        </p>
+                        <!-- <pre>{{ decorations }}</pre> -->
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="panel === 'guildhall'">
+                <p>Cet onglet n'est pas encore disponible.</p>
+            </div>
         </div>
 
         <div class="lbm-app__footer">
-            <lbm-app-footer></lbm-app-footer>
+            <lbm-app-footer :version="`${VERSION}`"></lbm-app-footer>
         </div>
     </div>
 </template>
@@ -711,6 +905,15 @@ ul {
 }
 
 .tip :deep(p) {
+    margin-bottom: 0;
+}
+
+.description :deep(img) {
+    width: 100%;
+    height: auto;
+}
+
+.description :deep(p:last-of-type) {
     margin-bottom: 0;
 }
 </style>

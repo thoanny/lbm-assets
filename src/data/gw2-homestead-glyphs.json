@@ -1,0 +1,134 @@
+[
+    {
+        "id": "alchemy_harvesting",
+        "name": "Alchimie (plantes)"
+    },
+    {
+        "id": "alchemy_logging",
+        "name": "Alchimie (bois)"
+    },
+    {
+        "id": "alchemy_mining",
+        "name": "Alchimie (minerais)"
+    },
+    {
+        "id": "crucible_harvesting",
+        "name": "Creuset (plantes)"
+    },
+    {
+        "id": "crucible_logging",
+        "name": "Creuset (bois)"
+    },
+    {
+        "id": "crucible_mining",
+        "name": "Creuset (minerais)"
+    },
+    {
+        "id": "forester_harvesting",
+        "name": "Forestier (plantes)"
+    },
+    {
+        "id": "forester_logging",
+        "name": "Forestier (bois)"
+    },
+    {
+        "id": "forester_mining",
+        "name": "Forestier (minerais)"
+    },
+    {
+        "id": "herbalist_harvesting",
+        "name": "Herboriste (plantes)"
+    },
+    {
+        "id": "herbalist_logging",
+        "name": "Herboriste (bois)"
+    },
+    {
+        "id": "herbalist_mining",
+        "name": "Herboriste (minerais)"
+    },
+    {
+        "id": "leatherworker_harvesting",
+        "name": "Travailleur du cuir (plantes)"
+    },
+    {
+        "id": "leatherworker_logging",
+        "name": "Travailleur du cuir (bois)"
+    },
+    {
+        "id": "leatherworker_mining",
+        "name": "Travailleur du cuir (minerais)"
+    },
+    {
+        "id": "prospector_harvesting",
+        "name": "Prospecteur (plantes)"
+    },
+    {
+        "id": "prospector_logging",
+        "name": "Prospecteur (bois)"
+    },
+    {
+        "id": "prospector_mining",
+        "name": "Prospecteur (minerais)"
+    },
+    {
+        "id": "scavenger_harvesting",
+        "name": "Récupérateur (plantes)"
+    },
+    {
+        "id": "scavenger_logging",
+        "name": "Récupérateur (bois)"
+    },
+    {
+        "id": "scavenger_mining",
+        "name": "Récupérateur (minerais)"
+    },
+    {
+        "id": "tailor_harvesting",
+        "name": "Tailleur (plantes)"
+    },
+    {
+        "id": "tailor_logging",
+        "name": "Tailleur (bois)"
+    },
+    {
+        "id": "tailor_mining",
+        "name": "Tailleur (minerais)"
+    },
+    {
+        "id": "unbound_harvesting",
+        "name": "Déliement (plantes)"
+    },
+    {
+        "id": "unbound_logging",
+        "name": "Déliement (bois)"
+    },
+    {
+        "id": "unbound_mining",
+        "name": "Déliement (minerais)"
+    },
+    {
+        "id": "volatility_harvesting",
+        "name": "Volatilité (plantes)"
+    },
+    {
+        "id": "volatility_logging",
+        "name": "Volatilité (bois)"
+    },
+    {
+        "id": "volatility_mining",
+        "name": "Volatilité (minerais)"
+    },
+    {
+        "id": "watchknight_harvesting",
+        "name": "Factionnaire mécanique (plantes)"
+    },
+    {
+        "id": "watchknight_logging",
+        "name": "Factionnaire mécanique (bois)"
+    },
+    {
+        "id": "watchknight_mining",
+        "name": "Factionnaire mécanique (minerais)"
+    }
+]
