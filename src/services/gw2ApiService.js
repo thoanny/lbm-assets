@@ -38,6 +38,16 @@ class Gw2ApiService {
     getDecorations() {
         return api.get('/homestead/decorations');
     }
+    getGuildUpgrades() {
+        return api.get('/guild/upgrades', { params: { ids: 'all' } });
+    }
+    getGuildUpgradesByIds(ids) {
+        const $ids = ids.join(',');
+        return api.get('/guild/upgrades', { params: { ids: $ids } });
+    }
+    getRecipeById(recipe_id) {
+        return api.get(`/recipes`, { params: { id: recipe_id, v: '2025-08-04' } });
+    }
     getDecorationsByIds(ids) {
         const $ids = ids.join(',');
         return api.get('/homestead/decorations', { params: { ids: $ids } });

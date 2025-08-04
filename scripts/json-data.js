@@ -20,6 +20,14 @@ const endpoints = {
         path: './src/data/gw2-wizard-vault-objectives.json',
         url: 'https://lebusmagique.org/gw2/wizard-vault/objectives/',
     },
+    // 'gw2api-guild-upgrades': {
+    //     path: './src/data/gw2api-guild-upgrades.json',
+    //     url: 'https://api.guildwars2.com/v2/guild/upgrades?ids=all&lang=fr',
+    // },
+    'guild-decorations': {
+        path: './src/data/gw2-guild-decorations.json',
+        url: 'https://lebusmagique.org/gw2/guild/decorations/',
+    },
 };
 
 if (!endpoints[type] && type !== 'all') {

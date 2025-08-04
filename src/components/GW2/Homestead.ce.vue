@@ -1,5 +1,5 @@
 <script setup>
-const VERSION = 'homestead-0.9.0';
+const VERSION = 'homestead-0.10.0';
 // Icons : https://remixicon.com
 import { onMounted, ref, computed, watch } from 'vue';
 import { chunk, copyToClipboard, formatIntToGold } from '@/services/utils';
@@ -11,6 +11,7 @@ import { markdown } from '../../services/markdown';
 
 import localCats from '@/data/gw2-homestead-cats.json';
 import localNodes from '@/data/gw2-homestead-nodes.json';
+import localGuildDecorations from '@/data/gw2-guild-decorations.json';
 
 import IconHomeUp from '../icons/IconHomeUp.vue';
 import IconArmchair2 from '../icons/IconArmchair2.vue';
@@ -22,6 +23,7 @@ import IconCopy from '../icons/IconCopy.vue';
 import IconBook from '../icons/IconBook.vue';
 import IconInfoSquareRoundedFilled from '../icons/IconInfoSquareRoundedFilled.vue';
 import IconCircleCheckFilled from '../icons/IconCircleCheckFilled.vue';
+import IconEye from '../icons/IconEye.vue';
 
 const gw2 = Gw2ApiService;
 
@@ -60,8 +62,9 @@ const loadData = async () => {
         gw2.getGlyphs(),
         gw2.getCategories(),
         gw2.getDecorations(),
+        gw2.getGuildUpgrades(),
     ]).then(async (res) => {
-        const [$cats, $nodes, $glyphs, $categories, $decorations] = res;
+        const [$cats, $nodes, $glyphs, $categories, $decorations, $guildUpgrades] = res;
 
         cats.value = $cats.data.map((d) => ({
             ...d,
@@ -141,6 +144,16 @@ const loadData = async () => {
         const pricesIds = [...new Set([...nodesPricesIds, ...catsFoodPricesIds])];
         prices.value = await gw2.getCommercePrices(pricesIds).then((res) => res.data);
         console.log('nodesPricesIds', nodesPricesIds);
+
+        // Décorations de guilde
+        guildDecorations.value = $guildUpgrades.data
+            .filter((upgrade) => upgrade.type === 'Decoration')
+            .map((d) => ({
+                ...d,
+                local: localGuildDecorations.find((lg) => lg.fields.upgrade_id === d.id) || null,
+                recipe: null,
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name));
     });
 };
 
@@ -179,6 +192,10 @@ const loadUserData = async () => {
 
 const getDecoration = (decoration_id) => {
     LBMApp.value.scrollIntoView({ behaviour: 'smooth' });
+
+    updateState('h', decoration_id);
+
+    currentDecoration.value = null;
     currentDecoration.value = decorations.value.find(
         (decoration) => decoration.id === decoration_id,
     );
@@ -197,7 +214,33 @@ onMounted(() => {
     if (tabs.indexOf(props.tab) >= 0) {
         tab.value = props.tab;
     }
-    loadData().then(() => loadUserData());
+    loadData().then(() => {
+        loadUserData();
+
+        const url = new URL(location);
+        const p = url.searchParams.get('p');
+        const t = url.searchParams.get('t');
+
+        if (p) {
+            if (p === 'u') {
+                panel.value = 'upgrades';
+                if (t && tabs.indexOf(t) >= 0) {
+                    tab.value = t;
+                }
+            } else if (p === 'h') {
+                panel.value = 'homestead';
+                if (t) {
+                    console.log('homestead load', parseInt(t));
+                    getDecoration(parseInt(t));
+                }
+            } else if (p === 'g') {
+                panel.value = 'guildhall';
+                if (t) {
+                    getGuildDecoration(parseInt(t));
+                }
+            }
+        }
+    });
 });
 
 const filteredDecorations = computed(() => {
@@ -265,19 +308,135 @@ watch(currentToken, () => {
 const panels = ['upgrades', 'homestead', 'guildhall'];
 const panel = ref('upgrades');
 const tabs = ['cats', 'nodes', 'glyphs'];
-const tab = ref('cats'); // TODO
+const tab = ref('cats');
 
 function switchPanel(p) {
     if (p !== panel.value) {
         panel.value = p;
+        updateState(p.substring(0, 1));
     }
+
+    currentDecoration.value = null;
+    currentGuildDecoration.value = null;
 }
 
 function switchTab(t) {
     if (t !== tab.value) {
         tab.value = t;
+        updateState(panel.value.substring(0, 1), t);
     }
 }
+
+const updateState = (panel = null, tab = null) => {
+    const url = new URL(location);
+
+    if (!panel) {
+        url.searchParams.delete('p');
+    } else {
+        url.searchParams.set('p', panel);
+    }
+
+    if (!tab) {
+        url.searchParams.delete('t');
+    } else {
+        url.searchParams.set('t', tab);
+    }
+
+    history.replaceState({}, '', url);
+};
+
+// Guild decorations
+
+const guildDecorations = ref([]);
+const currentGuildDecoration = ref();
+
+const getGuildDecoration = (decoration_id) => {
+    LBMApp.value.scrollIntoView({ behaviour: 'smooth' });
+
+    updateState('g', decoration_id);
+
+    currentGuildDecoration.value = null;
+    currentGuildDecoration.value = guildDecorations.value.find(
+        (decoration) => decoration.id === decoration_id,
+    );
+
+    if (currentGuildDecoration.value && currentGuildDecoration.value.local?.fields.recipe_id) {
+        currentGuildDecoration.value.recipe = 'loading';
+        gw2.getRecipeById(currentGuildDecoration.value.local?.fields.recipe_id)
+            .then((res) => {
+                const recipe = res.data;
+                if (recipe) {
+                    let itemsIds = [];
+                    let upgradesIds = [];
+
+                    currentGuildDecoration.value.recipe = recipe;
+
+                    recipe.ingredients.forEach((ingredient) => {
+                        if (ingredient.type === 'Item') {
+                            itemsIds.push(ingredient.id);
+                        } else if (ingredient.type === 'GuildUpgrade') {
+                            upgradesIds.push(ingredient.id);
+                        }
+                    });
+
+                    if (itemsIds.length > 0) {
+                        console.log(itemsIds);
+                        gw2.getItemsByIds(itemsIds).then((res) => {
+                            currentGuildDecoration.value.recipe._items = res.data;
+                        });
+                    }
+
+                    if (upgradesIds.length > 0) {
+                        console.log(upgradesIds);
+                        gw2.getGuildUpgradesByIds(upgradesIds).then((res) => {
+                            currentGuildDecoration.value.recipe._upgrades = res.data;
+                        });
+                    }
+                }
+                console.log('recipe:', recipe);
+            })
+            .catch(() => {
+                currentGuildDecoration.value.recipe = null;
+            });
+    }
+
+    console.log(currentGuildDecoration.value);
+};
+
+const searchGuildValue = ref('');
+
+const filteredGuildDecorations = computed(() => {
+    const s = searchGuildValue.value
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '')
+        .toLowerCase();
+
+    return guildDecorations.value.filter((decoration) => {
+        if (searchGuildValue.value) {
+            return (
+                decoration.name
+                    .normalize('NFD')
+                    .replace(/\p{Diacritic}/gu, '')
+                    .toLowerCase()
+                    .indexOf(s) >= 0
+            );
+        }
+        return true;
+    });
+});
+
+const getGuildDecorationRecipeItem = (item_id) => {
+    if (!item_id) {
+        return;
+    }
+    return currentGuildDecoration.value.recipe._items.find((item) => item.id === item_id);
+};
+
+const getGuildDecorationRecipeUpgrade = (upgrade_id) => {
+    return currentGuildDecoration.value.recipe._upgrades.find(
+        (upgrade) => upgrade.id === upgrade_id,
+    );
+};
 </script>
 
 <template>
@@ -286,7 +445,7 @@ function switchTab(t) {
     <div class="lbm-app" ref="LBMApp">
         <div class="lbm-app__header">
             <div class="lbm-app__brand">
-                <img src="" alt="" class="lbm-app__logo bg-primary" v-if="false" />
+                <img loading="lazy" src="" alt="" class="lbm-app__logo bg-primary" v-if="false" />
                 <div class="lbm-app__title">
                     Décorations du pavillon et du hall de guilde
                     <div class="lbm-app__subtitle">
@@ -420,6 +579,7 @@ function switchTab(t) {
                                         target="_blank"
                                     >
                                         <img
+                                            loading="lazy"
                                             :src="currentCat.local.fields.food.icon"
                                             alt=""
                                             class="h-6 w-6 rounded border-2"
@@ -500,12 +660,14 @@ function switchTab(t) {
                             >
                                 <div class="inline-flex flex-1 gap-2 items-center text-left">
                                     <img
+                                        loading="lazy"
                                         :src="cat.local.fields.icon"
                                         alt=""
                                         class="rounded h-6 w-6"
                                         v-if="cat.local?.fields.icon"
                                     />
                                     <img
+                                        loading="lazy"
                                         :src="cat.local.fields.food.icon"
                                         alt=""
                                         class="rounded h-6 w-6"
@@ -571,6 +733,7 @@ function switchTab(t) {
                                     v-if="currentNode.local?.fields.item"
                                 >
                                     <img
+                                        loading="lazy"
                                         :src="currentNode.local.fields.item.icon"
                                         alt=""
                                         class="h-12 w-12 rounded border-2"
@@ -596,6 +759,7 @@ function switchTab(t) {
                                             {{ cost.amount }}
                                             &times;
                                             <img
+                                                loading="lazy"
                                                 :src="cost.currency.icon"
                                                 alt=""
                                                 class="h-6 w-6 object-fit"
@@ -641,6 +805,7 @@ function switchTab(t) {
                                         v-for="source in currentNode.local.fields.sources"
                                     >
                                         <img
+                                            loading="lazy"
                                             :src="source.source.icon"
                                             alt=""
                                             class="h-6 w-6 object-fit"
@@ -665,6 +830,7 @@ function switchTab(t) {
                             >
                                 <div class="inline-flex flex-1 gap-2 items-center text-left">
                                     <img
+                                        loading="lazy"
                                         :src="node.local.fields.item.icon"
                                         alt=""
                                         class="rounded h-6 w-6"
@@ -703,6 +869,7 @@ function switchTab(t) {
                             >
                                 <div class="inline-flex flex-1 gap-2 items-center text-left">
                                     <img
+                                        loading="lazy"
                                         :src="`https://v2.lebusmagique.fr/img/api/items/${glyph.item_id}.png`"
                                         alt=""
                                         class="rounded h-6 w-6"
@@ -724,7 +891,10 @@ function switchTab(t) {
                     </div>
                 </div>
             </div>
-            <div v-else-if="panel === 'homestead'" class="flex flex-col-reverse sm:flex-row gap-4">
+            <div
+                v-else-if="panel === 'homestead'"
+                class="flex flex-col-reverse sm:flex-row gap-4 items-start flex-1"
+            >
                 <!-- Homestead -->
                 <div
                     class="w-full sm:max-w-xs bg-base-200 rounded-box p-2 sm:sticky top-4 shrink-0"
@@ -765,7 +935,12 @@ function switchTab(t) {
                                     }"
                                     class="px-2"
                                 >
-                                    <img :src="decoration.icon" alt="" class="h-5 w-5 rounded" />
+                                    <img
+                                        loading="lazy"
+                                        :src="decoration.icon"
+                                        alt=""
+                                        class="h-5 w-5 rounded"
+                                    />
                                     <span class="truncate">{{ decoration.name }}</span>
                                 </a>
                             </li>
@@ -779,6 +954,7 @@ function switchTab(t) {
                             <div class="">
                                 <div class="flex gap-4 items-center relative z-20">
                                     <img
+                                        loading="lazy"
                                         :src="currentDecoration.icon"
                                         alt=""
                                         class="w-16 h-16 bg-red-500 rounded border-2"
@@ -799,6 +975,7 @@ function switchTab(t) {
                             </div>
                             <div class="mt-4">
                                 <img
+                                    loading="lazy"
                                     :src="`https://outils.lebusmagique.fr/homestead/${currentDecoration.id}.jpg`"
                                     class="w-full h-full object-cover"
                                     onerror="this.src='https://lebusmagique.netlify.app/assets/img/guilds/decorations/thumbs/defaut.jpg';"
@@ -834,8 +1011,211 @@ function switchTab(t) {
                     </div>
                 </div>
             </div>
-            <div v-else-if="panel === 'guildhall'">
-                <p>Cet onglet n'est pas encore disponible.</p>
+            <div
+                v-else-if="panel === 'guildhall'"
+                class="flex flex-col-reverse sm:flex-row items-start gap-4 flex-1"
+            >
+                <div
+                    class="w-full sm:max-w-xs bg-base-200 rounded-box p-2 sm:sticky top-4 shrink-0"
+                >
+                    <div class="flex flex-col gap-2 mb-2">
+                        <input
+                            type="text"
+                            class="lbm-input lbm-input-bordered lbm-input-sm w-full"
+                            placeholder="Chercher une décoration"
+                            v-model="searchGuildValue"
+                        />
+                    </div>
+
+                    <div
+                        class="overflow-y-auto lbm-scrollbar min-h-96 pr-2"
+                        style="max-height: calc(100dvh - 15rem)"
+                    >
+                        <ul class="lbm-menu w-full p-0" v-if="guildDecorations">
+                            <li v-for="decoration in filteredGuildDecorations">
+                                <a
+                                    @click.prevent="getGuildDecoration(decoration.id)"
+                                    :class="{
+                                        'active lbm-active':
+                                            currentGuildDecoration?.id === decoration.id,
+                                    }"
+                                    class="px-2"
+                                >
+                                    <img
+                                        loading="lazy"
+                                        :src="decoration.icon"
+                                        alt=""
+                                        class="h-5 w-5 rounded"
+                                    />
+                                    <span class="truncate">{{ decoration.name }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-start gap-4" v-if="currentGuildDecoration">
+                        <div class="w-full">
+                            <!-- <pre>{{ currentGuildDecoration }}</pre> -->
+                            <div class="">
+                                <div class="flex gap-4 items-center relative z-20">
+                                    <img
+                                        loading="lazy"
+                                        :src="currentGuildDecoration.local.fields.icon"
+                                        alt=""
+                                        class="w-16 h-16 bg-red-500 rounded border-2"
+                                        v-if="currentGuildDecoration.local?.fields.icon"
+                                    />
+                                    <img
+                                        loading="lazy"
+                                        :src="currentGuildDecoration.local.fields.item.icon"
+                                        alt=""
+                                        class="w-16 h-16 bg-red-500 rounded border-2"
+                                        v-else-if="currentGuildDecoration.local?.fields.item?.icon"
+                                    />
+                                    <img
+                                        loading="lazy"
+                                        :src="currentGuildDecoration.icon"
+                                        alt=""
+                                        class="w-16 h-16 bg-red-500 rounded border-2"
+                                        v-else
+                                    />
+                                    <div class="flex flex-col flex-1">
+                                        <h2 class="text-xl font-semibold text-white">
+                                            {{ currentGuildDecoration.name }}
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="currentGuildDecoration.description">
+                                <p v-html="currentGuildDecoration.description"></p>
+                            </div>
+                            <div
+                                v-if="currentGuildDecoration.local?.fields.description"
+                                v-html="
+                                    markdown.render(currentGuildDecoration.local.fields.description)
+                                "
+                                class="text-white description"
+                            ></div>
+                            <div class="mt-4">
+                                <img
+                                    loading="lazy"
+                                    :src="`https://lebusmagique.org/${currentGuildDecoration.local.fields.media}`"
+                                    class="w-full h-full object-cover rounded-lg"
+                                    alt=""
+                                    v-if="currentGuildDecoration.local?.fields.media"
+                                />
+                                <img
+                                    loading="lazy"
+                                    :src="`https://lebusmagique.netlify.app/assets/img/guilds/decorations/thumbs/${currentGuildDecoration.local?.fields.item?.id || currentGuildDecoration.id}.jpg`"
+                                    class="w-full h-full object-cover rounded-lg"
+                                    onerror="this.src='https://lebusmagique.netlify.app/assets/img/guilds/decorations/thumbs/defaut.jpg';"
+                                    alt=""
+                                    v-else
+                                />
+                            </div>
+                            <div
+                                class="flex gap-1 flex-col mt-4"
+                                v-if="currentGuildDecoration.costs.length > 0"
+                            >
+                                <strong>Coût&nbsp;:</strong>
+                                <span v-for="(cost, c) in currentGuildDecoration.costs" :key="c"
+                                    >{{ cost.count }} &times;&nbsp;{{ cost.name }}</span
+                                >
+                            </div>
+                            <div
+                                class="flex gap-4 items-center"
+                                v-if="currentGuildDecoration.recipe === 'loading'"
+                            >
+                                <span class="lbm-loading"></span>Chargement de la recette
+                            </div>
+                            <div
+                                class=""
+                                v-if="
+                                    currentGuildDecoration.recipe &&
+                                    currentGuildDecoration.recipe !== 'loading'
+                                "
+                            >
+                                <h4 class="mt-4">Recette</h4>
+                                <ul class="flex flex-col gap-2 !pl-0 mt-2">
+                                    <li
+                                        v-for="ingredient in currentGuildDecoration.recipe
+                                            .ingredients"
+                                        :key="ingredient.id"
+                                        class="flex items-center gap-1"
+                                    >
+                                        <template v-if="ingredient.type === 'Item'">
+                                            <img
+                                                :src="
+                                                    getGuildDecorationRecipeItem(ingredient.id)
+                                                        ?.icon
+                                                "
+                                                class="size-8 border-2 rounded mr-1 shrink-0"
+                                                :class="[
+                                                    `border-gw2-rarity-${getGuildDecorationRecipeItem(ingredient.id)?.rarity}`,
+                                                ]"
+                                                alt=""
+                                            />
+                                            {{ ingredient.count }} &times;
+                                            <span
+                                                :class="[
+                                                    `text-gw2-rarity-${getGuildDecorationRecipeItem(ingredient.id)?.rarity}`,
+                                                ]"
+                                            >
+                                                {{
+                                                    getGuildDecorationRecipeItem(ingredient.id)
+                                                        ?.name
+                                                }}
+                                            </span>
+                                        </template>
+                                        <template v-if="ingredient.type === 'GuildUpgrade'">
+                                            <img
+                                                :src="
+                                                    getGuildDecorationRecipeUpgrade(ingredient.id)
+                                                        ?.icon
+                                                "
+                                                class="size-8 border-2 rounded mr-1 shrink-0"
+                                                alt=""
+                                            />
+                                            {{ ingredient.count }} &times;
+                                            <span>
+                                                {{
+                                                    getGuildDecorationRecipeUpgrade(ingredient.id)
+                                                        ?.name
+                                                }}
+                                            </span>
+                                            <button
+                                                @click.prevent="getGuildDecoration(ingredient.id)"
+                                                class="lbm-btn lbm-btn-sm lbm-btn-square lbm-btn-primary ml-1"
+                                            >
+                                                <IconEye class="size-5" />
+                                            </button>
+                                        </template>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="text-xs mt-6">
+                                Identifiant de la décoration&nbsp;: {{ currentGuildDecoration.id }}
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <p>
+                            Il y a actuellement {{ guildDecorations.length }} décorations de guilde
+                            disponibles dans l'API officielle d'ArenaNet/Guild Wars 2.
+                        </p>
+                        <p>
+                            Si vous souhaitez partager avec nous des idées d'améliorations, de
+                            fonctionnalités, n'hésitez pas à nous contacter&nbsp;!
+                        </p>
+                        <p class="font-bold text-white">
+                            <span class="hidden sm:inline">&larr;</span
+                            ><span class="sm:hidden">&darr;</span> Cliquez sur une décoration pour
+                            avoir quelques détails.
+                        </p>
+                        <!-- <pre>{{ decorations }}</pre> -->
+                    </div>
+                </div>
             </div>
         </div>
 
