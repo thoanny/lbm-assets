@@ -250,6 +250,12 @@ const filteredDecorations = computed(() => {
         .toLowerCase();
 
     return decorations.value.filter((decoration) => {
+        if (s === 'todo:') {
+            return !decoration.local;
+        }
+        if (s === 'media:') {
+            return decoration.local && !decoration.local.fields.media;
+        }
         if (searchType.value && searchValue.value) {
             return (
                 decoration.categories.indexOf(searchType.value) >= 0 &&
@@ -413,6 +419,12 @@ const filteredGuildDecorations = computed(() => {
 
     return guildDecorations.value.filter((decoration) => {
         if (searchGuildValue.value) {
+            if (s === 'todo:') {
+                return !decoration.local;
+            }
+            if (s === 'media:') {
+                return decoration.local && !decoration.local.fields.media;
+            }
             return (
                 decoration.name
                     .normalize('NFD')
