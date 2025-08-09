@@ -116,6 +116,55 @@ class Gw2ApiService {
             character: name,
         });
     }
+    getMapChests() {
+        return api.get('/mapchests', { params: { ids: 'all' } });
+    }
+    getUserMapChests(token) {
+        return api.get('/account/mapchests', { params: { access_token: token } });
+    }
+    getWorldBosses() {
+        return api.get('/worldbosses', { params: { ids: 'all' } });
+    }
+    getUserWorldBosses(token) {
+        return api.get('/account/worldbosses', { params: { access_token: token } });
+    }
+    getDungeons() {
+        return api.get('/dungeons', { params: { ids: 'all' } });
+    }
+    getUserDungeons(token) {
+        return api.get('/account/dungeons', { params: { access_token: token } });
+    }
+    getDailyCrafting() {
+        return api.get('/dailycrafting', { params: { ids: 'all' } });
+    }
+    getUserDailyCrafting(token) {
+        return api.get('/account/dailycrafting', { params: { access_token: token } });
+    }
+    getAchievementsGroupById(group_id) {
+        if (!group_id) {
+            return {};
+        }
+        return api.get(`/achievements/groups/${group_id}`, { params: { lang: 'fr' } });
+    }
+    getAchievementsCategoriesByIds(ids) {
+        const version = '2025-08-07';
+        const $ids = ids.join(',');
+        return api.get(`/achievements/categories`, {
+            params: { ids: $ids, v: version, lang: 'fr' },
+        });
+    }
+    getAchievementsByIds(ids) {
+        if (ids.length <= 0) {
+            return [];
+        }
+        const $ids = ids.join(',');
+        return api.get(`/achievements`, {
+            params: { ids: $ids, lang: 'fr' },
+        });
+    }
+    getUserAchievements(token) {
+        return api.get('/account/achievements', { params: { access_token: token } });
+    }
 }
 
 export default new Gw2ApiService();

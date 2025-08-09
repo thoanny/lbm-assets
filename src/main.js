@@ -20,6 +20,7 @@ import GW2_UserAuth from './components/GW2/UserAuth.ce.vue';
 import ResponsiveBreakpoints from './components/ResponsiveBreakpoints.ce.vue';
 import GW2_SuperAdventureBox from './components/GW2/SuperAdventureBox.ce.vue';
 import LBM_PagesList from './components/LBM/PagesList.ce.vue';
+import GW2_Tasks from './components/GW2/Tasks.ce.vue';
 
 setActivePinia(createPinia());
 
@@ -42,3 +43,4 @@ customElements.define('responsive-breakpoints', defineCustomElement(ResponsiveBr
 customElements.define('gw2-user-auth', defineCustomElement(GW2_UserAuth));
 customElements.define('gw2-sab', defineCustomElement(GW2_SuperAdventureBox));
 customElements.define('lbm-pages-list', defineCustomElement(LBM_PagesList));
+customElements.define('gw2-tasks', defineCustomElement(GW2_Tasks));
