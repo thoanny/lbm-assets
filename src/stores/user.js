@@ -37,7 +37,7 @@ export const useUserStore = defineStore('user', () => {
             response_type: 'code',
             client_id: clientId,
             state: state,
-            scope: 'gw2:account gw2:progression gw2:unlocks',
+            scope: 'gw2:account gw2:progression gw2:unlocks gw2:characters gw2:inventories',
             redirect_uri: getCleanedCurrentUrl(),
             prompt: 'consent',
         };
