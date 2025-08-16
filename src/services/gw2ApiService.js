@@ -110,6 +110,12 @@ class Gw2ApiService {
     getCharacters(token) {
         return api.get('/characters', { params: { access_token: token } });
     }
+    getCharacterInventory(token, character) {
+        return api.get(`/characters/${character}/inventory`, {
+            params: { access_token: token },
+            character: character,
+        });
+    }
     getCharacterByNameSuperAdventureBox(token, name) {
         return api.get(`/characters/${name}/sab`, {
             params: { access_token: token },
@@ -164,6 +170,9 @@ class Gw2ApiService {
     }
     getUserAchievements(token) {
         return api.get('/account/achievements', { params: { access_token: token } });
+    }
+    getUserBank(token) {
+        return api.get('/account/bank', { params: { access_token: token } });
     }
 }
 

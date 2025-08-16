@@ -28,6 +28,14 @@ const endpoints = {
         path: './src/data/gw2-guild-decorations.json',
         url: 'https://lebusmagique.org/gw2/guild/decorations/',
     },
+    fishes: {
+        path: './src/data/gw2-fishes.json',
+        url: 'https://lebusmagique.org/gw2/fishing/fishes/',
+    },
+    'gw2api-specializations': {
+        path: './src/data/gw2api-specializations.json',
+        url: 'https://api.guildwars2.com/v2/specializations?ids=all&lang=fr',
+    },
 };
 
 if (!endpoints[type] && type !== 'all') {
