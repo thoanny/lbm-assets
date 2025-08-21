@@ -47,7 +47,7 @@
                     @click="updateCurrentSpecialization(spec.id)"
                 >
                     <img
-                        :src="`/img/voe/specializations/icons/${spec.id}_compressed.png`"
+                        :src="`https://lbm-assets.vercel.app/img/voe/specializations/icons/${spec.id}_compressed.png`"
                         class="w-full h-full object-fit"
                         :class="{
                             'grayscale contrast-150 brightness-150':
@@ -64,7 +64,7 @@
                     v-if="currentSpecialization"
                 >
                     <img
-                        :src="`/img/voe/specializations/backgrounds/${currentSpecialization.id}_compressed.jpg`"
+                        :src="`https://lbm-assets.vercel.app/img/voe/specializations/backgrounds/${currentSpecialization.id}_compressed.jpg`"
                         class="absolute top-0 w-full h-full object-cover z-10"
                         alt=""
                         :class="{
@@ -82,7 +82,7 @@
                             <!-- Header -->
                             <div class="flex flex-col items-center text-black">
                                 <img
-                                    :src="`/img/voe/specializations/icons/${currentSpecialization.id}_compressed.png`"
+                                    :src="`https://lbm-assets.vercel.app/img/voe/specializations/icons/${currentSpecialization.id}_compressed.png`"
                                     alt=""
                                     class="w-36"
                                 />
