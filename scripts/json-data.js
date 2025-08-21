@@ -36,6 +36,14 @@ const endpoints = {
         path: './src/data/gw2api-specializations.json',
         url: 'https://api.guildwars2.com/v2/specializations?ids=all&lang=fr',
     },
+    'gw2api-traits': {
+        path: './src/data/gw2api-traits.json',
+        url: 'https://api.guildwars2.com/v2/traits?ids=all&lang=fr',
+    },
+    'gw2api-skills': {
+        path: './src/data/gw2api-skills.json',
+        url: 'https://api.guildwars2.com/v2/skills?ids=all&lang=fr',
+    },
 };
 
 if (!endpoints[type] && type !== 'all') {

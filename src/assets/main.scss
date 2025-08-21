@@ -107,3 +107,23 @@ h6 {
         background: rgba(0, 0, 0, 0.75);
     }
 }
+
+.tippy-box[data-theme~='gw2'] {
+    @apply text-base-content bg-transparent;
+}
+
+.tippy-box[data-theme~='gw2'] .tippy-content {
+    padding: 0;
+}
+
+.text-shadow {
+    text-shadow:
+        1px 1px 0 #000,
+        -1px 1px 0 #000,
+        1px -1px 0 #000,
+        -1px -1px 0 #000;
+}
+
+pre {
+    @apply bg-base-100;
+}
