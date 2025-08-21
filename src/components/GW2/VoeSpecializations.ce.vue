@@ -64,7 +64,7 @@
                     v-if="currentSpecialization"
                 >
                     <img
-                        :src="`https://lbm-assets.vercel.app/img/voe/specializations/backgrounds/${currentSpecialization.id}_compressed.jpg`"
+                        :src="`https://lbm-assets.vercel.app/img/voe/specializations/backgrounds/${currentSpecialization.id}_compressed.webp`"
                         class="absolute top-0 w-full h-full object-cover z-10"
                         alt=""
                         :class="{
