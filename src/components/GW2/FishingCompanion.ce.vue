@@ -1,5 +1,5 @@
 <script setup>
-const VERSION = '2.0.0';
+const VERSION = '2.0.1';
 
 import { onMounted, onUnmounted, ref, watch, computed } from 'vue';
 import { pad } from '@/services/utils';
@@ -20,6 +20,7 @@ import IconInfinity from '../icons/IconInfinity.vue';
 import IconCalendarStar from '../icons/IconCalendarStar.vue';
 import IconCalendarCheck from '../icons/IconCalendarCheck.vue';
 import IconAlertTriangle from '../icons/IconAlertTriangle.vue';
+import debounce from 'lodash.debounce';
 
 const refreshFishesInterval = ref(null);
 const refreshClocksInterval = ref(null);
@@ -30,6 +31,7 @@ const { currentToken } = storeToRefs(user);
 
 const showSearchInput = ref(false);
 const searchValue = ref('');
+const filterSearchValue = ref('');
 
 const allFishes = ref(null);
 
@@ -259,6 +261,7 @@ const updateClocks = () => {
 
 const toggleSearchInput = () => {
     searchValue.value = '';
+    filterSearchValue.value = '';
     showSearchInput.value = !showSearchInput.value;
 };
 
@@ -406,8 +409,8 @@ const filteredFishes = computed(() => {
         })
         .filter((fish) => {
             // Recherche texte
-            if (searchValue.value) {
-                const s = searchValue.value
+            if (filterSearchValue.value) {
+                const s = filterSearchValue.value
                     .normalize('NFD')
                     .replace(/\p{Diacritic}/gu, '')
                     .toLowerCase();
@@ -560,9 +563,16 @@ const getSpecializationById = (specializationId) => {
     const id = specializationsIds[specializationId];
     return localSpecializations.find((specialization) => specialization.id === id);
 };
+watch(
+    searchValue,
+    debounce(() => {
+        filterSearchValue.value = searchValue.value;
+    }, 600),
+);
 </script>
 
 <template>
+    <pre>filterSearchValue: {{ filterSearchValue }}</pre>
     <div class="lbm-app">
         <div class="lbm-app__header">
             <div class="lbm-app__brand">
