@@ -1,5 +1,5 @@
 <script setup>
-const VERSION = 'homestead-0.10.1';
+const VERSION = 'homestead-0.10.2';
 // Icons : https://remixicon.com
 import { onMounted, ref, computed, watch } from 'vue';
 import { chunk, copyToClipboard, formatIntToGold } from '@/services/utils';
