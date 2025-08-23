@@ -193,8 +193,6 @@ const loadUserData = async () => {
 const getDecoration = (decoration_id) => {
     LBMApp.value.scrollIntoView({ behaviour: 'smooth' });
 
-    updateState('h', decoration_id);
-
     currentDecoration.value = null;
     currentDecoration.value = decorations.value.find(
         (decoration) => decoration.id === decoration_id,
@@ -319,7 +317,6 @@ const tab = ref('cats');
 function switchPanel(p) {
     if (p !== panel.value) {
         panel.value = p;
-        updateState(p.substring(0, 1));
     }
 
     currentDecoration.value = null;
@@ -329,27 +326,8 @@ function switchPanel(p) {
 function switchTab(t) {
     if (t !== tab.value) {
         tab.value = t;
-        updateState(panel.value.substring(0, 1), t);
     }
 }
-
-const updateState = (panel = null, tab = null) => {
-    const url = new URL(location);
-
-    if (!panel) {
-        url.searchParams.delete('p');
-    } else {
-        url.searchParams.set('p', panel);
-    }
-
-    if (!tab) {
-        url.searchParams.delete('t');
-    } else {
-        url.searchParams.set('t', tab);
-    }
-
-    history.replaceState({}, '', url);
-};
 
 // Guild decorations
 
@@ -358,8 +336,6 @@ const currentGuildDecoration = ref();
 
 const getGuildDecoration = (decoration_id) => {
     LBMApp.value.scrollIntoView({ behaviour: 'smooth' });
-
-    updateState('g', decoration_id);
 
     currentGuildDecoration.value = null;
     currentGuildDecoration.value = guildDecorations.value.find(
@@ -448,6 +424,38 @@ const getGuildDecorationRecipeUpgrade = (upgrade_id) => {
     return currentGuildDecoration.value.recipe._upgrades.find(
         (upgrade) => upgrade.id === upgrade_id,
     );
+};
+
+import { v4 as uuidv4 } from 'uuid';
+
+import { getCleanedCurrentUrl } from '@/services/utils';
+
+const getCurrentDecorationUri = computed(() => {
+    const params = new URLSearchParams({ p: 'h', t: currentDecoration.value.id });
+    return [getCleanedCurrentUrl(), params.toString()].join('?');
+});
+
+const getCurrentGuildDecorationUri = computed(() => {
+    const params = new URLSearchParams({ p: 'g', t: currentGuildDecoration.value.id });
+    return [getCleanedCurrentUrl(), params.toString()].join('?');
+});
+
+const TOAST_TIMEOUT = 3000;
+const toasts = ref({});
+
+const copyUrlToClipboard = (content) => {
+    copyToClipboard(content);
+
+    const t = uuidv4();
+    toasts.value[t] = `Adresse copiée dans le presse-papiers.`;
+    setTimeout(removeToast, TOAST_TIMEOUT, t);
+};
+
+const removeToast = (t) => {
+    if (typeof toasts.value[t] === 'undefined') {
+        return;
+    }
+    delete toasts.value[t];
 };
 </script>
 
@@ -989,10 +997,23 @@ const getGuildDecorationRecipeUpgrade = (upgrade_id) => {
                                 <img
                                     loading="lazy"
                                     :src="`https://outils.lebusmagique.fr/homestead/${currentDecoration.id}.jpg`"
-                                    class="w-full h-full object-cover"
+                                    class="w-full h-full object-cover aspect-video"
                                     onerror="this.src='https://lebusmagique.netlify.app/assets/img/guilds/decorations/thumbs/defaut.jpg';"
                                     alt=""
                                 />
+                            </div>
+                            <div class="lbm-join flex mt-4">
+                                <input
+                                    type="text"
+                                    :value="getCurrentDecorationUri"
+                                    class="lbm-input lbm-input-sm lbm-join-item w-full max-w-xs"
+                                />
+                                <button
+                                    class="lbm-btn lbm-btn-primary lbm-btn-sm lbm-join-item"
+                                    @click="copyUrlToClipboard(getCurrentDecorationUri)"
+                                >
+                                    <IconCopy class="size-4" />
+                                </button>
                             </div>
                             <div class="text-xs mt-4">
                                 Identifiant de la décoration&nbsp;: {{ currentDecoration.id }}
@@ -1206,7 +1227,24 @@ const getGuildDecorationRecipeUpgrade = (upgrade_id) => {
                                     </li>
                                 </ul>
                             </div>
-                            <div class="text-xs mt-6">
+                            <div class="lbm-join flex mt-4">
+                                <input
+                                    type="text"
+                                    :value="getCurrentGuildDecorationUri"
+                                    class="lbm-input lbm-input-sm lbm-join-item w-full max-w-xs"
+                                />
+                                <button
+                                    class="lbm-btn lbm-btn-primary lbm-btn-sm lbm-join-item"
+                                    @click="
+                                        copyUrlToClipboard(
+                                            getCurrentDecgetCurrentGuildDecorationUriorationUri,
+                                        )
+                                    "
+                                >
+                                    <IconCopy class="size-4" />
+                                </button>
+                            </div>
+                            <div class="text-xs mt-4">
                                 Identifiant de la décoration&nbsp;: {{ currentGuildDecoration.id }}
                             </div>
                         </div>
@@ -1228,6 +1266,30 @@ const getGuildDecorationRecipeUpgrade = (upgrade_id) => {
                         <!-- <pre>{{ decorations }}</pre> -->
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Toasts -->
+        <div class="lbm-toast" style="z-index: 1001" v-if="toasts">
+            <div
+                class="lbm-alert lbm-alert-success text-xs py-2 px-3 font-bold gap-1"
+                v-for="(toast, t) in toasts"
+                :key="t"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="stroke-current shrink-0 h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                </svg>
+                <span>{{ toast }}</span>
             </div>
         </div>
 
