@@ -572,7 +572,7 @@ watch(
 </script>
 
 <template>
-    <pre>filterSearchValue: {{ filterSearchValue }}</pre>
+    <!-- <pre>filterSearchValue: {{ filterSearchValue }}</pre> -->
     <div class="lbm-app">
         <div class="lbm-app__header">
             <div class="lbm-app__brand">
