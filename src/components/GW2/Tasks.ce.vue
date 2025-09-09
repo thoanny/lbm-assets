@@ -1,3 +1,23 @@
+<!-- 
+- Pouvoir masquer certaines lignes
+- Pouvoir masquer une catégorie
+- Hebdo : ajouter convergeances (JW/SotO)
+    - [JW] Convergences (hebdomadaire) : mont Balrior
+    - [JW] Convergences en mode défi (hebdomadaires) : Mont Balrior 
+    - [SotO] Convergences (hebdomadaire)
+    - [SotO] Convergences en mode défi (hebdomadaires) : Nayos extérieur
+- Hebdo : chasse à la brèche (JW/SotO)
+- Possibilité d'ajouter des tâches persos, qui s'ajoute dans quoti/hebdo/sans deadline
+- Batch de tâches déjà perso par le LBM (pour avoir quelques idées)
+- Ajout de tâche, pouvoir ajouter un ID de succès
+- Dans les paramètres, pouvoir réafficher
+
+- formulaire d'ajout :
+    - intitulé
+    - identifiant de succès
+    - période (DAILY/WEEKLY/CUSTOM)
+
+-->
 <template>
     <div class="lbm-app">
         <div class="lbm-app__header">
@@ -11,10 +31,39 @@
                 </div>
             </div>
             <div class="lbm-app__sidebar">
+                <button class="lbm-btn lbm-btn-square lbm-btn-secondary">
+                    <IconPlus />
+                </button>
                 <gw2-user-auth></gw2-user-auth>
             </div>
         </div>
         <div class="lbm-app__main">
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div class="flex flex-col gap-1">
+                    <progress
+                        class="lbm-progress lbm-progress-success"
+                        value="20"
+                        max="100"
+                    ></progress>
+                    <span class="text-xs">Tâches quotidiennes</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <progress
+                        class="lbm-progress lbm-progress-success"
+                        value="50"
+                        max="100"
+                    ></progress>
+                    <span class="text-xs">Tâches hebdomadaires</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <progress
+                        class="lbm-progress lbm-progress-success"
+                        value="75"
+                        max="100"
+                    ></progress>
+                    <span class="text-xs">Mes objectifs</span>
+                </div>
+            </div>
             <div v-if="isLoading" class="px-4 flex gap-2">
                 <span class="lbm-loading lbm-loading-spinner"></span>
                 Chargement en cours... (1)
@@ -50,103 +99,125 @@
                             {{ tab.name }}
                         </button>
                     </div>
-                    <div v-if="activePanel === 'daily' && activeTab === 'mapchests'">
-                        <div
-                            class="flex gap-2 items-center"
-                            v-for="chest in data.mapchests"
-                            :key="chest.id"
-                        >
-                            <input
-                                type="checkbox"
-                                class="lbm-checkbox lbm-checkbox-primary"
-                                :checked="chest.checked"
-                                disabled
-                            />
-                            {{ chest.id }}
+                    <div
+                        v-if="activePanel === 'daily' && activeTab === 'mapchests'"
+                        class="flex flex-col gap-3"
+                    >
+                        <div v-for="chest in data.mapchests" :key="chest.id">
+                            <div class="flex gap-2 items-center font-semibold">
+                                <IconSquareCheck class="text-info" v-if="chest.checked" />
+                                <IconSquare class="text-info/50" v-else />
+                                {{ chest.title || chest.id }}
+                            </div>
+                            <div v-if="chest.description" class="text-sm">
+                                {{ chest.description }}
+                            </div>
                         </div>
                     </div>
-                    <div v-if="activePanel === 'daily' && activeTab === 'worldbosses'">
-                        <div
-                            class="flex gap-2 items-center"
-                            v-for="boss in data.worldbosses"
-                            :key="boss.id"
-                        >
-                            <input
-                                type="checkbox"
-                                class="lbm-checkbox lbm-checkbox-primary"
-                                :checked="boss.checked"
-                                disabled
-                            />
-                            {{ boss.id }}
+                    <div
+                        v-if="activePanel === 'daily' && activeTab === 'worldbosses'"
+                        class="flex flex-col gap-3"
+                    >
+                        <div v-for="boss in data.worldbosses" :key="boss.id">
+                            <div class="flex gap-2 items-center font-semibold">
+                                <IconSquareCheck class="text-info" v-if="boss.checked" />
+                                <IconSquare class="text-info/50" v-else />
+                                {{ boss.title || boss.id }}
+                            </div>
+                            <div v-if="boss.description" class="text-sm">
+                                {{ boss.description }}
+                            </div>
                         </div>
                     </div>
-                    <div v-if="activePanel === 'daily' && activeTab === 'dungeons'">
+                    <div
+                        v-if="activePanel === 'daily' && activeTab === 'dungeons'"
+                        class="flex flex-col gap-3"
+                    >
                         <template v-for="dungeon in data.dungeons" :key="dungeon.id">
-                            <h4>{{ dungeon.id }}</h4>
-                            <div
-                                class="flex gap-2 items-center"
-                                v-for="path in dungeon.paths"
-                                :key="path.id"
-                            >
-                                <input
-                                    type="checkbox"
-                                    class="lbm-checkbox lbm-checkbox-primary"
-                                    :checked="path.checked"
-                                    disabled
-                                />
-                                {{ path.id }} ({{ path.type }})
+                            <h4 class="text-white">{{ dungeon.title || dungeon.id }}</h4>
+                            <div v-if="dungeon.description" class="text-sm -mt-3">
+                                {{ dungeon.description }}
+                            </div>
+                            <div v-for="path in dungeon.paths" :key="path.id">
+                                <div class="flex gap-2 items-center font-semibold">
+                                    <IconSquareCheck class="text-info" v-if="path.checked" />
+                                    <IconSquare class="text-info/50" v-else />
+                                    {{ path.title || path.id }}
+                                </div>
+                                <div v-if="path.description" class="text-sm">
+                                    {{ path.description }}
+                                </div>
                             </div>
                         </template>
                     </div>
-                    <div v-if="activePanel === 'daily' && activeTab === 'dailycrafting'">
-                        <div
-                            class="flex gap-2 items-center"
-                            v-for="craft in data.dailycrafting"
-                            :key="craft.id"
-                        >
-                            <input
-                                type="checkbox"
-                                class="lbm-checkbox lbm-checkbox-primary"
-                                :checked="craft.checked"
-                                disabled
-                            />
-                            {{ craft.id }}
+                    <div
+                        v-if="activePanel === 'daily' && activeTab === 'dailycrafting'"
+                        class="flex flex-col gap-3"
+                    >
+                        <div v-for="craft in data.dailycrafting" :key="craft.id">
+                            <div class="flex gap-2 items-center font-semibold">
+                                <IconSquareCheck class="text-info" v-if="craft.checked" />
+                                <IconSquare class="text-info/50" v-else />
+                                {{ craft.title || craft.id }}
+                            </div>
+                            <div v-if="craft.description" class="text-sm">
+                                {{ craft.description }}
+                            </div>
                         </div>
                     </div>
-                    <div v-if="activePanel === 'daily' && activeTab === 'achievements'">
+                    <div
+                        v-if="activePanel === 'daily' && activeTab === 'achievements'"
+                        class="flex flex-col gap-3"
+                    >
                         <template v-for="category in data.dailyachievements" :key="category.id">
-                            <h4 class="flex items-center gap-2">
-                                <img
-                                    :src="category.icon"
-                                    class="size-8"
-                                    alt=""
-                                    v-if="category.icon"
-                                />
-                                {{ category.name }}
-                            </h4>
-                            <pre>{{ showAchievement(category.name) }}</pre>
                             <template
-                                v-for="achievement in category.achievements"
-                                :key="achievement.id"
+                                v-if="
+                                    !category.start_date ||
+                                    !category.end_date ||
+                                    (category.start_date &&
+                                        category.end_date &&
+                                        new Date(category.start_date) <= new Date() &&
+                                        new Date(category.end_date) >= new Date())
+                                "
                             >
-                                <div class="flex gap-2 items-center">
-                                    <input
-                                        type="checkbox"
-                                        class="lbm-checkbox lbm-checkbox-primary"
-                                        :checked="getUserAchievementDone(achievement.id)"
-                                        disabled
+                                <h4
+                                    class="flex items-center gap-1 -ml-1"
+                                    :data-category-id="category.id"
+                                >
+                                    <img
+                                        :src="category.icon"
+                                        class="size-8"
+                                        alt=""
+                                        v-if="category.icon"
                                     />
-                                    {{ achievement.name }}
+                                    {{ category.name }}
+                                </h4>
+                                <div v-if="category.description" class="text-sm -mt-3">
+                                    {{ category.description }}
                                 </div>
+                                <template
+                                    v-for="achievement in category.achievements"
+                                    :key="achievement.id"
+                                >
+                                    <div class="flex gap-2 items-center">
+                                        <IconSquareCheck
+                                            class="text-info"
+                                            v-if="getUserAchievementDone(achievement.id)"
+                                        />
+                                        <IconSquare class="text-info/50" v-else />
+                                        {{ achievement.name }}
+                                    </div>
+                                </template>
                             </template>
                         </template>
                     </div>
                 </div>
             </div>
-            <!-- <pre>{{ data }}</pre> -->
+            <!-- <pre>{{ localTasks }}</pre> -->
+            <!-- <pre>{{ data.dailyachievements }}</pre> -->
         </div>
         <div class="lbm-app__footer">
-            <lbm-app-footer version="tasks-0.1.0"></lbm-app-footer>
+            <lbm-app-footer :version="VERSION"></lbm-app-footer>
         </div>
     </div>
 </template>
@@ -161,14 +232,21 @@ h4 + h4 {
 </style>
 
 <script setup>
+const VERSION = 'tasks-0.1.1';
+
 import { ref, computed, onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import Gw2ApiService from '@/services/gw2ApiService';
+import localTasks from '@/data/gw2-tasks.json';
+
 import IconCalendar from '../icons/IconCalendar.vue';
 import IconCalendarWeek from '../icons/IconCalendarWeek.vue';
 import IconListCheck from '../icons/IconListCheck.vue';
 import IconSettings from '../icons/IconSettings.vue';
+import IconPlus from '../icons/IconPlus.vue';
+import IconSquareCheck from '../icons/IconSquareCheck.vue';
+import IconSquare from '../icons/IconSquare.vue';
 
 const isLoading = ref();
 const gw2 = Gw2ApiService;
@@ -194,7 +272,7 @@ const menu = ref({
             dungeons: { id: 'dungeons', name: 'Donjons' },
             dailycrafting: { id: 'dailycrafting', name: 'Crafts' },
             achievements: { id: 'achievements', name: 'Succès' },
-            // fractals: { id: 'fractals', name: 'Fractales' },
+            // fractals: { id: 'fractals', name: 'Fractales' }, // Déjà dans la catégorie "succès"
         },
     },
     weekly: {
@@ -208,7 +286,7 @@ const menu = ref({
     },
     custom: {
         id: 'custom',
-        name: 'Personnalisées',
+        name: 'Mes objectifs',
         icon: 'listCheck',
         tabs: {},
     },
@@ -278,16 +356,38 @@ const loadDailyTasks = async () => {
         gw2.getAchievementsGroupById('18DB115A-8637-4290-A636-821362A3C4A8'), // Groupe 'quoti'
     ]).then(async (res) => {
         const [$mapchests, $worldbosses, $dungeons, $dailycrafting, $dailygroupachievement] = res;
-        data.value.mapchests = $mapchests.data;
-        data.value.worldbosses = $worldbosses.data;
-        data.value.dungeons = $dungeons.data;
-        data.value.dailycrafting = $dailycrafting.data;
+        data.value.mapchests = $mapchests.data.map((mc) => ({
+            ...mc,
+            ...localTasks.find((t) => t.fields.uid === mc.id)?.fields,
+        }));
+        data.value.worldbosses = $worldbosses.data.map((wb) => ({
+            ...wb,
+            ...localTasks.find((t) => t.fields.uid === wb.id)?.fields,
+        }));
+        data.value.dungeons = $dungeons.data.map((d) => ({
+            ...d,
+            paths: d.paths.map((p) => ({
+                ...p,
+                ...localTasks.find((t) => t.fields.uid === `${d.id}_${p.id}`)?.fields,
+            })),
+            ...localTasks.find((t) => t.fields.uid === d.id)?.fields,
+        }));
+        data.value.dailycrafting = $dailycrafting.data.map((dc) => ({
+            ...dc,
+            ...localTasks.find((t) => t.fields.uid === dc.id)?.fields,
+        }));
 
         if ($dailygroupachievement.data) {
             gw2.getAchievementsCategoriesByIds($dailygroupachievement.data.categories).then(
                 async (res) => {
                     const categories = res.data;
-                    data.value.dailyachievements = categories;
+                    data.value.dailyachievements = categories.map((da) => ({
+                        ...da,
+                        start_date: null,
+                        end_date: null,
+                        ...localTasks.find((t) => t.fields.uid === `achievement_category_${da.id}`)
+                            ?.fields,
+                    }));
 
                     console.log('categories:', categories);
                     const reqs = categories.map((category) =>
@@ -333,13 +433,14 @@ const loadUserDailyTasks = async () => {
         if ($mapchests.data) {
             data.value.mapchests = data.value.mapchests.map((chest) => ({
                 ...chest,
-                checked: $mapchests.data.indexOf(chest) >= 0,
+                checked: $mapchests.data.indexOf(chest.id) >= 0,
             }));
+            console.log('$mapchests', $mapchests.data);
         }
         if ($worldbosses.data) {
             data.value.worldbosses = data.value.worldbosses.map((boss) => ({
                 ...boss,
-                checked: $worldbosses.data.indexOf(boss) >= 0,
+                checked: $worldbosses.data.indexOf(boss.id) >= 0,
             }));
         }
 
@@ -366,51 +467,4 @@ const loadUserDailyTasks = async () => {
         // Todo, succès de l'utilsateur sur : data.value.dailyachievements
     });
 };
-
-const Y = new Date().getFullYear();
-
-// TODO : corriger les dates
-const festivals = {
-    Halloween: {
-        start: new Date(Date.parse(`1 november ${Y}`)),
-        end: new Date(Date.parse(`31 november ${Y}`)),
-    },
-    Hivernel: {
-        start: new Date(Date.parse(`1 december ${Y}`)),
-        end: new Date(Date.parse(`15 january ${Y + 1}`)),
-    },
-    'nouvel an lunaire': {
-        start: new Date(Date.parse(`1 february ${Y}`)),
-        end: new Date(Date.parse(`15 february ${Y}`)),
-    },
-    'Super Adventure': {
-        start: new Date(Date.parse(`1 april ${Y}`)),
-        end: new Date(Date.parse(`15 april ${Y}`)),
-    },
-    'Quatre Vents': {
-        start: new Date(Date.parse(`1 august ${Y}`)),
-        end: new Date(Date.parse(`15 august ${Y}`)),
-    },
-    'Foire du Dragon': {
-        start: new Date(Date.parse(`1 june ${Y}`)),
-        end: new Date(Date.parse(`15 june ${Y}`)),
-    },
-};
-
-const showAchievement = (achievement_name) => {
-    const now = new Date();
-    let i = 0;
-    Object.keys(festivals).forEach((festival) => {
-        console.log(festival.toLocaleLowerCase(), '-', achievement_name.toLocaleLowerCase());
-        if (achievement_name.toLocaleLowerCase().includes(festival.toLocaleLowerCase())) {
-            if (festivals[festival].start >= now && festivals[festival].end <= now) {
-                $i = 0;
-            } else {
-                i++;
-            }
-        }
-    });
-    return i === 0;
-};
-console.log(festivals);
 </script>

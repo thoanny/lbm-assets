@@ -44,6 +44,10 @@ const endpoints = {
         path: './src/data/gw2api-skills.json',
         url: 'https://api.guildwars2.com/v2/skills?ids=all&lang=fr',
     },
+    'gw2-tasks': {
+        path: './src/data/gw2-tasks.json',
+        url: 'https://lebusmagique.org/gw2/tasks/',
+    },
 };
 
 if (!endpoints[type] && type !== 'all') {
