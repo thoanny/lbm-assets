@@ -142,7 +142,7 @@
                                 <div class="flex gap-2 items-center font-semibold">
                                     <IconSquareCheck class="text-info" v-if="path.checked" />
                                     <IconSquare class="text-info/50" v-else />
-                                    {{ path.title || path.id }}
+                                    {{ path.title || `${dungeon.id}_${path.id}` }}
                                 </div>
                                 <div v-if="path.description" class="text-sm">
                                     {{ path.description }}
