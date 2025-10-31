@@ -101,73 +101,67 @@
                     </div>
                     <div
                         v-if="activePanel === 'daily' && activeTab === 'mapchests'"
-                        class="flex flex-col gap-3"
+                        class="flex flex-col gap-2"
                     >
-                        <div v-for="chest in data.mapchests" :key="chest.id">
-                            <div class="flex gap-2 items-center font-semibold">
-                                <IconSquareCheck class="text-info" v-if="chest.checked" />
-                                <IconSquare class="text-info/50" v-else />
-                                {{ chest.title || chest.id }}
-                            </div>
-                            <div v-if="chest.description" class="text-sm">
-                                {{ chest.description }}
-                            </div>
-                        </div>
+                        <TaskLine
+                            v-for="chest in data.mapchests"
+                            :key="chest.id"
+                            :task="chest"
+                            :checked="chest.checked"
+                            :auto="true"
+                            @copy-to-clipboard="copyToClipboard"
+                        />
                     </div>
                     <div
                         v-if="activePanel === 'daily' && activeTab === 'worldbosses'"
-                        class="flex flex-col gap-3"
+                        class="flex flex-col gap-2"
                     >
-                        <div v-for="boss in data.worldbosses" :key="boss.id">
-                            <div class="flex gap-2 items-center font-semibold">
-                                <IconSquareCheck class="text-info" v-if="boss.checked" />
-                                <IconSquare class="text-info/50" v-else />
-                                {{ boss.title || boss.id }}
-                            </div>
-                            <div v-if="boss.description" class="text-sm">
-                                {{ boss.description }}
-                            </div>
-                        </div>
+                        <TaskLine
+                            v-for="boss in data.worldbosses"
+                            :key="boss.id"
+                            :task="boss"
+                            :checked="boss.checked"
+                            :auto="true"
+                            @copy-to-clipboard="copyToClipboard"
+                        />
                     </div>
                     <div
                         v-if="activePanel === 'daily' && activeTab === 'dungeons'"
-                        class="flex flex-col gap-3"
+                        class="flex flex-col gap-2"
                     >
                         <template v-for="dungeon in data.dungeons" :key="dungeon.id">
                             <h4 class="text-white">{{ dungeon.title || dungeon.id }}</h4>
-                            <div v-if="dungeon.description" class="text-sm -mt-3">
-                                {{ dungeon.description }}
-                            </div>
-                            <div v-for="path in dungeon.paths" :key="path.id">
-                                <div class="flex gap-2 items-center font-semibold">
-                                    <IconSquareCheck class="text-info" v-if="path.checked" />
-                                    <IconSquare class="text-info/50" v-else />
-                                    {{ path.title || `${dungeon.id}_${path.id}` }}
-                                </div>
-                                <div v-if="path.description" class="text-sm">
-                                    {{ path.description }}
-                                </div>
-                            </div>
+                            <div
+                                v-if="dungeon.description"
+                                class="text-sm -mt-2"
+                                v-html="markdown.render(dungeon.description)"
+                            ></div>
+                            <TaskLine
+                                v-for="path in dungeon.paths"
+                                :key="path.id"
+                                :task="path"
+                                :checked="path.checked"
+                                :auto="true"
+                                @copy-to-clipboard="copyToClipboard"
+                            />
                         </template>
                     </div>
                     <div
                         v-if="activePanel === 'daily' && activeTab === 'dailycrafting'"
-                        class="flex flex-col gap-3"
+                        class="flex flex-col gap-2"
                     >
-                        <div v-for="craft in data.dailycrafting" :key="craft.id">
-                            <div class="flex gap-2 items-center font-semibold">
-                                <IconSquareCheck class="text-info" v-if="craft.checked" />
-                                <IconSquare class="text-info/50" v-else />
-                                {{ craft.title || craft.id }}
-                            </div>
-                            <div v-if="craft.description" class="text-sm">
-                                {{ craft.description }}
-                            </div>
-                        </div>
+                        <TaskLine
+                            v-for="craft in data.dailycrafting"
+                            :key="craft.id"
+                            :task="craft"
+                            :checked="craft.checked"
+                            :auto="true"
+                            @copy-to-clipboard="copyToClipboard"
+                        />
                     </div>
                     <div
                         v-if="activePanel === 'daily' && activeTab === 'achievements'"
-                        class="flex flex-col gap-3"
+                        class="flex flex-col gap-2"
                     >
                         <template v-for="category in data.dailyachievements" :key="category.id">
                             <template
@@ -192,27 +186,43 @@
                                     />
                                     {{ category.name }}
                                 </h4>
-                                <div v-if="category.description" class="text-sm -mt-3">
-                                    {{ category.description }}
-                                </div>
-                                <template
+                                <div
+                                    v-if="category.description"
+                                    class="text-sm -mt-2"
+                                    v-html="markdown.render(category.description)"
+                                ></div>
+                                <TaskLine
                                     v-for="achievement in category.achievements"
                                     :key="achievement.id"
-                                >
-                                    <div class="flex gap-2 items-center">
-                                        <IconSquareCheck
-                                            class="text-info"
-                                            v-if="getUserAchievementDone(achievement.id)"
-                                        />
-                                        <IconSquare class="text-info/50" v-else />
-                                        {{ achievement.name }}
-                                    </div>
-                                </template>
+                                    :task="achievement"
+                                    :checked="getUserAchievementDone(achievement.id)"
+                                    :auto="true"
+                                    @copy-to-clipboard="copyToClipboard"
+                                />
                             </template>
                         </template>
                     </div>
+                    <div
+                        v-if="activePanel === 'daily' && activeTab === 'other'"
+                        class="flex flex-col gap-2"
+                    >
+                        <TaskLine
+                            v-for="task in dailyOtherTasks"
+                            :key="task.id"
+                            :task="task"
+                            :checked="task.checked"
+                            :auto="false"
+                            @toggle-task="toggleTask"
+                            @copy-to-clipboard="copyToClipboard"
+                        />
+                    </div>
                 </div>
             </div>
+            <div class="p-4 bg-neutral">bg-neutral</div>
+            <div class="p-4 bg-base-100">bg-base-100</div>
+            <div class="p-4 bg-base-200">bg-base-200</div>
+            <div class="p-4 bg-base-300">bg-base-300</div>
+            <pre>{{ data.mapchests }}</pre>
             <!-- <pre>{{ localTasks }}</pre> -->
             <!-- <pre>{{ data.dailyachievements }}</pre> -->
         </div>
@@ -229,6 +239,10 @@ div + h4,
 h4 + h4 {
     margin-top: 1rem;
 }
+
+.text-sm :deep(p) {
+    margin: 0;
+}
 </style>
 
 <script setup>
@@ -237,16 +251,16 @@ const VERSION = 'tasks-0.1.1';
 import { ref, computed, onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
+import { markdown } from '@/services/markdown';
 import Gw2ApiService from '@/services/gw2ApiService';
 import localTasks from '@/data/gw2-tasks.json';
 
-import IconCalendar from '../icons/IconCalendar.vue';
-import IconCalendarWeek from '../icons/IconCalendarWeek.vue';
-import IconListCheck from '../icons/IconListCheck.vue';
-import IconSettings from '../icons/IconSettings.vue';
-import IconPlus from '../icons/IconPlus.vue';
-import IconSquareCheck from '../icons/IconSquareCheck.vue';
-import IconSquare from '../icons/IconSquare.vue';
+import IconCalendar from '@/components/icons/IconCalendar.vue';
+import IconCalendarWeek from '@/components/icons/IconCalendarWeek.vue';
+import IconListCheck from '@/components/icons/IconListCheck.vue';
+import IconSettings from '@/components/icons/IconSettings.vue';
+import IconPlus from '@/components/icons/IconPlus.vue';
+import TaskLine from './TaskLine.ce.vue';
 
 const isLoading = ref();
 const gw2 = Gw2ApiService;
@@ -272,6 +286,7 @@ const menu = ref({
             dungeons: { id: 'dungeons', name: 'Donjons' },
             dailycrafting: { id: 'dailycrafting', name: 'Crafts' },
             achievements: { id: 'achievements', name: 'Succès' },
+            other: { id: 'other', name: 'Autres' },
             // fractals: { id: 'fractals', name: 'Fractales' }, // Déjà dans la catégorie "succès"
         },
     },
@@ -467,4 +482,37 @@ const loadUserDailyTasks = async () => {
         // Todo, succès de l'utilsateur sur : data.value.dailyachievements
     });
 };
+
+const tasksChecked = ref([]);
+
+const toggleTask = (taskId) => {
+    const idx = tasksChecked.value.indexOf(taskId);
+    if (idx >= 0) {
+        tasksChecked.value.splice(idx, 1);
+    } else {
+        tasksChecked.value.push(taskId);
+    }
+};
+
+const dailyOtherTasks = computed(() => {
+    return localTasks
+        .filter((task) => task.fields?.uid.startsWith('custom_') && task.fields?.period === 'daily')
+        .map((task) => ({
+            id: task.fields?.uid,
+            ...task.fields,
+            checked: tasksChecked.value.indexOf(task.fields?.uid) >= 0,
+        }));
+});
+
+function copyToClipboard(content) {
+    if (!content) {
+        return;
+    }
+
+    navigator.clipboard.writeText(content);
+
+    // const t = uuidv4();
+    // toasts.value[t] = `Code de chat copié : "${name}".`;
+    // setTimeout(removeToast, TOAST_TIMEOUT, t);
+}
 </script>
