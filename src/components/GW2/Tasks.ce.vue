@@ -218,11 +218,11 @@
                     </div>
                 </div>
             </div>
-            <div class="p-4 bg-neutral">bg-neutral</div>
+            <!-- <div class="p-4 bg-neutral">bg-neutral</div>
             <div class="p-4 bg-base-100">bg-base-100</div>
             <div class="p-4 bg-base-200">bg-base-200</div>
-            <div class="p-4 bg-base-300">bg-base-300</div>
-            <pre>{{ data.mapchests }}</pre>
+            <div class="p-4 bg-base-300">bg-base-300</div> -->
+            <!-- <pre>{{ data.mapchests }}</pre> -->
             <!-- <pre>{{ localTasks }}</pre> -->
             <!-- <pre>{{ data.dailyachievements }}</pre> -->
         </div>
@@ -246,7 +246,7 @@ h4 + h4 {
 </style>
 
 <script setup>
-const VERSION = 'tasks-0.1.1';
+const VERSION = 'tasks-0.1.2';
 
 import { ref, computed, onMounted } from 'vue';
 import { useUserStore } from '@/stores/user';

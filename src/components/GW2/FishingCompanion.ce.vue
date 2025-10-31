@@ -1,5 +1,5 @@
 <script setup>
-const VERSION = '2.0.1';
+const VERSION = '2.0.2';
 
 import { onMounted, onUnmounted, ref, watch, computed } from 'vue';
 import { pad } from '@/services/utils';
