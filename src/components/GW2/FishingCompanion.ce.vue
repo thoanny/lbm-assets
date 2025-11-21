@@ -429,6 +429,11 @@ const filteredFishes = computed(() => {
         .filter((fish) => {
             // Achievements / Régions
             if (currentAchievement.value && !currentSpecial.value) {
+                if (currentAchievement.value === 20) {
+                    return [19, 20].indexOf(fish.fields.achievement?.pk) >= 0; // Rives aux épaves + Castora
+                } else if (currentAchievement.value === 21) {
+                    return [19, 21].indexOf(fish.fields.achievement?.pk) >= 0; // Bois étoilé + Castora
+                }
                 return fish.fields.achievement?.pk === currentAchievement.value;
             }
             return true;
@@ -490,7 +495,11 @@ const filteredHoles = computed(() => {
     return allFishes.value
         ?.filter((fish) => {
             if (currentAchievement.value) {
-                if (fish.fields.achievement?.pk === currentAchievement.value) {
+                if (currentAchievement.value === 20) {
+                    return [19, 20].indexOf(fish.fields.achievement?.pk) >= 0; // Rives aux épaves + Castora
+                } else if (currentAchievement.value === 21) {
+                    return [19, 21].indexOf(fish.fields.achievement?.pk) >= 0; // Bois étoilé + Castora
+                } else if (fish.fields.achievement?.pk === currentAchievement.value) {
                     return true;
                 }
                 return false;
@@ -508,7 +517,11 @@ const filteredBaits = computed(() => {
     return allFishes.value
         ?.filter((fish) => {
             if (currentAchievement.value) {
-                if (fish.fields.achievement?.pk === currentAchievement.value) {
+                if (currentAchievement.value === 20) {
+                    return [19, 20].indexOf(fish.fields.achievement?.pk) >= 0; // Rives aux épaves + Castora
+                } else if (currentAchievement.value === 21) {
+                    return [19, 21].indexOf(fish.fields.achievement?.pk) >= 0; // Bois étoilé + Castora
+                } else if (fish.fields.achievement?.pk === currentAchievement.value) {
                     return true;
                 }
                 return false;
