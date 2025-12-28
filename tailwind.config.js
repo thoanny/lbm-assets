@@ -1,6 +1,7 @@
 /*eslint-env node*/
 /** @type {import('tailwindcss').Config} */
 import daisyui from 'daisyui';
+import containerqueries from '@tailwindcss/container-queries';
 export default {
     content: ['./index.html', './src/**/*.{vue,js}'],
     corePlugins: {
@@ -67,7 +68,7 @@ export default {
             pattern: /(col|row)-start-(0|1|2|3|4)/,
         },
     ],
-    plugins: [daisyui],
+    plugins: [daisyui, containerqueries],
     daisyui: {
         themes: ['dark'],
         base: false,

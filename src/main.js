@@ -21,6 +21,7 @@ import GW2_SuperAdventureBox from './components/GW2/SuperAdventureBox.ce.vue';
 import LBM_PagesList from './components/LBM/PagesList.ce.vue';
 import GW2_Tasks from './components/GW2/Tasks.ce.vue';
 import GW2_VoeSpecializations from './components/GW2/VoeSpecializations.ce.vue';
+import LBM_Events from './components/LBM/Events.ce.vue';
 
 setActivePinia(createPinia());
 
@@ -41,3 +42,4 @@ customElements.define('gw2-sab', defineCustomElement(GW2_SuperAdventureBox));
 customElements.define('lbm-pages-list', defineCustomElement(LBM_PagesList));
 customElements.define('gw2-tasks', defineCustomElement(GW2_Tasks));
 customElements.define('gw2-voe-specs', defineCustomElement(GW2_VoeSpecializations));
+customElements.define('lbm-events', defineCustomElement(LBM_Events));
