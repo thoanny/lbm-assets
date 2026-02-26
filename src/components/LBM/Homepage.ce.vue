@@ -137,6 +137,74 @@
                         </div>
                     </a>
                 </div>
+
+                <dialog ref="modalEvent" class="lbm-modal">
+                    <div class="lbm-modal-box" v-if="currentEvent">
+                        <h3 class="text-lg font-bold">{{ currentEvent.title }}</h3>
+                        <div class="flex flex-col gap-1 my-4">
+                            <div class="flex gap-2">
+                                <div class="w-6 shrink-0">
+                                    <IconCalendarWeek class="size-5" />
+                                </div>
+                                <div class="text-sm">
+                                    {{
+                                        new Date(
+                                            Date.parse(currentEvent.startAt),
+                                        ).toLocaleDateString('FR-fr', {
+                                            weekday: 'long',
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                        })
+                                    }}
+                                    &rarr;
+                                    {{
+                                        new Date(Date.parse(currentEvent.endAt)).toLocaleTimeString(
+                                            'FR-fr',
+                                            {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            },
+                                        )
+                                    }}
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="w-6 shrink-0">
+                                    <IconUserSquareRounded class="size-5" />
+                                </div>
+                                <div class="text-sm">
+                                    {{ currentEvent.leaderGw2 }}
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="w-6 shrink-0">
+                                    <IconBus class="size-5" />
+                                </div>
+                                <div class="text-sm">{{ currentEvent.seats }} inscrits</div>
+                            </div>
+                        </div>
+                        <div
+                            class="my-4"
+                            v-if="currentEvent.description"
+                            v-html="markdown.render(currentEvent.description)"
+                        ></div>
+                        <div class="lbm-modal-action justify-between">
+                            <a :href="currentEvent.link" class="lbm-btn lbm-btn-primary">
+                                <IconBrandDiscordFilled class="size-5" />
+                                S'inscrire
+                            </a>
+                            <form method="dialog">
+                                <button class="lbm-btn lbm-btn-neutral">Fermer</button>
+                            </form>
+                        </div>
+                    </div>
+                    <form method="dialog" class="lbm-modal-backdrop">
+                        <button>close</button>
+                    </form>
+                </dialog>
             </div>
         </div>
 
@@ -271,6 +339,9 @@
 
 <script setup>
 import { onMounted, ref, computed } from 'vue';
+import { markdown } from '../../services/markdown';
+
+// Icons
 import IconRss from '../icons/IconRss.vue';
 import IconBrandTwitch from '../icons/IconBrandTwitch.vue';
 import IconBrandYoutube from '../icons/IconBrandYoutube.vue';
@@ -278,6 +349,9 @@ import IconCalendarWeek from '../icons/IconCalendarWeek.vue';
 import IconNews from '../icons/IconNews.vue';
 import IconBook2 from '../icons/IconBook2.vue';
 import IconInfoCircle from '../icons/IconInfoCircle.vue';
+import IconBus from '../icons/IconBus.vue';
+import IconUserSquareRounded from '../icons/IconUserSquareRounded.vue';
+import IconBrandDiscordFilled from '../icons/IconBrandDiscordFilled.vue';
 
 const itemsPerPage = 12;
 const itemsTotal = ref(0);
@@ -285,6 +359,13 @@ const currentPage = ref(1);
 
 const isFeedLoading = ref(false);
 const isEventsLoading = ref(false);
+
+const currentEvent = ref({});
+const modalEvent = ref();
+const handleOpenModal = (eventUid) => {
+    currentEvent.value = events.value.find((event) => event.uid === eventUid);
+    modalEvent.value.showModal();
+};
 
 const feed = ref([]);
 const events = ref([]);
@@ -364,7 +445,6 @@ const loadEvents = () => {
     fetch('https://api.lebusmagique.fr/api/lbm/events')
         .then((res) => res.json())
         .then((data) => {
-            console.log('data', data);
             events.value = data.slice(0, 9);
         })
         .finally(() => {
