@@ -119,14 +119,8 @@
                     </div>
                 </div>
             </a>
-            <div v-for="event in events" :key="event.uid">
-                <div class="">{{ event.title }}</div>
-                <div v-html="markdown.render(event.description)"></div>
-            </div>
         </div>
     </div>
-    <hr />
-    <pre v-if="false">{{ events }}</pre>
 </template>
 
 <script setup>
