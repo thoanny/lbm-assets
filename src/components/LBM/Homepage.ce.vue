@@ -10,7 +10,7 @@
                             v-for="(item, k) in featured"
                             :key="item.id"
                             :href="item.link"
-                            class="relative rounded-box overflow-hidden h-full w-full group"
+                            class="bg-base-100 relative rounded-box overflow-hidden h-full w-full group"
                             :class="{
                                 'md:col-span-3 aspect-square md:aspect-video':
                                     [0, 2, 4, 5].indexOf(k) >= 0,
@@ -40,6 +40,33 @@
                                     {{ item.title }}
                                 </div>
                                 <div class="line-clamp-3">{{ item.description }}</div>
+                                <div class="flex gap-2 items-center">
+                                    <span
+                                        class="lbm-badge gap-1 text-xs py-1 px-2 h-auto lbm-badge-lebusmagique"
+                                    >
+                                        <IconNews
+                                            class="size-4"
+                                            v-if="item.link.includes('.fr/blog/')"
+                                        />
+                                        <IconBook2 class="size-4" v-else />
+                                        {{ item.link.includes('.fr/blog/') ? 'Article' : 'Guide' }}
+                                    </span>
+                                    <span class="text-xs flex gap-1 items-center">
+                                        <IconCalendarWeek class="size-4" />
+                                        {{
+                                            new Date(Date.parse(item.pubDate)).toLocaleDateString(
+                                                'FR-fr',
+                                                {
+                                                    year: 'numeric',
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                },
+                                            )
+                                        }}
+                                    </span>
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -55,7 +82,7 @@
                     <a
                         class="bg-base-100 aspect-video relative rounded-box overflow-hidden no-underline text-white group"
                         :class="{ 'block xl:hidden': e >= 7 }"
-                        v-for="(event, e) in events.slice(0, 9)"
+                        v-for="(event, e) in events"
                         :key="event.uid"
                         href="#!"
                         @click.prevent="handleOpenModal(event.uid)"
@@ -121,7 +148,7 @@
                     type="checkbox"
                     class="lbm-toggle lbm-toggle-success lbm-toggle-sm m-0"
                     v-model="filters.lbm"
-                    @change="resetPage"
+                    @change="handleUpdateFilters"
                 />
                 <span class="label-text text-sm">Guides et articles</span>
             </label>
@@ -130,7 +157,7 @@
                     type="checkbox"
                     class="lbm-toggle lbm-toggle-success lbm-toggle-sm m-0"
                     v-model="filters.rss"
-                    @change="resetPage"
+                    @change="handleUpdateFilters"
                 />
                 <span class="label-text text-sm">Flux RSS</span>
             </label>
@@ -139,7 +166,7 @@
                     type="checkbox"
                     class="lbm-toggle lbm-toggle-success lbm-toggle-sm m-0"
                     v-model="filters.twitch"
-                    @change="resetPage"
+                    @change="handleUpdateFilters"
                 />
                 <span class="label-text text-sm">Twitch</span>
             </label>
@@ -148,85 +175,109 @@
                     type="checkbox"
                     class="lbm-toggle lbm-toggle-success lbm-toggle-sm m-0"
                     v-model="filters.youtube"
-                    @change="resetPage"
+                    @change="handleUpdateFilters"
                 />
                 <span class="label-text text-sm">YouTube</span>
             </label>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
-            <a
-                v-for="item in filteredFeed"
-                :key="item.id"
-                :href="item.link"
-                target="_blank"
-                class="relative rounded-box overflow-hidden h-full w-full group aspect-square"
+
+        <template v-if="!isFeedLoading">
+            <div class="lbm-alert mt-4" role="alert" v-if="filteredFeed.length == 0">
+                <IconInfoCircle class="stroke-info h-6 w-6 shrink-0" />
+                Aucun contenu trouvé... Merci de changer les filtres.
+            </div>
+
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4"
+                v-else
             >
-                <div
-                    class="w-full h-full absolute top-0 left-0 bg-gradient-to-t from-black/90 to-black/0 group-hover:from-black group-hover:to-black/10 z-20"
-                ></div>
-                <img
-                    :src="`${item.imageUrl}`"
-                    class="w-full h-full object-cover absolute top-0 left-0 z-10 transform group-hover:scale-110 transition-all"
-                    loading="lazy"
-                    alt=""
-                />
-                <div
-                    class="absolute bottom-0 left-0 z-30 p-4 text-white flex flex-col gap-2 w-full"
+                <a
+                    v-for="item in filteredFeed"
+                    :key="item.id"
+                    :href="item.link"
+                    target="_blank"
+                    class="bg-base-100 relative rounded-box overflow-hidden h-full w-full group aspect-square"
                 >
-                    <div class="font-bold text-shadow">
-                        {{ item.title }}
+                    <div
+                        class="w-full h-full absolute top-0 left-0 bg-gradient-to-t from-black/90 to-black/0 group-hover:from-black group-hover:to-black/10 z-20"
+                    ></div>
+                    <img
+                        :src="`${item.imageUrl}`"
+                        class="w-full h-full object-cover absolute top-0 left-0 z-10 transform group-hover:scale-110 transition-all"
+                        loading="lazy"
+                        alt=""
+                    />
+                    <div
+                        class="absolute bottom-0 left-0 z-30 p-4 text-white flex flex-col gap-2 w-full"
+                    >
+                        <div class="font-bold text-shadow">
+                            {{ item.title }}
+                        </div>
+                        <div class="line-clamp-3 text-sm text-shadow" v-if="item.type !== 'twitch'">
+                            {{ item.description.substring(0, 250) }}
+                        </div>
+                        <div class="flex items-center gap-2 justify-between">
+                            <span
+                                class="lbm-badge gap-1 text-xs py-1 px-2 h-auto"
+                                :class="{
+                                    'lbm-badge-twitch': item.type == 'twitch',
+                                    'lbm-badge-youtube': item.type == 'youtube',
+                                    'lbm-badge-lebusmagique': !item.type,
+                                    'lbm-badge-rss': item.type == 'rss',
+                                }"
+                            >
+                                <IconBrandTwitch class="size-4" v-if="item.type == 'twitch'" />
+                                <IconBrandYoutube
+                                    class="size-4"
+                                    v-else-if="item.type == 'youtube'"
+                                />
+                                <IconRss class="size-4" v-else-if="item.type == 'rss'" />
+                                <template v-if="item.type">{{ item.username }}</template>
+                                <template v-else>
+                                    <IconNews
+                                        class="size-4"
+                                        v-if="item.link.includes('.fr/blog/')"
+                                    />
+                                    <IconBook2 class="size-4" v-else />
+                                    {{ item.link.includes('.fr/blog/') ? 'Article' : 'Guide' }}
+                                </template>
+                            </span>
+                            <span class="text-xs flex gap-1 items-center">
+                                <IconCalendarWeek class="size-4" />
+                                {{
+                                    new Date(Date.parse(item.pubDate)).toLocaleDateString('FR-fr', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                    })
+                                }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="line-clamp-3 text-sm text-shadow" v-if="item.type !== 'twitch'">
-                        {{ item.description.substring(0, 250) }}
-                    </div>
-                    <div class="flex items-center gap-2 justify-between">
-                        <span
-                            class="lbm-badge gap-1 text-xs py-1 px-2 h-auto"
-                            :class="{
-                                'lbm-badge-twitch': item.type == 'twitch',
-                                'lbm-badge-youtube': item.type == 'youtube',
-                                'lbm-badge-lebusmagique': !item.type,
-                                'lbm-badge-rss': item.type == 'rss',
-                            }"
-                        >
-                            <IconBrandTwitch class="size-4" v-if="item.type == 'twitch'" />
-                            <IconBrandYoutube class="size-4" v-else-if="item.type == 'youtube'" />
-                            <IconRss class="size-4" v-else-if="item.type == 'rss'" />
-                            <template v-if="item.type">{{ item.username }}</template>
-                            <template v-else>Le Bus Magique</template>
-                        </span>
-                        <span class="text-xs flex gap-1 items-center">
-                            <IconCalendarWeek class="size-4" />
-                            {{
-                                new Date(Date.parse(item.pubDate)).toLocaleDateString('FR-fr', {
-                                    year: 'numeric',
-                                    month: 'short',
-                                    day: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                })
-                            }}
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <button
-            @click="loadMoreFeedItems"
-            v-show="isLoadMoreActive"
-            class="mt-4 lbm-btn lbm-btn lbm-btn-secondary"
-        >
-            Charger plus d'éléments
-        </button>
+                </a>
+            </div>
+            <button
+                @click="loadMoreFeedItems"
+                v-show="isLoadMoreActive"
+                class="mt-4 lbm-btn lbm-btn lbm-btn-secondary"
+            >
+                Charger plus d'éléments
+            </button>
+        </template>
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref, computed, watch } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import IconRss from '../icons/IconRss.vue';
 import IconBrandTwitch from '../icons/IconBrandTwitch.vue';
 import IconBrandYoutube from '../icons/IconBrandYoutube.vue';
 import IconCalendarWeek from '../icons/IconCalendarWeek.vue';
+import IconNews from '../icons/IconNews.vue';
+import IconBook2 from '../icons/IconBook2.vue';
+import IconInfoCircle from '../icons/IconInfoCircle.vue';
 
 const itemsPerPage = 12;
 const itemsTotal = ref(0);
@@ -314,7 +365,7 @@ const loadEvents = () => {
         .then((res) => res.json())
         .then((data) => {
             console.log('data', data);
-            events.value = data;
+            events.value = data.slice(0, 9);
         })
         .finally(() => {
             isEventsLoading.value = false;
@@ -322,12 +373,30 @@ const loadEvents = () => {
 };
 
 onMounted(() => {
+    loadFiltersInLocalStorage();
     loadFeed();
     loadEvents();
 });
 
-const resetPage = () => {
+const handleUpdateFilters = () => {
     currentPage.value = 1;
+    saveFiltersInLocalStorage();
+};
+
+const saveFiltersInLocalStorage = () => {
+    localStorage.setItem('lbm-homepage-filters', JSON.stringify(filters.value));
+};
+
+const loadFiltersInLocalStorage = () => {
+    const localFilters = JSON.parse(localStorage.getItem('lbm-homepage-filters'));
+    if (localFilters) {
+        filters.value = {
+            lbm: !!localFilters.lbm ?? true,
+            rss: !!localFilters.rss ?? true,
+            twitch: !!localFilters.twitch ?? true,
+            youtube: !!localFilters.youtube ?? true,
+        };
+    }
 };
 </script>
 
