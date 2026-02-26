@@ -2,8 +2,13 @@
     <div>
         <div class="flex flex-col xl:flex-row gap-4 items-start">
             <div class="w-full xl:w-3/4">
-                <h2 class="mb-4">Derniers guides et actualités</h2>
-                <div v-if="isFeedLoading">Chargement du flux en cours</div>
+                <h2 class="mb-4">Derniers guides et articles</h2>
+                <div v-if="isFeedLoading">
+                    <div class="flex gap-2 items-center font-semibold text-sm">
+                        <span class="lbm-loading lbm-loading-ring"></span>
+                        Chargement des guides et articles...
+                    </div>
+                </div>
                 <div v-else>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
                         <a
@@ -74,7 +79,12 @@
             </div>
             <div class="w-full xl:w-1/4">
                 <h2 class="mb-4">Prochains événements</h2>
-                <div v-if="isEventsLoading">Chargement des événements en cours</div>
+                <div v-if="isEventsLoading">
+                    <div class="flex gap-2 items-center font-semibold text-sm">
+                        <span class="lbm-loading lbm-loading-ring"></span>
+                        Chargement des événements...
+                    </div>
+                </div>
                 <div
                     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-1 gap-4 xl:gap-3"
                     v-else
@@ -331,9 +341,15 @@
                 v-show="isLoadMoreActive"
                 class="mt-4 lbm-btn lbm-btn lbm-btn-secondary"
             >
-                Charger plus d'éléments
+                Afficher plus d'éléments
             </button>
         </template>
+        <div class="mt-4" v-else>
+            <div class="flex gap-2 items-center font-semibold text-sm">
+                <span class="lbm-loading lbm-loading-ring"></span>
+                Chargement du flux d'actualités...
+            </div>
+        </div>
     </div>
 </template>
 
@@ -357,8 +373,8 @@ const itemsPerPage = 12;
 const itemsTotal = ref(0);
 const currentPage = ref(1);
 
-const isFeedLoading = ref(false);
-const isEventsLoading = ref(false);
+const isFeedLoading = ref(true);
+const isEventsLoading = ref(true);
 
 const currentEvent = ref({});
 const modalEvent = ref();
