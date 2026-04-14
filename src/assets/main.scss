@@ -1,20 +1,6 @@
-@use 'sprite';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-$spritesheet-sprites: ();
-
-.lbm-icon {
-    display: inline-block;
-    @include sprite.sprites($spritesheet-sprites);
-}
-
-:deep(.lbm-icon) {
-    display: inline-block;
-    @include sprite.sprites($spritesheet-sprites);
-}
 
 *,
 ::before,
