@@ -18,14 +18,12 @@ import GW2_WizardVault from './components/GW2/WizardVault.ce.vue';
 import LBM_AppFooter from './components/LBM/AppFooter.ce.vue';
 import LBM_Events from './components/LBM/Events.ce.vue';
 import LBM_Homepage from './components/LBM/Homepage.ce.vue';
-import LBM_MainMenu from './components/LBM/MainMenu.ce.vue';
 import LBM_PagesList from './components/LBM/PagesList.ce.vue';
 import LBM_TicketRequest from './components/LBM/TicketRequest.ce.vue';
 import ResponsiveBreakpoints from './components/ResponsiveBreakpoints.ce.vue';
 
 setActivePinia(createPinia());
 
-customElements.define('lbm-menu', defineCustomElement(LBM_MainMenu));
 customElements.define('lbm-ticket-request', defineCustomElement(LBM_TicketRequest));
 customElements.define('gw2-wizard-vault', defineCustomElement(GW2_WizardVault));
 customElements.define('gw2-events-timer', defineCustomElement(GW2_EventsTimer));
