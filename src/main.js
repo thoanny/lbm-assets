@@ -11,7 +11,6 @@ import GW2_EventsTimer from './components/GW2/EventsTimer.ce.vue';
 import GW2_FishingCompanion from './components/GW2/FishingCompanion.ce.vue';
 import GW2_Homestead from './components/GW2/Homestead.ce.vue';
 import GW2_SuperAdventureBox from './components/GW2/SuperAdventureBox.ce.vue';
-import GW2_Tasks from './components/GW2/Tasks.ce.vue';
 import GW2_UserAuth from './components/GW2/UserAuth.ce.vue';
 import GW2_VoeSpecializations from './components/GW2/VoeSpecializations.ce.vue';
 import GW2_WizardVault from './components/GW2/WizardVault.ce.vue';
@@ -37,7 +36,6 @@ customElements.define('responsive-breakpoints', defineCustomElement(ResponsiveBr
 customElements.define('gw2-user-auth', defineCustomElement(GW2_UserAuth));
 customElements.define('gw2-sab', defineCustomElement(GW2_SuperAdventureBox));
 customElements.define('lbm-pages-list', defineCustomElement(LBM_PagesList));
-customElements.define('gw2-tasks', defineCustomElement(GW2_Tasks));
 customElements.define('gw2-voe-specs', defineCustomElement(GW2_VoeSpecializations));
 customElements.define('lbm-events', defineCustomElement(LBM_Events));
 customElements.define('lbm-homepage', defineCustomElement(LBM_Homepage));
