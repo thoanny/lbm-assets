@@ -37,5 +37,8 @@ customElements.define('gw2-user-auth', defineCustomElement(GW2_UserAuth));
 customElements.define('gw2-sab', defineCustomElement(GW2_SuperAdventureBox));
 customElements.define('lbm-pages-list', defineCustomElement(LBM_PagesList));
 customElements.define('gw2-voe-specs', defineCustomElement(GW2_VoeSpecializations));
+
+// TODO : Dédoubler les événements des guides et actus (lbm-events ne semble pas être utilisé, mais créer lbm-homepage-events)
 customElements.define('lbm-events', defineCustomElement(LBM_Events));
+customElements.define('lbm-homepage-events', defineCustomElement(LBM_Events));
 customElements.define('lbm-homepage', defineCustomElement(LBM_Homepage));

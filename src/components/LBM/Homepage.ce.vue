@@ -3,7 +3,7 @@
         <div class="flex flex-col xl:flex-row gap-4 items-start">
             <div class="w-full xl:w-3/4">
                 <h2 class="mb-4">Derniers guides et articles</h2>
-                <div v-if="isFeedLoading">
+                <div v-if="isFeaturedLoading">
                     <div class="flex gap-2 items-center font-semibold text-sm">
                         <span class="lbm-loading lbm-loading-ring"></span>
                         Chargement des guides et articles...
@@ -354,26 +354,27 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { markdown } from '../../services/markdown';
 
 // Icons
-import IconRss from '../icons/IconRss.vue';
+import IconBook2 from '../icons/IconBook2.vue';
+import IconBrandDiscordFilled from '../icons/IconBrandDiscordFilled.vue';
 import IconBrandTwitch from '../icons/IconBrandTwitch.vue';
 import IconBrandYoutube from '../icons/IconBrandYoutube.vue';
-import IconCalendarWeek from '../icons/IconCalendarWeek.vue';
-import IconNews from '../icons/IconNews.vue';
-import IconBook2 from '../icons/IconBook2.vue';
-import IconInfoCircle from '../icons/IconInfoCircle.vue';
 import IconBus from '../icons/IconBus.vue';
+import IconCalendarWeek from '../icons/IconCalendarWeek.vue';
+import IconInfoCircle from '../icons/IconInfoCircle.vue';
+import IconNews from '../icons/IconNews.vue';
+import IconRss from '../icons/IconRss.vue';
 import IconUserSquareRounded from '../icons/IconUserSquareRounded.vue';
-import IconBrandDiscordFilled from '../icons/IconBrandDiscordFilled.vue';
 
 const itemsPerPage = 12;
 const itemsTotal = ref(0);
 const currentPage = ref(1);
 
 const isFeedLoading = ref(true);
+const isFeaturedLoading = ref(true);
 const isEventsLoading = ref(true);
 
 const currentEvent = ref({});
@@ -384,16 +385,13 @@ const handleOpenModal = (eventUid) => {
 };
 
 const feed = ref([]);
+const featured = ref([]);
 const events = ref([]);
 const filters = ref({
     lbm: true,
     rss: true,
     twitch: true,
     youtube: true,
-});
-
-const featured = computed(() => {
-    return feed.value.filter((item) => item.type == null).slice(0, 6);
 });
 
 const featuredIds = computed(() => {
@@ -456,6 +454,19 @@ const loadFeed = () => {
         });
 };
 
+const loadFeatured = () => {
+    isFeaturedLoading.value = true;
+
+    fetch('https://api.lebusmagique.fr/api/lbm/feed/json')
+        .then((res) => res.json())
+        .then((data) => {
+            featured.value = data.sort((a, b) => a.pubDate - b.pubDate);
+        })
+        .finally(() => {
+            isFeaturedLoading.value = false;
+        });
+};
+
 const loadEvents = () => {
     isEventsLoading.value = true;
     fetch('https://api.lebusmagique.fr/api/lbm/events')
@@ -470,6 +481,7 @@ const loadEvents = () => {
 
 onMounted(() => {
     loadFiltersInLocalStorage();
+    loadFeatured();
     loadFeed();
     loadEvents();
 });
